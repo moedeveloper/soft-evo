@@ -35,10 +35,8 @@ public class SidePanelProfileAdapter  extends ArrayAdapter<JSONObject>{
 
             //Inflate the view
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.print_panel_spinner_item, null, false);
 
             holder = new ViewHolder();
-            holder.mProfileName = (TextView) convertView.findViewById(R.id.print_panel_spinner_text);
             convertView.setTag(holder);
 
 
@@ -69,10 +67,8 @@ public class SidePanelProfileAdapter  extends ArrayAdapter<JSONObject>{
 
             //Inflate the view
             LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.print_panel_spinner_item, null, false);
 
             holder = new ViewHolder();
-            holder.mProfileName = (TextView) convertView.findViewById(R.id.print_panel_spinner_text);
             convertView.setTag(holder);
 
 

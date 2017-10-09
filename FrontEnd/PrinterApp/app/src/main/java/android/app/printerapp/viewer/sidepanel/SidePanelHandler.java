@@ -5,13 +5,10 @@ import android.app.printerapp.Log;
 import android.app.printerapp.MainActivity;
 import android.app.printerapp.R;
 
-import android.app.printerapp.viewer.SlicingHandler;
-import android.app.printerapp.viewer.ViewerMainFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
@@ -21,8 +18,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -44,8 +39,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-
 /**
  * Class to initialize and handle the side panel in the print panel
  * Created by alberto-baeza on 10/24/14.
@@ -64,7 +57,6 @@ public class SidePanelHandler {
     //Printer to send the files
 
     //Inherited elements
-    private SlicingHandler mSlicingHandler;
     private View mRootView;
     private Activity mActivity;
 
@@ -105,10 +97,9 @@ public class SidePanelHandler {
     private CheckBox enableCoolingFan;
 
     //Constructor
-    public SidePanelHandler(SlicingHandler handler, Activity activity, View v) {
+    public SidePanelHandler( Activity activity, View v) {
 
         mActivity = activity;
-        mSlicingHandler = handler;
         mRootView = v;
 
         initUiElements();
@@ -118,67 +109,8 @@ public class SidePanelHandler {
     //Initialize UI references
     public void initUiElements() {
 
-        s_type = (Spinner) mRootView.findViewById(R.id.type_spinner);
-        s_profile = (Spinner) mRootView.findViewById(R.id.profile_spinner);
-        s_adhesion = (Spinner) mRootView.findViewById(R.id.adhesion_spinner);
-        s_support = (Spinner) mRootView.findViewById(R.id.support_spinner);
-
-        s_infill = (RelativeLayout) mRootView.findViewById(R.id.infill_spinner);
-        infillText = (TextView) mRootView.findViewById(R.id.infill_number_view);
-
-        printButton = (PaperButton) mRootView.findViewById(R.id.print_model_button);
-        sliceButton = (PaperButton) mRootView.findViewById(R.id.slice_model_button);
-        saveButton = (PaperButton) mRootView.findViewById(R.id.save_settings_button);
-        restoreButton = (PaperButton) mRootView.findViewById(R.id.restore_settings_button);
-        deleteButton = (PaperButton) mRootView.findViewById(R.id.delete_settings_button);
-
-        layerHeight = (EditText) mRootView.findViewById(R.id.layer_height_edittext);
-        shellThickness = (EditText) mRootView.findViewById(R.id.shell_thickness_edittext);
-        enableRetraction = (CheckBox) mRootView.findViewById(R.id.enable_retraction_checkbox);
-        bottomTopThickness = (EditText) mRootView.findViewById(R.id.bottom_top_thickness_edittext);
-        printSpeed = (EditText) mRootView.findViewById(R.id.print_speed_edittext);
-        printTemperature = (EditText) mRootView.findViewById(R.id.print_temperature_edittext);
-        filamentDiamenter = (EditText) mRootView.findViewById(R.id.diameter_edittext);
-        filamentFlow = (EditText) mRootView.findViewById(R.id.flow_title_edittext);
-
-        travelSpeed = (EditText) mRootView.findViewById(R.id.travel_speed_edittext);
-        bottomLayerSpeed = (EditText) mRootView.findViewById(R.id.bottom_layer_speed_edittext);
-        infillSpeed = (EditText) mRootView.findViewById(R.id.infill_speed_edittext);
-        outerShellSpeed = (EditText) mRootView.findViewById(R.id.outher_shell_speed_edittext);
-        innerShellSpeed = (EditText) mRootView.findViewById(R.id.inner_shell_speed_edittext);
-
-        minimalLayerTime = (EditText) mRootView.findViewById(R.id.minimal_layer_time_edittext);
-        enableCoolingFan = (CheckBox) mRootView.findViewById(R.id.enable_cooling_fan_checkbox);
 
 
-        //profileText = (EditText) mRootView.findViewById(R.id.profile_edittext);
-
-        // SCROLL VIEW HACK
-
-        /**
-         * Removes focus from the scrollview when notifying the adapter
-         */
-        ScrollView view = (ScrollView) mRootView.findViewById(R.id.advanced_options_scroll_view);
-        view.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-        view.setFocusable(true);
-        view.setFocusableInTouchMode(true);
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                v.requestFocusFromTouch();
-                return false;
-            }
-        });
-
-        mRootView.findViewById(R.id.connect_printer_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //Open devices panel to connect a new printer
-                MainActivity.performClick(2);
-
-            }
-        });
 
         initTextWatchers();
 
@@ -430,23 +362,6 @@ public class SidePanelHandler {
 
     }
 **/
-    /**
-     * Send a gcode file to the selected printer
-     */
-    private void sendToPrint() {
-
-
-
-
-        /**
-         * Save the printer profile settings
-         */
-        //DatabaseController.handlePreference(DatabaseController.TAG_PROFILE, "type", String.valueOf(s_type.getSelectedItemPosition()), true);
-        //DatabaseController.handlePreference(DatabaseController.TAG_PROFILE, "quality", String.valueOf(s_profile.getSelectedItemPosition()), true);
-
-
-    }
-
 
     /**
      * Parses a JSON profile to the side panel
@@ -514,312 +429,7 @@ public class SidePanelHandler {
         return f;
     }
 
-    /**
-     * Open a pop up window with the infill options
-     */
-    public void openInfillPopupWindow() {
 
-//        if (mInfillOptionsPopupWindow == null) {
-        //Get the content view of the pop up window
-        final LinearLayout popupLayout = (LinearLayout) mActivity.getLayoutInflater()
-                .inflate(R.layout.print_panel_infill_dropdown_menu, null);
-        popupLayout.measure(0, 0);
-
-        final Bitmap gridResource = BitmapFactory.decodeResource(mActivity.getResources(), R.drawable.fill_grid);
-
-        //Set the behavior of the infill seek bar
-        final SeekBar infillSeekBar = (SeekBar) popupLayout.findViewById(R.id.seekBar_infill);
-        final TextView infillPercent = (TextView) popupLayout.findViewById(R.id.infill_number_view);
-        final ImageView infillGrid = (ImageView) popupLayout.findViewById(R.id.infill_grid_view);
-        infillSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                infillPercent.setText(progress + "%");
-                infillText.setText(progress + "%");
-
-                if(progress == 0) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_empty));
-                }
-                if (progress > 0 && progress <= 25) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_0));
-                }
-                if (progress > 26 && progress <= 50) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_25));
-                }
-                if (progress > 51 && progress <= 75) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_50));
-                }
-                if (progress > 76 && progress < 100) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_75));
-                }
-                if (progress == 100) {
-                    infillGrid.setImageDrawable(mActivity.getResources().getDrawable(R.drawable.grid_full));
-                }
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                mCurrentInfill = infillSeekBar.getProgress();
-                mSlicingHandler.setExtras("profile.fill_density", mCurrentInfill);
-
-            }
-        });
-
-        infillSeekBar.setProgress(mCurrentInfill);
-        infillPercent.setText(mCurrentInfill + " %");
-
-        //Show the pop up window in the correct position
-        int[] infillSpinnerCoordinates = new int[2];
-        s_infill.getLocationOnScreen(infillSpinnerCoordinates);
-        int popupLayoutPadding = (int) mActivity.getResources().getDimensionPixelSize(R.dimen.content_padding_normal);
-        int popupLayoutWidth = 360; //FIXED WIDTH
-        int popupLayoutHeight = popupLayout.getMeasuredHeight();
-        final int popupLayoutX = infillSpinnerCoordinates[0] - 2; //Remove the background padding
-        final int popupLayoutY = infillSpinnerCoordinates[1];
-
-
-
-        mInfillOptionsPopupWindow.showAtLocation(s_infill, Gravity.NO_GRAVITY,
-                popupLayoutX, popupLayoutY);
-//        }
-    }
-
-    /**
-     * Save a slicing profile by adding every individual element to a JSON
-     */
-    public void saveProfile() {
-
-        LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View getModelsDialogView = inflater.inflate(R.layout.dialog_create_profile, null);
-        final MaterialEditText nameEditText = (MaterialEditText) getModelsDialogView.findViewById(R.id.new_profile_name_edittext);
-
-        final MaterialDialog.Builder createFolderDialog = new MaterialDialog.Builder(mActivity);
-        createFolderDialog.title(R.string.dialog_create_profile_title)
-                .customView(getModelsDialogView, true)
-                .positiveColorRes(R.color.theme_accent_1)
-                .positiveText(R.string.create)
-                .negativeColorRes(R.color.body_text_2)
-                .negativeText(R.string.cancel)
-                .autoDismiss(false)
-                .callback(new MaterialDialog.ButtonCallback() {
-                    @Override
-                    public void onPositive(MaterialDialog dialog) {
-                        String name = nameEditText.getText().toString().trim();
-                        if (name == null || name.equals("")) {
-                            nameEditText.setError(mActivity.getString(R.string.library_create_folder_name_error));
-                        }
-                        else {
-                            //Init UI elements
-
-                            JSONObject profile = null;
-
-
-                            //Parse the JSON element
-                            try {
-
-                                //Profile info
-                                profile = new JSONObject();
-
-                                profile.put("displayName", nameEditText.getText().toString());
-                                profile.put("description", "Test profile created from App"); //TODO
-                                profile.put("key", nameEditText.getText().toString().replace(" ", "_").toLowerCase());
-
-                                //Data info
-                                JSONObject data = new JSONObject();
-
-                                data.put("layer_height", getFloatValue(layerHeight.getText().toString()));
-                                data.put("wall_thickness", getFloatValue(shellThickness.getText().toString()));
-                                data.put("solid_layer_thickness", getFloatValue(bottomTopThickness.getText().toString()));
-
-                                data.put("print_speed", getFloatValue(printSpeed.getText().toString()));
-                                data.put("print_temperature", new JSONArray().put(getFloatValue(printTemperature.getText().toString())));
-                                data.put("filament_diameter", new JSONArray().put(getFloatValue(filamentDiamenter.getText().toString())));
-                                data.put("filament_flow", getFloatValue(filamentFlow.getText().toString()));
-                                data.put("retraction_enable", enableRetraction.isChecked());
-
-                                data.put("travel_speed", getFloatValue(travelSpeed.getText().toString()));
-                                data.put("bottom_layer_speed", getFloatValue(bottomLayerSpeed.getText().toString()));
-                                data.put("infill_speed", getFloatValue(infillSpeed.getText().toString()));
-                                data.put("outer_shell_speed", getFloatValue(outerShellSpeed.getText().toString()));
-                                data.put("inner_shell_speed", getFloatValue(innerShellSpeed.getText().toString()));
-
-                                data.put("cool_min_layer_time", getFloatValue(minimalLayerTime.getText().toString()));
-                                data.put("fan_enabled", enableCoolingFan.isChecked());
-
-                                profile.put("data", data);
-
-
-                                Log.i("OUT", profile.toString());
-
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-
-                            } catch (NumberFormatException e) {
-
-                                //Check if there was an invalid number
-                                e.printStackTrace();
-                                Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_LONG).show();
-                                profile = null;
-
-                            }
-
-                            if (profile != null) {
-
-
-                                //check if name already exists to avoid overwriting
-
-
-
-
-                            }
-
-
-                        }
-
-                        dialog.dismiss();
-                    }
-                    @Override
-                    public void onNegative(MaterialDialog dialog) {
-                        dialog.dismiss();
-                    }
-
-                })
-                .show();
-
-
-
-
-    }
-
-    public void deleteProfile(String name) {
-
-        //Delete profile first
-
-    }
-
-
-
-
-
-    /*******************************************
-     * ADAPTERS
-     ******************************************/
-
-    public void switchSlicingButton(boolean enable){
-
-    }
-
-    public void reloadProfileAdapter(){
-
-
-
-
-    }
-
-    public void reloadQualityAdapter(){
-
-
-
-    }
-
-    /**********************************************************************************************/
-
-
-    /**
-     * Only works for "extra" profiles, add a new value per field since we can't upload them yet
-     */
-    //TODO Temporary
-    public void refreshProfileExtras(){
-
-        if (s_profile.getSelectedItemPosition() > 2){
-
-
-            mSlicingHandler.setExtras("profile.layer_height", getFloatValue(layerHeight.getText().toString()));
-            mSlicingHandler.setExtras("profile.wall_thickness", getFloatValue(shellThickness.getText().toString()));
-            mSlicingHandler.setExtras("profile.solid_layer_thickness", getFloatValue(bottomTopThickness.getText().toString()));
-
-            mSlicingHandler.setExtras("profile.print_speed", getFloatValue(printSpeed.getText().toString()));
-            mSlicingHandler.setExtras("profile.print_temperature", new JSONArray().put(getFloatValue(printTemperature.getText().toString())));
-            mSlicingHandler.setExtras("profile.filament_diameter", new JSONArray().put(getFloatValue(filamentDiamenter.getText().toString())));
-            mSlicingHandler.setExtras("profile.filament_flow", getFloatValue(filamentFlow.getText().toString()));
-            mSlicingHandler.setExtras("profile.retraction_enable", enableRetraction.isChecked());
-
-            mSlicingHandler.setExtras("profile.travel_speed", getFloatValue(travelSpeed.getText().toString()));
-            mSlicingHandler.setExtras("profile.bottom_layer_speed", getFloatValue(bottomLayerSpeed.getText().toString()));
-            mSlicingHandler.setExtras("profile.infill_speed", getFloatValue(infillSpeed.getText().toString()));
-            mSlicingHandler.setExtras("profile.outer_shell_speed", getFloatValue(outerShellSpeed.getText().toString()));
-            mSlicingHandler.setExtras("profile.inner_shell_speed", getFloatValue(innerShellSpeed.getText().toString()));
-
-            mSlicingHandler.setExtras("profile.cool_min_layer_time", getFloatValue(minimalLayerTime.getText().toString()));
-            mSlicingHandler.setExtras("profile.fan_enabled", enableCoolingFan.isChecked());
-
-
-        }
-
-    }
-
-
-    public void refreshPrinters(){
-
-        CardView advanced_layout = (CardView) mRootView.findViewById(R.id.advanced_options_card_view);
-        LinearLayout simple_layout = (LinearLayout) mRootView.findViewById(R.id.simple_settings_layout);
-        LinearLayout buttons_layout = (LinearLayout) mRootView.findViewById(R.id.advanced_settings_buttons_container);
-        LinearLayout print_button = (LinearLayout) mRootView.findViewById(R.id.print_button_container);
-
-        /*
-        if (DatabaseController.count() < 1){
-            mRootView.findViewById(R.id.viewer_select_printer_layout).setVisibility(View.GONE);
-            mRootView.findViewById(R.id.viewer_no_printer_layout).setVisibility(View.VISIBLE);
-
-
-            ViewHelper.disableEnableAllViews(false,advanced_layout);
-            ViewHelper.disableEnableAllViews(false,simple_layout);
-            ViewHelper.disableEnableAllViews(false,buttons_layout);
-            ViewHelper.disableEnableAllViews(false,print_button);
-
-
-        } else {
-            mRootView.findViewById(R.id.viewer_select_printer_layout).setVisibility(View.VISIBLE);
-            mRootView.findViewById(R.id.viewer_no_printer_layout).setVisibility(View.GONE);
-
-            ViewHelper.disableEnableAllViews(true,advanced_layout);
-            ViewHelper.disableEnableAllViews(true,simple_layout);
-            ViewHelper.disableEnableAllViews(true,buttons_layout);
-            ViewHelper.disableEnableAllViews(true,print_button);
-            //mPrinter = DevicesListController.selectAvailablePrinter(s_type.getSelectedItemPosition() + 1, s_type.getSelectedItem().toString());
-            mSlicingHandler.setPrinter(mPrinter);
-            if (mPrinter!=null)   ViewHelper.disableEnableAllViews(true,print_button);
-            else ViewHelper.disableEnableAllViews(false,print_button);
-        }
-*/
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mActivity);
-        if (sharedPref.getBoolean(mActivity.getResources().getString(R.string.shared_preferences_autoslice), false)) sliceButton.setVisibility(View.INVISIBLE);
-        else sliceButton.setVisibility(View.VISIBLE);
-
-        mRootView.invalidate();
-
-
-
-
-    }
-
-    /**
-     * Clear the extra parameter list and reload basic parameters
-     */
-    public void reloadBasicExtras(){
-
-        mSlicingHandler.clearExtras();
-        mSlicingHandler.setExtras("profile.fill_density", mCurrentInfill);
-        mSlicingHandler.setExtras("profile.support", s_support.getSelectedItem());
-        mSlicingHandler.setExtras("profile", s_profile.getSelectedItem().toString());
-
-    }
 
     /**
      * Generic text watcher to add new printing parameters
@@ -847,7 +457,7 @@ public class SidePanelHandler {
         public void afterTextChanged(Editable editable) {
 
             try{
-                mSlicingHandler.setExtras(mValue, getFloatValue(editable.toString()));
+                //mSlicingHandler.setExtras(mValue, getFloatValue(editable.toString()));
 
             } catch (NumberFormatException e){
 
@@ -861,7 +471,7 @@ public class SidePanelHandler {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-            mSlicingHandler.setExtras(mValue, b);
+            //mSlicingHandler.setExtras(mValue, b);
 
         }
     }

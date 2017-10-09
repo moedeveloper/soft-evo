@@ -145,7 +145,7 @@ public class MainActivity extends ActionBarActivity {
         mDrawerList.setEmptyView(drawerListEmptyView);
 
         LayoutInflater inflater = getLayoutInflater();
-        mDrawerList.addHeaderView(inflater.inflate(R.layout.history_drawer_header, null));
+        //mDrawerList.addHeaderView(inflater.inflate(R.layout.history_drawer_header, null));
 
         mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
