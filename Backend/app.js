@@ -43,6 +43,9 @@ app.use(function(err, req, res, next) {
 
 var server = http.createServer(app);
 
+
+
+
 server.listen(port, function(){
     console.log("Running on port: " + port);
 }); 
