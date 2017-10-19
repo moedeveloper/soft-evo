@@ -3,10 +3,10 @@ Q = require('q');
 var pool;
 pool = mysql.createPool({
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    database: 'mo3',
-    password: 'yb10dj1v',
+    host: 'us-cdbr-azure-southcentral-f.cloudapp.net',
+    user: 'bfd2e734428b9e',
+    database: 'mo3db',
+    password: 'b7514c26',
     //charset			: 'latin1_swedish_ci',
     charset: 'utf8',
     timezone: 'Europe/Stockholm'
