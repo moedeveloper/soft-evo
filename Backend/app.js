@@ -7,12 +7,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var details = require('./routes/details.js');
-var builds = require('./routes/build');
+var builds = require('./routes/build.js');
 var prints = require('./routes/print.js');
+var buildParts = require('./routes/buildParts.js');
+var companies = require('./routes/companies.js');
+
 
 app.use('/api', details);
 app.use('/api', builds);
 app.use('/api', prints);
+app.use('/api', buildParts);
+app.use('/api', companies);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -34,7 +39,7 @@ app.use(function(err, req, res, next) {
 	if (err) {
 		res.status(err.status || 400).send(
 		{
-			message: err.message
+			message: err.message 
 		});
 	}
 	//res.header("Content-Type", "application/json; charset=utf-8");
@@ -43,27 +48,8 @@ app.use(function(err, req, res, next) {
 
 var server = http.createServer(app);
 
-
-
-
 server.listen(port, function(){
     console.log("Running on port: " + port);
 }); 
 
-
 module.exports = app;
-
-// details, prints, build, build parts.
-
-
-//get details by details ID
-// details by companyId
-// details by original filename
-// details by projectID
-
-// build by Id
-
-// print get print by Id
-// by build Id return list of printIDs
-// by machine & opeeratorname
-

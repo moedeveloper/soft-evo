@@ -15,9 +15,12 @@
     "express": "^4.16.2",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
+    "mssql": "^4.1.0",
     "mysql": "^2.15.0",
     "mysql2": "^1.4.2",
     "node-uuid": "^1.4.8",
-    "q": "^1.5.0"
+    "q": "^1.5.0",
+    "tedious": "^2.0.0",
+    "tedious-connection-pool": "^1.0.5"
   }
 }
