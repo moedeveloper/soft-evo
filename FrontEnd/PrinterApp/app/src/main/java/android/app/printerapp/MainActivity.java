@@ -92,6 +92,9 @@ public class MainActivity extends ActionBarActivity {
         //Set tab host for the view
         setTabHost();
 
+        ApiController apiController = new ApiController();
+        apiController.testDetailsApi();
+
     }
 
     public static void performClick(int i){

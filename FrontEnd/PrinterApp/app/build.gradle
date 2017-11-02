@@ -77,4 +77,6 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient-android:4.3.5'
     compile files('libs/android-async-http-1.4.6.jar')
     compile project(':library-release')
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 }
