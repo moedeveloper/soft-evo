@@ -36,6 +36,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -95,6 +96,15 @@ public class MainActivity extends ActionBarActivity {
         ApiController apiController = new ApiController();
         apiController.testDetailsApi();
 
+        Button addBotton =  (Button) findViewById(R.id.button_add_details);
+        addBotton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),add_details.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
     }
 
     public static void performClick(int i){
@@ -139,8 +149,6 @@ public class MainActivity extends ActionBarActivity {
         mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-
-
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setSelector(getResources().getDrawable(R.drawable.selectable_rect_background_green));
 
@@ -155,7 +163,6 @@ public class MainActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 mDrawerLayout.closeDrawers();
-
             }
         });
     }
@@ -195,6 +202,7 @@ public class MainActivity extends ActionBarActivity {
         spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_devices)));
         spec.setContent(R.id.maintab3);
         mTabHost.addTab(spec);
+
 
         /*
         if (DatabaseController.count() > 0){
@@ -401,5 +409,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onPause() {
         //NotificationReceiver.setForeground(false);
         super.onPause();
+    }
+
+    public void showAddDetailsActivity(){
+
     }
 }

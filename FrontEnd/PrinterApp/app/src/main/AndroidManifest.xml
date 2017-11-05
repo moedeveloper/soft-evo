@@ -5,7 +5,7 @@
     android:versionCode="0"
     android:versionName="1.0">
 
-    <!--uses-sdk tools:overrideLibrary="android.support.v4"/-->
+    <!-- uses-sdk tools:overrideLibrary="android.support.v4"/ -->
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,48 +16,55 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
-    <supports-screens android:smallScreens="false"
-        android:normalScreens="false"
+    <supports-screens
         android:largeScreens="true"
-        android:xlargeScreens="true"
-        android:requiresSmallestWidthDp="600" />
+        android:normalScreens="false"
+        android:requiresSmallestWidthDp="600"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
 
     <application
         android:allowBackup="true"
+        android:allowClearUserData="true"
+        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme.Green"
         android:largeHeap="true"
-        android:vmSafeMode="true"
-        android:allowClearUserData="true"
-        android:hardwareAccelerated="true">
-
+        android:theme="@style/AppBaseTheme.Green"
+        android:vmSafeMode="true">
         <activity
-            android:name="android.app.printerapp.SplashScreenActivity"
-            android:screenOrientation="landscape"
+            android:name=".SplashScreenActivity"
             android:label="@string/app_name"
+            android:screenOrientation="landscape"
             android:theme="@style/AppBaseTheme.Green.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="android.app.printerapp.MainActivity"
+            android:name=".MainActivity"
+            android:configChanges="locale"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="locale">
-        </activity>
-<!--
+            android:windowSoftInputMode="adjustPan"></activity>
+        <!--
         <receiver android:name=".NotificationReceiver">
             <intent-filter>
                 <action android:name="android.app.printerapp.NotificationReceiver" />
             </intent-filter>
         </receiver>
--->
+        -->
+
+        <activity
+            android:name=".add_details"
+            android:label="@string/title_activity_test_details"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

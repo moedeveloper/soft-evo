@@ -5,9 +5,9 @@
     <string name="about_app_name" translatable="false">OctoPrint 3d bq printer controller</string>
     <string name="about_url" translatable="false">http://www.octoprint.org</string>
     <string name="title_item_detail">Item Detail</string>
-    
+
     <string name="lorem_ipsum" translatable="false">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</string>
-    
+
     <string name="add">Add</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
@@ -27,14 +27,14 @@
     <string name="password">Password</string>
     <string name="show_password">Show password</string>
     <string name="empty_password_error">Password can\'t be empty</string>
-    
+
     <string name="fragment_devices">Printers</string>
     <string name="fragment_print">Panel</string>
     <string name="fragment_models">Models</string>
     <string name="fragment_history">History</string>
     <string name="fragment_settings">Settings</string>
-    
-    
+
+
     <string name="devices_quickprint">&#9552;</string>
     <string name="devices_add_dialog_title">New printer detected</string>
     <string name="devices_add_dialog_message">Select a printer to add it to your panel</string>
@@ -49,20 +49,20 @@
     <string name="devices_dialog_loading">Error while loading file: </string>
     <string name="devices_list_header_1">DEVICES</string>
     <string name="devices_list_header_2">STATUS</string>
-   
+
     <string name="devices_command_waiting">Connecting to server</string>
     <string name="devices_upload_waiting">Uploading file&#8230;</string>
     <string name="devices_text_loading">Uploading&#8230;</string>
     <string name="devices_text_connecting">Connecting&#8230;</string>
     <string name="devices_text_completed">Finished</string>
     <string name="devices_text_paused">Paused</string>
-    
+
     <string name="devices_menu_add">Add printer</string>
     <string name="devices_menu_filter">Filter devices</string>
     <string name="devices_menu_reload">Reload devices</string>
     <string name="devices_cab_menu_delete">Delete printer</string>
     <string name="devices_cab_menu_settings">Printer settings</string>
-    
+
     <string name="devices_filter_dialog_all">All</string>
     <string name="devices_filter_dialog_progress">In progress printers</string>
     <string name="devices_filter_dialog_inactive">Available printers</string>
@@ -138,7 +138,7 @@
     <string name="storage_toast_corrupted">File is corrupted</string>
     <string name="viewer_toast_not_available">This view is not available.</string>
     <string name="viewer_toast_not_available_2">This view is not available. Open a file first</string>
-    
+
     <string name="slicing_title">Slicing done in </string>
     <string name="slicing_download">Download file into project folder?</string>
     <string name="finish_dialog_title">Print finished</string>
@@ -146,13 +146,13 @@
     <string name="notification_printing_progress">Print progress</string>
     <string name="finish_dialog_option_1">Keep gcode in server</string>
     <string name="finish_dialog_option_2">Keep gcode in local project folder</string>
-    
+
     <string name="library_search_dialog_title">Search keyword</string>
     <string name="library_filter_dialog_show">Show everything</string>
     <string name="library_filter_dialog_gcode">Show GCODE files</string>
     <string name="library_filter_dialog_stl">Show STL files</string>
     <string name="library_filter_dialog_remove">Remove filters</string>
-        
+
     <string name="library_create_dialog_title">Create new folder</string>
     <string name="library_create_folder_name">New folder name</string>
     <string name="library_create_folder_name_error">The name can\'t be empty</string>
@@ -180,7 +180,7 @@
     <string name="library_menu_folder">New folder</string>
     <string name="library_menu_paste">Paste</string>
     <string name="library_menu_models">Get models</string>
-    
+
     <string name="library_models_all">All the models</string>
     <string name="library_models_local">Local</string>
     <string name="library_models_printers">Printer</string>
@@ -204,13 +204,13 @@
 
     <string name="library_thingiverse_url" translatable="false">http://www.thingiverse.com/</string>
     <string name="library_youmagine_url" translatable="false">https://www.youmagine.com/</string>
-    
+
     <string name="detailview_description">Description</string>
     <string name="detailview_notes">Comments</string>
     <string name="detailview_description_default">(No description)</string>
     <string name="detailview_notes_default">(No notes)</string>
     <string name="detailview_gcode">gcode</string>
-    
+
     <string name="viewer_menu_open">Open file</string>
     <string name="viewer_menu_save">Save</string>
     <string name="viewer_menu_save_gcode">Save gcode</string>
@@ -256,7 +256,7 @@
     <string name="settings_tabhost_tab_connection">Connection and network</string>
     <string name="settings_tabhost_tab_devices">Devices</string>
     <string name="settings_tabhost_tab_users">Users</string>
-    
+
     <string name="viewer_button_back">Back</string>
     <string name="viewer_button_right">Right</string>
     <string name="viewer_button_down">Down</string>
@@ -270,7 +270,7 @@
     <string name="viewer_button_rotation">Rotation</string>
     <string name="viewer_button_translation">Translation</string>
     <string name="viewer_button_rotate_positive_angle">+15º</string>
-    <string name="viewer_button_rotate_negative_angle">-15º</string>   
+    <string name="viewer_button_rotate_negative_angle">-15º</string>
     <string name="viewer_text_rx">X axis</string>
     <string name="viewer_text_ry">Y axis</string>
     <string name="viewer_text_rz">Z axis</string>
@@ -309,20 +309,20 @@
     <string name="viewer_button_print">Print</string>
     <string name="viewer_button_undo">Undo</string>
     <string name="viewer_button_redo">Redo</string>
-    
-    <string name="choose_file">Choose File</string> 
-	<string name="open">Open</string>  
+
+    <string name="choose_file">Choose File</string>
+    <string name="open">Open</string>
     <string name="gcode_viewer">Gcode Files</string>
-	<string name="close_browser">Close browser</string>
-		   
+    <string name="close_browser">Close browser</string>
+
     <string name="viewer_title">Print Panel</string>
     <string name="loading_stl">Loading STL file</string>
     <string name="loading_gcode">Loading GCode file</string>
-    
+
     <string name="be_patient">Please, be patient. It may take a while</string>
     <string name="error_opening_invalid_file">Invalid file. Try again.</string>
     <string name="error_saving_invalid_model">Print Panel is empty. Open and edit a file and try again.</string>
-         
+
     <string name="ok">OK</string>
     <string name="project_name_title">Save project</string>
     <string name="project_name">Project name</string>
@@ -330,7 +330,7 @@
     <string name="generating_project">Generating project</string>
     <string name="generating_screenshot">Generating screenshot&#8230;</string>
     <string name="new_project">New project</string>
-    
+
     <string name="edition_menu_move">Move</string>
     <string name="edition_menu_rotate">Rotate</string>
     <string name="edition_menu_resize">Resize</string>
@@ -380,10 +380,10 @@
     <string name="history_drawer_date">Date:\u0020</string>
     <string name="history_empty_text">The printing history is empty</string>
 
-    <string name="print_panel_x_axis"  translatable="false">X =</string>
-    <string name="print_panel_y_axis"  translatable="false">Y =</string>
-    <string name="print_panel_z_axis"  translatable="false">Z =</string>
-    <string name="print_panel_mm_axis"  translatable="false">&#032;mm</string>
+    <string name="print_panel_x_axis" translatable="false">X =</string>
+    <string name="print_panel_y_axis" translatable="false">Y =</string>
+    <string name="print_panel_z_axis" translatable="false">Z =</string>
+    <string name="print_panel_mm_axis" translatable="false">&#032;mm</string>
     <string name="library_menu_sort_by_name">Name</string>
     <string name="library_menu_sort_by_date">Recent</string>
     <string name="library_menu_sort_by_size">Size</string>
@@ -403,6 +403,8 @@
     <string name="manual_add_error_address">Address can\'t be empty</string>
     <string name="printview_video_error">Webcam not available</string>
     <string name="connection_error_api_disabled">The connection cannot be configured automatically, please add it manually</string>
+    <string name="title_activity_test_details">test_details</string>
+    <string name="action_settings">Settings</string>
 
 
 </resources>
