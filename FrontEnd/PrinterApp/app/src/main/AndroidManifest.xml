@@ -61,9 +61,16 @@
         <activity
             android:name=".add_details"
             android:label="@string/title_activity_test_details"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape">
 
         </activity>
+
+        <activity
+            android:name=".DetailsListActivity"
+            android:label="Details"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape" />
 
     </application>
 

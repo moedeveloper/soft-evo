@@ -13,6 +13,8 @@ import retrofit2.http.GET;
  */
 
 public interface ApiService {
+    String BASE_URL = "http://mo3app.azurewebsites.net/api/";
+
     @GET("details")
     Call<DetailList> listDetails();
 }

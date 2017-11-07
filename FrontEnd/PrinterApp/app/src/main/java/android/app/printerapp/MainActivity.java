@@ -105,6 +105,14 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+        Button listDetailsButton = (Button) findViewById(R.id.button_list_details);
+        listDetailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DetailsListActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public static void performClick(int i){
