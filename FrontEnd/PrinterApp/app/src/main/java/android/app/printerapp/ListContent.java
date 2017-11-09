@@ -8,8 +8,8 @@ package android.app.printerapp;
  */
 public class ListContent {
 
-    //public static final String ID_DEVICES = "Devices";
-    //public static final String ID_LIBRARY = "Library";
+    public static final String ID_DOCUMENTER = "Documenter";
+    public static final String ID_LIBRARY = "Library";
     public static final String ID_VIEWER = "Viewer";
 
     public static final String ID_SETTINGS = "Settings";

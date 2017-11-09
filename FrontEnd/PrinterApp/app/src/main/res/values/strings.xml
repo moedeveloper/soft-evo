@@ -28,6 +28,7 @@
     <string name="show_password">Show password</string>
     <string name="empty_password_error">Password can\'t be empty</string>
 
+    <string name="fragment_documenter">Documenter</string>
     <string name="fragment_devices">Printers</string>
     <string name="fragment_print">Panel</string>
     <string name="fragment_models">Models</string>

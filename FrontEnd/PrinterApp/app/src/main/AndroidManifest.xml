@@ -5,7 +5,7 @@
     android:versionCode="0"
     android:versionName="1.0">
 
-    <!-- uses-sdk tools:overrideLibrary="android.support.v4"/ -->
+    <!--uses-sdk tools:overrideLibrary="android.support.v4"/-->
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,62 +16,117 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
-    <supports-screens
-        android:largeScreens="true"
+    <supports-screens android:smallScreens="false"
         android:normalScreens="false"
-        android:requiresSmallestWidthDp="600"
-        android:smallScreens="false"
-        android:xlargeScreens="true" />
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:requiresSmallestWidthDp="600" />
 
     <application
         android:allowBackup="true"
-        android:allowClearUserData="true"
-        android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
         android:theme="@style/AppBaseTheme.Green"
-        android:vmSafeMode="true">
+        android:largeHeap="true"
+        android:vmSafeMode="true"
+        android:allowClearUserData="true"
+        android:hardwareAccelerated="true">
+
         <activity
-            android:name=".SplashScreenActivity"
-            android:label="@string/app_name"
+            android:name="android.app.printerapp.SplashScreenActivity"
             android:screenOrientation="landscape"
+            android:label="@string/app_name"
             android:theme="@style/AppBaseTheme.Green.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".MainActivity"
-            android:configChanges="locale"
+            android:name="android.app.printerapp.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <!--
-        <receiver android:name=".NotificationReceiver">
-            <intent-filter>
-                <action android:name="android.app.printerapp.NotificationReceiver" />
-            </intent-filter>
-        </receiver>
-        -->
+            android:windowSoftInputMode="adjustPan"
+            android:configChanges="locale">
+        </activity>
 
         <activity
             android:name=".add_details"
             android:label="@string/title_activity_test_details"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape">
-
         </activity>
 
         <activity
             android:name=".DetailsListActivity"
             android:label="Details"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="landscape" />
-
+            android:screenOrientation="landscape" >
+        </activity>
     </application>
 
 </manifest>
+
+<!--Back-up-->
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<manifest xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--package="android.app.printerapp"-->
+    <!--android:versionCode="0"-->
+    <!--android:versionName="1.0">-->
+
+    <!--&lt;!&ndash; uses-sdk tools:overrideLibrary="android.support.v4"/ &ndash;&gt;-->
+
+    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
+    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />-->
+    <!--<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <!--<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />-->
+    <!--<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />-->
+    <!--<uses-permission android:name="android.permission.INTERNET" />-->
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+    <!--<uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />-->
+
+    <!--<supports-screens-->
+        <!--android:largeScreens="true"-->
+        <!--android:normalScreens="false"-->
+        <!--android:requiresSmallestWidthDp="600"-->
+        <!--android:smallScreens="false"-->
+        <!--android:xlargeScreens="true" />-->
+
+    <!--<application-->
+        <!--android:allowBackup="true"-->
+        <!--android:allowClearUserData="true"-->
+        <!--android:hardwareAccelerated="true"-->
+        <!--android:icon="@drawable/ic_launcher"-->
+        <!--android:label="@string/app_name"-->
+        <!--android:largeHeap="true"-->
+        <!--android:theme="@style/AppBaseTheme.Green"-->
+        <!--android:vmSafeMode="true">-->
+        <!--&lt;!&ndash;-->
+        <!--<receiver android:name=".NotificationReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.app.printerapp.NotificationReceiver" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--&ndash;&gt;-->
+
+        <!--<activity-->
+            <!--android:name=".add_details"-->
+            <!--android:label="@string/title_activity_test_details"-->
+            <!--android:parentActivityName=".MainActivity"-->
+            <!--android:screenOrientation="landscape">-->
+
+        <!--</activity>-->
+
+        <!--<activity-->
+            <!--android:name=".DetailsListActivity"-->
+            <!--android:label="Details"-->
+            <!--android:parentActivityName=".MainActivity"-->
+            <!--android:screenOrientation="landscape" />-->
+
+    <!--</application>-->
+
+<!--</manifest>-->
