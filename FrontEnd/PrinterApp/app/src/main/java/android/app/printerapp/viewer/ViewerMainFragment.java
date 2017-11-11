@@ -81,8 +81,6 @@ public class ViewerMainFragment extends Fragment {
         if (savedInstanceState == null) {
 
 //            //Show custom option menu
-//            setHasOptionsMenu(true);
-
             //Inflate the fragment
             mRootView = inflater.inflate(R.layout.print_panel_main,
                     container, false);

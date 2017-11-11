@@ -8,7 +8,6 @@ import android.app.printerapp.library.LibraryFragment;
 import android.app.printerapp.library.detail.DetailViewFragment;
 import android.app.printerapp.ui.AnimationHelper;
 import android.app.printerapp.viewer.ViewerMainFragment;
-import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +15,6 @@ import android.os.StrictMode;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TextView;
 
