@@ -102,140 +102,145 @@
             android:paddingTop="30dp"
             android:background="@color/gray_separator">
 
-            <!--Search bar layout-->
             <RelativeLayout
-                android:id="@+id/search_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/home_search_title"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:layout_centerVertical="true"
+                >
+                <!--Search bar layout-->
+                <RelativeLayout
+                    android:id="@+id/search_bar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/home_search_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:text="@string/hello_blank_fragment" />
+
+                    <EditText
+                        android:id="@+id/home_search_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@id/home_search_title"
+                        android:layout_centerHorizontal="true"
+                        android:inputType="text" />
+
+                </RelativeLayout>
+
+                <!--Advanced search options layout-->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:text="@string/hello_blank_fragment" />
+                    android:layout_below="@id/search_bar_layout"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <EditText
-                    android:id="@+id/home_search_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_below="@id/home_search_title"
-                    android:layout_centerHorizontal="true"
-                    android:inputType="text" />
+                    <!--Left options-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="20dp"
+                        android:layout_weight="1">
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+                    </LinearLayout>
+
+                    <!--Right options-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="20dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="@string/hello_blank_fragment" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
             </RelativeLayout>
-
-            <!--Advanced search options layout-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/search_bar_layout"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <!--Left options-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-                </LinearLayout>
-
-                <!--Right options-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_margin="20dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/hello_blank_fragment" />
-                    <Spinner
-                        android:layout_width="fill_parent"
-                        android:layout_marginTop="20dp"
-                        android:layout_height="20dp" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
         </RelativeLayout>
     </LinearLayout>
     

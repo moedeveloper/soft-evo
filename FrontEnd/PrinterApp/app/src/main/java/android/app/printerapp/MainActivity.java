@@ -126,11 +126,11 @@ public class MainActivity extends ActionBarActivity {
         mTabHost.addTab(spec);
 
         if (DatabaseController.count() > 0){
+            mTabHost.setCurrentTab(2);
+            onItemSelected(2);
+        } else {
             mTabHost.setCurrentTab(0);
             onItemSelected(0);
-        } else {
-            mTabHost.setCurrentTab(1);
-            onItemSelected(1);
 
         }
 
