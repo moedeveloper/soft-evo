@@ -87,22 +87,40 @@ public class MainActivity extends ActionBarActivity {
 
         mTabHost.setup();
 
-        //Models tab
-        TabHost.TabSpec spec = mTabHost.newTabSpec("Details");
+        //Home tab
+        TabHost.TabSpec spec = mTabHost.newTabSpec(ListContent.ID_HOME);
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_home)));
+        spec.setContent(R.id.maintab0);
+        mTabHost.addTab(spec);
+
+        //Details tab
+        spec = mTabHost.newTabSpec(ListContent.ID_DETAILS);
         spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_details)));
         spec.setContent(R.id.maintab1);
         mTabHost.addTab(spec);
 
-        //Print panel tab
-        spec = mTabHost.newTabSpec("Builds");
+        //Builds tab
+        spec = mTabHost.newTabSpec(ListContent.ID_BUILDS);
         spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_builds)));
         spec.setContent(R.id.maintab2);
         mTabHost.addTab(spec);
 
-        //Documenter placeholder tab
-        spec = mTabHost.newTabSpec("Prints");
+        //Prints tab
+        spec = mTabHost.newTabSpec(ListContent.ID_PRINTS);
         spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_prints)));
         spec.setContent(R.id.maintab3);
+        mTabHost.addTab(spec);
+
+        //Materials tab
+        spec = mTabHost.newTabSpec(ListContent.ID_MATERIALS);
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_materials)));
+        spec.setContent(R.id.maintab4);
+        mTabHost.addTab(spec);
+
+        //Tests tab
+        spec = mTabHost.newTabSpec(ListContent.ID_TESTS);
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_tests)));
+        spec.setContent(R.id.maintab5);
         mTabHost.addTab(spec);
 
         if (DatabaseController.count() > 0){
@@ -165,32 +183,32 @@ public class MainActivity extends ActionBarActivity {
         //Select fragment
         switch (id) {
 
-            case 0: {
+            case 1: {
                 //Check if we already created the Fragment to avoid having multiple instances
-                if (getFragmentManager().findFragmentByTag(ListContent.ID_LIBRARY) == null) {
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_DETAILS) == null) {
                     mLibraryFragment = new LibraryFragment();
-                    fragmentTransaction.add(R.id.maintab1, mLibraryFragment, ListContent.ID_LIBRARY);
+                    fragmentTransaction.add(R.id.maintab1, mLibraryFragment, ListContent.ID_DETAILS);
                 }
                 mCurrent = mLibraryFragment;
 
             }
 
             break;
-            case 1: {
+            case 2: {
                 closeDetailView();
                 //Check if we already created the Fragment to avoid having multiple instances
-                if (getFragmentManager().findFragmentByTag(ListContent.ID_VIEWER) == null) {
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_BUILDS) == null) {
                     mViewerFragment = new ViewerMainFragment();
-                    fragmentTransaction.add(R.id.maintab2, mViewerFragment, ListContent.ID_VIEWER);
+                    fragmentTransaction.add(R.id.maintab2, mViewerFragment, ListContent.ID_BUILDS);
                 }
                 mCurrent = mViewerFragment;
             }
             break;
 
-            case 2: {
-                if (getFragmentManager().findFragmentByTag(ListContent.ID_DOCUMENTER) == null) {
+            case 3: {
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_PRINTS) == null) {
                     mDocumenterFragment = new DocumenterPlaceholderFragment();
-                    fragmentTransaction.add(R.id.maintab3, mDocumenterFragment, ListContent.ID_DOCUMENTER);
+                    fragmentTransaction.add(R.id.maintab3, mDocumenterFragment, ListContent.ID_PRINTS);
                 }
                 mCurrent = mDocumenterFragment;
             }

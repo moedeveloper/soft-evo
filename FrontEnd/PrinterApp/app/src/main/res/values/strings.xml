@@ -12,7 +12,7 @@
     <string name="warning">Warning</string>
     <string name="dialog_continue">Continue</string>
 
-
+    <string name="fragment_home">Home</string>
     <string name="fragment_details">Details</string>
     <string name="fragment_builds">Builds</string>
     <string name="fragment_prints">Prints</string>
