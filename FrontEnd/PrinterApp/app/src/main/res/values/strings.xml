@@ -12,6 +12,13 @@
     <string name="warning">Warning</string>
     <string name="dialog_continue">Continue</string>
 
+
+    <string name="fragment_details">Details</string>
+    <string name="fragment_builds">Builds</string>
+    <string name="fragment_prints">Prints</string>
+    <string name="fragment_tests">Tests</string>
+    <string name="fragment_materials">Materials</string>
+
     <string name="fragment_documenter">Documenter</string>
     <string name="fragment_print">Panel</string>
     <string name="fragment_models">Models</string>

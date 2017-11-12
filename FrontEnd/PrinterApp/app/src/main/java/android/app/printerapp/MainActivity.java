@@ -88,20 +88,20 @@ public class MainActivity extends ActionBarActivity {
         mTabHost.setup();
 
         //Models tab
-        TabHost.TabSpec spec = mTabHost.newTabSpec("Library");
-        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_models)));
+        TabHost.TabSpec spec = mTabHost.newTabSpec("Details");
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_details)));
         spec.setContent(R.id.maintab1);
         mTabHost.addTab(spec);
 
         //Print panel tab
-        spec = mTabHost.newTabSpec("Panel");
-        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_print)));
+        spec = mTabHost.newTabSpec("Builds");
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_builds)));
         spec.setContent(R.id.maintab2);
         mTabHost.addTab(spec);
 
         //Documenter placeholder tab
-        spec = mTabHost.newTabSpec("Documenter");
-        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_documenter)));
+        spec = mTabHost.newTabSpec("Prints");
+        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_prints)));
         spec.setContent(R.id.maintab3);
         mTabHost.addTab(spec);
 
