@@ -24,6 +24,8 @@ import android.widget.TextView;
 public class MainActivity extends ActionBarActivity {
 
     //List of Fragments
+
+    private HomeFragment mHomeFragment; //Front page
     private DocumenterPlaceholderFragment mDocumenterFragment; //Documenter fragment
     private LibraryFragment mLibraryFragment; //Storage fragment
     private ViewerMainFragment mViewerFragment; //Print panel fragment @static for model load
@@ -182,6 +184,16 @@ public class MainActivity extends ActionBarActivity {
 
         //Select fragment
         switch (id) {
+
+            case 0: {
+                //Check if we already created the Fragment to avoid having multiple instances
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_HOME) == null) {
+                    mHomeFragment = new HomeFragment();
+                    fragmentTransaction.add(R.id.maintab0, mHomeFragment, ListContent.ID_HOME);
+                }
+                mCurrent = mHomeFragment;
+
+            }
 
             case 1: {
                 //Check if we already created the Fragment to avoid having multiple instances

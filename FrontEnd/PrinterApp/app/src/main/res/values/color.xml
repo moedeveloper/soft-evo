@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+
     <!-- GENERAL COLORS -->
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
@@ -32,5 +34,8 @@
     <color name="navmenu_text_color_selected">@color/body_text_1</color>
 
     <color name="drag_and_drop_hover_background">@color/theme_primary_light</color>
+
+    <!--Theme colors refactored-->
+    <color name="gray_separator">#25000000</color>
 
 </resources>
