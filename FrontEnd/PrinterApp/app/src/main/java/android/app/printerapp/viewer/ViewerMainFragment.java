@@ -82,7 +82,7 @@ public class ViewerMainFragment extends Fragment {
 
 //            //Show custom option menu
             //Inflate the fragment
-            mRootView = inflater.inflate(R.layout.print_panel_main,
+            mRootView = inflater.inflate(R.layout.prints_layout_main,
                     container, false);
 
             mContext = getActivity();
@@ -215,6 +215,12 @@ public class ViewerMainFragment extends Fragment {
         }
 
         mDataList.add(data);
+    }
+
+    //Clear all data
+    public static void optionClean() {
+        mDataList.clear();
+        mFile = null;
     }
 
     public static void draw() {

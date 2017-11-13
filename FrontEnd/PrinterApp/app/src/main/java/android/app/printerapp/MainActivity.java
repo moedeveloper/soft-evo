@@ -259,7 +259,6 @@ public class MainActivity extends ActionBarActivity {
 
         //This method will simulate a click and all its effects
         performClick(1);
-
         //Handler will avoid crash
         Handler handler = new Handler();
         handler.post(new Runnable() {
