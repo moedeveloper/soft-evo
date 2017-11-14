@@ -7,7 +7,7 @@ import android.app.printerapp.database.DatabaseController;
 import android.app.printerapp.library.LibraryFragment;
 import android.app.printerapp.library.detail.DetailViewFragment;
 import android.app.printerapp.ui.AnimationHelper;
-import android.app.printerapp.viewer.ViewerMainFragment;
+import android.app.printerapp.viewer.PrintsFragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
     private HomeFragment mHomeFragment; //Front page
     private DocumenterPlaceholderFragment mDocumenterFragment; //Documenter fragment
     private LibraryFragment mLibraryFragment; //Storage fragment
-    private ViewerMainFragment mViewerFragment; //Print panel fragment @static for model load
+    private PrintsFragment mViewerFragment; //Print panel fragment @static for model load
 
     //Class specific variables
     private static Fragment mCurrent; //The current shown fragment @static
@@ -63,7 +63,7 @@ public class MainActivity extends ActionBarActivity {
         mDialog = new DialogController(this);
 
         //Initialize fragments
-        mViewerFragment = (ViewerMainFragment) getFragmentManager().findFragmentByTag(ListContent.ID_VIEWER);
+        mViewerFragment = (PrintsFragment) getFragmentManager().findFragmentByTag(ListContent.ID_VIEWER);
 
         mManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
@@ -210,7 +210,7 @@ public class MainActivity extends ActionBarActivity {
                 closeDetailView();
                 //Check if we already created the Fragment to avoid having multiple instances
                 if (getFragmentManager().findFragmentByTag(ListContent.ID_BUILDS) == null) {
-                    mViewerFragment = new ViewerMainFragment();
+                    mViewerFragment = new PrintsFragment();
                     fragmentTransaction.add(R.id.maintab2, mViewerFragment, ListContent.ID_BUILDS);
                 }
                 mCurrent = mViewerFragment;
@@ -266,7 +266,7 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void run() {
 
-                if (path!=null) ViewerMainFragment.openFileDialog(path);
+                if (path!=null) PrintsFragment.openFileDialog(path);
             }
         });
 

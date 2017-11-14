@@ -31,6 +31,8 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
     private static final float ANGLE_X = 0f;
     private static final float ANGLE_Y = -5f;
     private static final float CAMERA_DEFAULT_X = 0f;
+//    private static final float CAMERA_DEFAULT_Y = -100f;
+//    private static final float CAMERA_DEFAULT_Z = -116f;
     private static final float CAMERA_DEFAULT_Y = -300f;
     private static final float CAMERA_DEFAULT_Z = 350f;
     private static final float POSITION_DEFAULT_X = 0f;
@@ -149,7 +151,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 		this.mState = state;
 		
 		this.mMode = mode;
-        this.mPlate = ViewerMainFragment.getCurrentPlate();
+        this.mPlate = PrintsFragment.getCurrentPlate();
 	}
 	
 	public void setTransparent (boolean transparent) {
@@ -207,7 +209,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
             mPlate = type;
 
             //Create plate to pre-generate the plate
-            if (mMode == ViewerMainFragment.PRINT_PREVIEW){
+            if (mMode == PrintsFragment.PRINT_PREVIEW){
                 mWitboxFaceBack = new WitboxFaces (BACK, mPlate);
                 mWitboxFaceRight = new WitboxFaces (RIGHT, mPlate);
                 mWitboxFaceLeft = new WitboxFaces (LEFT, mPlate);
@@ -279,7 +281,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 		
-		if (mMode == ViewerMainFragment.DO_SNAPSHOT || mMode == ViewerMainFragment.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, ViewerMainFragment.getCurrentPlate());
+		if (mMode == PrintsFragment.DO_SNAPSHOT || mMode == PrintsFragment.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, PrintsFragment.getCurrentPlate());
 
         mWitboxFaceBack = new WitboxFaces (BACK, mPlate);
         mWitboxFaceRight = new WitboxFaces (RIGHT, mPlate);
@@ -309,7 +311,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
         // this projection matrix is applied to object coordinates		
         Matrix.perspectiveM(mProjectionMatrix, 0, 45, ratio, Z_NEAR, Z_FAR);
         
-        if (mMode == ViewerMainFragment.DO_SNAPSHOT || mMode == ViewerMainFragment.PRINT_PREVIEW) {
+        if (mMode == PrintsFragment.DO_SNAPSHOT || mMode == PrintsFragment.PRINT_PREVIEW) {
         	DataStorage data = mDataList.get(0);
 
 	        float h = data.getHeight();
@@ -548,7 +550,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 
-        if (mMode == ViewerMainFragment.DO_SNAPSHOT) {
+        if (mMode == PrintsFragment.DO_SNAPSHOT) {
         	mInfinitePlane.draw(mMVPMatrix, mMVMatrix);
         	takeSnapshot(unused);
 

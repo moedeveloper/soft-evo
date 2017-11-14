@@ -53,7 +53,7 @@ public class StlFile {
         mMode = mode;
         mContinueThread = true;
 
-        if (mMode != ViewerMainFragment.DO_SNAPSHOT)
+        if (mMode != PrintsFragment.DO_SNAPSHOT)
             mProgressDialog = prepareProgressDialog(context);
 
         mData = data;
@@ -159,13 +159,13 @@ public class StlFile {
                     e.printStackTrace();
                 }
 
-                ViewerMainFragment.resetWhenCancel();
+                PrintsFragment.resetWhenCancel();
             }
         });
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        if (mMode!= ViewerMainFragment.DO_SNAPSHOT) {
+        if (mMode!= PrintsFragment.DO_SNAPSHOT) {
             dialog.show();
             dialog.getWindow().setLayout(500, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
@@ -182,8 +182,8 @@ public class StlFile {
         public void handleMessage(Message msg) {
             if (mData.getCoordinateListSize() < 1) {
                 Toast.makeText(mContext, R.string.error_opening_invalid_file, Toast.LENGTH_SHORT).show();
-                ViewerMainFragment.resetWhenCancel();
-                if (mMode != ViewerMainFragment.DO_SNAPSHOT) mProgressDialog.dismiss();
+                PrintsFragment.resetWhenCancel();
+                if (mMode != PrintsFragment.DO_SNAPSHOT) mProgressDialog.dismiss();
                 return;
             }
 
@@ -197,13 +197,13 @@ public class StlFile {
             mData.clearVertexList();
 
     		//Finish
-			if (mMode== ViewerMainFragment.DONT_SNAPSHOT) {
-				ViewerMainFragment.draw();
+			if (mMode== PrintsFragment.DONT_SNAPSHOT) {
+				PrintsFragment.draw();
 				mProgressDialog.dismiss();
 
                 //TODO better filtering
 
-            } else if (mMode == ViewerMainFragment.DO_SNAPSHOT) {
+            } else if (mMode == PrintsFragment.DO_SNAPSHOT) {
                 LibraryModelCreation.takeSnapshot();
             }
         }
@@ -223,14 +223,14 @@ public class StlFile {
                     line = line.replaceFirst("vertex ", "").trim();
                     allLines.append(line + "\n");
                     maxLines++;
-                    if (maxLines % 1000 == 0 && mMode != ViewerMainFragment.DO_SNAPSHOT)
+                    if (maxLines % 1000 == 0 && mMode != PrintsFragment.DO_SNAPSHOT)
                         mProgressDialog.setMax(maxLines);
                 }
             }
 
             Log.i(TAG, "STL [Text] Read in: " + (SystemClock.currentThreadTimeMillis() - milis));
 
-            if (mMode != ViewerMainFragment.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
+            if (mMode != PrintsFragment.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
 
             countReader.close();
 
@@ -256,7 +256,7 @@ public class StlFile {
                 lines += 3;
 
                 if (lines % (maxLines / 10) == 0) {
-                    if (mMode != ViewerMainFragment.DO_SNAPSHOT) mProgressDialog.setProgress(lines);
+                    if (mMode != PrintsFragment.DO_SNAPSHOT) mProgressDialog.setProgress(lines);
                 }
             }
 
@@ -314,7 +314,7 @@ public class StlFile {
 
         int vectorSize = getIntWithLittleEndian(stlBytes, 80);
 
-        if (mMode != ViewerMainFragment.DO_SNAPSHOT) mProgressDialog.setMax(vectorSize);
+        if (mMode != PrintsFragment.DO_SNAPSHOT) mProgressDialog.setMax(vectorSize);
 
         float milis = SystemClock.currentThreadTimeMillis();
 
@@ -361,7 +361,7 @@ public class StlFile {
 
 
             if (i % (vectorSize / 10) == 0) {
-                if (mMode != ViewerMainFragment.DO_SNAPSHOT) mProgressDialog.setProgress(i);
+                if (mMode != PrintsFragment.DO_SNAPSHOT) mProgressDialog.setProgress(i);
             }
         }
         Log.i(TAG, "STL [BINARY] Read & Processed in: " + (SystemClock.currentThreadTimeMillis() - milis));

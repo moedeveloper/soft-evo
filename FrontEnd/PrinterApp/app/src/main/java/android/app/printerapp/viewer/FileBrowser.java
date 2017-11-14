@@ -230,7 +230,7 @@ public class FileBrowser extends Activity  {
 		mFileListListener = new OnFileListDialogListener() {
 			@Override
 			public void onClickFileList(File file) {
-				if (file!= null) ViewerMainFragment.openFileDialog(file.getPath());
+				if (file!= null) PrintsFragment.openFileDialog(file.getPath());
 			}
 		};
 	}

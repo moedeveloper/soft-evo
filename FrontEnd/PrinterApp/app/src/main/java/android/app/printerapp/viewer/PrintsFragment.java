@@ -19,7 +19,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewerMainFragment extends Fragment {
+public class PrintsFragment extends Fragment {
     //Tabs
     private static final int NORMAL = 0;
     private static final int OVERHANG = 1;
@@ -58,7 +58,7 @@ public class ViewerMainFragment extends Fragment {
 
 
     //Empty constructor
-    public ViewerMainFragment() {
+    public PrintsFragment() {
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ViewerMainFragment extends Fragment {
             //Inflate the fragment
             mRootView = inflater.inflate(R.layout.prints_layout_main,
                     container, false);
-
+            
             mContext = getActivity();
 
             initUIElements();

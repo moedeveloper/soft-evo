@@ -284,7 +284,7 @@ public class Geometry {
 		 boolean outOfPlate = false;
 		 int k = 0;
 
-         int[] auxPlate = ViewerMainFragment.getCurrentPlate();
+         int[] auxPlate = PrintsFragment.getCurrentPlate();
 
 		 if (newMaxX > auxPlate[0] || newMinX < -auxPlate[0]
 				|| newMaxY > auxPlate[1] || newMinY < -auxPlate[1]) outOfPlate = true;
