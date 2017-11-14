@@ -1,0 +1,240 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="android.app.printerapp.HomeFragment">
+
+    <!--Wrapper layout-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <!--Left side for add shortcuts-->
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1.2"
+            android:orientation="vertical"
+            android:weightSum="2">
+
+            <!--Button layout top-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/add_build_button"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:textSize="20sp"
+                    android:text="Add \n new build"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/add_button_bg" />
+
+                <Button
+                    android:id="@+id/add_detail_button"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_alignParentBottom="true"
+                    android:textSize="20sp"
+                    android:text="Add \n new detail"
+                    android:layout_toLeftOf="@+id/add_build_button"
+                    android:background="@drawable/add_button_bg" />
+
+                <Button
+                    android:id="@+id/add_print_button"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:textSize="20sp"
+                    android:text="Add \n new print"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/add_build_button"
+                    android:background="@drawable/add_button_bg" />
+
+            </RelativeLayout>
+
+            <!--Button layout bottom-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true">
+
+                    <Button
+                        android:id="@+id/add_material_button"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:layout_marginRight="20dp"
+                        android:textSize="20sp"
+                        android:text="Add \n new material"
+                        android:background="@drawable/add_button_bg" />
+
+                    <Button
+                        android:id="@+id/add_test_button"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:textSize="20sp"
+                        android:text="Add \n new test"
+                        android:layout_toRightOf="@id/add_material_button"
+                        android:background="@drawable/add_button_bg" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <!--Right side for search shortcut-->
+        <RelativeLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="1.8"
+            android:paddingTop="30dp"
+            android:background="@color/gray_separator">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                >
+                <!--Search bar layout-->
+                <RelativeLayout
+                    android:id="@+id/search_bar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/home_search_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_centerHorizontal="true"
+                        android:text="Search here"
+                        android:inputType="text" />
+
+                </RelativeLayout>
+
+                <!--Advanced search options layout-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/search_bar_layout"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <!--Left options-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="20dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 1" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 2" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 3" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 4" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+                    </LinearLayout>
+
+                    <!--Right options-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="20dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 5" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 6" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 7" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Option 8" />
+                        <Spinner
+                            android:layout_width="fill_parent"
+                            android:layout_marginTop="20dp"
+                            android:layout_height="20dp" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+    
+</FrameLayout>

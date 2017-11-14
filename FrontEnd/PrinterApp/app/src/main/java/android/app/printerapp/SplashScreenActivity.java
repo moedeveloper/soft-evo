@@ -1,9 +1,7 @@
 package android.app.printerapp;
 
 import android.app.Activity;
-//import android.app.printerapp.devices.DevicesListController;
-//import android.app.printerapp.devices.database.DatabaseController;
-//import android.app.printerapp.library.LibraryController;
+import android.app.printerapp.database.DatabaseController;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,8 +16,6 @@ import java.util.TimerTask;
  *
  * @author sara-perez
  */
-
-
 public class SplashScreenActivity extends Activity {
 
     private static final String TAG = "SplashScreenActivity";
@@ -34,14 +30,12 @@ public class SplashScreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //setContentView(R.layout.activity_splash_screen);
+        setContentView(R.layout.activity_splash_screen);
 
         mContext = this;
 
         //Initialize db and lists
-        //new DatabaseController(this);
-        //DevicesListController.loadList(this);
-        //LibraryController.initializeHistoryList();
+        new DatabaseController(this);
 
         //Initialize default settings
         PreferenceManager.setDefaultValues(this, R.xml.settings, false);
