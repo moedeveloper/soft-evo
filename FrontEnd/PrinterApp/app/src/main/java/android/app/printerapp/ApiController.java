@@ -4,8 +4,6 @@ import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 
-import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +26,7 @@ public class ApiController implements Callback<DetailList> {
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        Call<DetailList> call = apiService.listDetails();
+        Call<DetailList> call = apiService.fetchAllDetails();
         call.enqueue(this);
     }
 
