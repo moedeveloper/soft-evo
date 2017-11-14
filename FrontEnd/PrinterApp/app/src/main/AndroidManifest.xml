@@ -72,6 +72,11 @@
             android:parentActivityName=".MainActivity"
             android:screenOrientation="landscape" />
 
+        <activity
+            android:name=".DetailActivity"
+            android:label="Detail"
+            android:parentActivityName=".DetailsListActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

@@ -9,6 +9,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <TextView
@@ -29,9 +30,17 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <!-- STL VIEWER IN HERE -->
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/detail_activity_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_gravity="center" />
 </LinearLayout>

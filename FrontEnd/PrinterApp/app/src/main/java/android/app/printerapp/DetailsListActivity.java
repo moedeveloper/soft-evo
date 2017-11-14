@@ -3,7 +3,7 @@ package android.app.printerapp;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,7 +56,7 @@ public class DetailsListActivity extends ActionBarActivity implements Callback<D
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        Call<DetailList> call = apiService.listDetails();
+        Call<DetailList> call = apiService.fetchAllDetails();
         call.enqueue(this);
     }
 
@@ -114,7 +114,8 @@ public class DetailsListActivity extends ActionBarActivity implements Callback<D
 
         @Override
         public void onClick(View view) {
-            //TODO: Do something
+            Intent intent = new Intent(view.getContext(), DetailActivity.class);
+            startActivity(intent);
         }
     }
 }
