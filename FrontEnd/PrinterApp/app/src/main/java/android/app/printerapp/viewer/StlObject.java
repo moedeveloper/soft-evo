@@ -149,8 +149,8 @@ public class StlObject {
 
         int[] auxPlate;
 
-        if (PrintsFragment.getCurrentPlate()!=null){
-           auxPlate = PrintsFragment.getCurrentPlate();
+        if (PrintsSpecificFragment.getCurrentPlate()!=null){
+           auxPlate = PrintsSpecificFragment.getCurrentPlate();
         } else auxPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
 
 		

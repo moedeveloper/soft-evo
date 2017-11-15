@@ -1,104 +1,238 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="3">
+    android:layout_height="match_parent">
 
-    <!--Left panel-->
+    <!--LAYOUT-->
+    <!--Left part of the layout-->
+    <!--Information and data of the print-->
+
+    <TextView
+        android:id="@+id/print_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Print P1548"
+        android:textSize="25sp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"/>
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/prints_left_left_data_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
         android:orientation="vertical"
-        android:weightSum="3"
-        android:layout_weight="1.2">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="P1548"
-                android:textSize="30sp"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-                />
-            <include layout="@layout/prints_layout_data_view"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_margin="20dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/text_left_left_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"/>
 
-                />
-
-        </LinearLayout>
-
-
-        <!--Traceability list-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            >
-        </LinearLayout>
-    </LinearLayout>
-
-    <!--Right panel-->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.8"
+        android:id="@+id/prints_left_right_data_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="10dp"
         android:orientation="vertical"
-        android:weightSum="3">
-        <!--Includes the 3D viewer-->
-        <LinearLayout
-            android:layout_width="match_parent"
+        app:layout_constraintLeft_toLeftOf="@+id/text_left_left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/text_left_right_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"/>
+
+    <LinearLayout
+        android:id="@+id/prints_right_left_data_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="@+id/text_right_left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/text_right_right_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"/>
+
+    <LinearLayout
+        android:id="@+id/prints_right_right_data_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="10dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="@+id/text_right_right_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"/>
+
+    <!--The list for tracing the print-->
+    <RelativeLayout
+        android:id="@+id/prints_trace_list_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
+        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline">
+    </RelativeLayout>
+
+    <!--Right part of the layout-->
+    <!--The STL viewer-->
+    <include layout="@layout/stl_viewer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintTop_toBottomOf="@+id/top_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal" />
+
+    <!--Container for buttons, selection of models to display-->
+    <RelativeLayout
+        android:id="@+id/prints_model_button_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/button_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline">
+        <!--Placeholder buttons-->
+        <Button
+            android:text="D1456"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0.8">
-            <include layout="@layout/stl_viewer" />
-        </LinearLayout>
-        <!--Buttons-->
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp">
-            <Button
-                android:id="@+id/middle_print_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="D1234"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/middle_print_button"
-                android:text="D545"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/middle_print_button"
-                android:text="D14"/>
-            ></RelativeLayout>
+            android:id="@+id/print_middle_button"
+            android:layout_centerHorizontal="true" />
 
-        <!--The file information-->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:text="D0245"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingLeft="20dp"
-            >
+            android:id="@+id/print_left_button"
+            android:layout_toLeftOf="@+id/print_middle_button"
+            android:layout_toStartOf="@+id/print_middle_button"/>
 
-            <include layout="@layout/data_text_view"/>
-            <include layout="@layout/data_text_view"/>
-            <include layout="@layout/data_text_view"/>
-            <include layout="@layout/data_text_view"/>
+        <Button
+            android:text="D8899"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/print_right_button"
+            android:layout_toRightOf="@+id/print_middle_button"
+            android:layout_toEndOf="@+id/print_middle_button"/>
 
-        </LinearLayout>
+    </RelativeLayout>
 
-    </LinearLayout>
+    <!--GUIDELINES-->
+    <!--Guideline for the far left side-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/left_guideline"
+        app:layout_constraintGuide_percent="0.0"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--Guideline for the far right-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/right_guideline"
+        app:layout_constraintGuide_percent="1.0"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="592dp" />
+
+    <!--Guideline for the far top-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_guideline"
+        app:layout_constraintGuide_percent="0.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--Guideline for the far bottom-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_guideline"
+        app:layout_constraintGuide_percent="1.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="311dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--Guidelines for layout partitions-->
+    <!--Guideline for seperation between left and right layout-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/middle_guideline_vertical"
+        app:layout_constraintGuide_percent="0.6"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="355dp" />
+
+    <!--Guideline for separation between upper and lower parts of the layout-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/middle_guideline_horizontal"
+        app:layout_constraintGuide_percent="0.6"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="187dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--Guideline to create an area for buttons-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_guideline"
+        app:layout_constraintGuide_percent="0.7"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="218dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <!--Guidelines for data, LEFT SIDE -->
+    <!--Guideline for text separation left-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_left_left_guideline"
+        app:layout_constraintGuide_percent="0.10"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="59dp" />
+    <!--Guideline for text separation right-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_left_right_guideline"
+        app:layout_constraintGuide_percent="0.20"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="178dp" />
+
+    <!--Guidelines for data, RIGHT SIDE -->
+    <!--Guideline for text separation right-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_right_left_guideline"
+        app:layout_constraintGuide_percent="0.25"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="178dp" />
+    <!--Guideline for text separation right-->
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_right_right_guideline"
+        app:layout_constraintGuide_percent="0.35"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="178dp" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

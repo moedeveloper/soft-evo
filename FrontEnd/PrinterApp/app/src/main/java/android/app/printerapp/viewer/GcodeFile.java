@@ -40,7 +40,7 @@ public class GcodeFile  {
 		mData = data;
 		mMode = mode;
 		mContinueThread = true;
-		if(mMode!= PrintsFragment.DO_SNAPSHOT) mProgressDialog = prepareProgressDialog(context);
+		if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog = prepareProgressDialog(context);
 
 		mData.setPathFile(mFile.getAbsolutePath());		
 		mData.initMaxMin();
@@ -71,8 +71,8 @@ public class GcodeFile  {
                     Log.i(TAG, "GCODE Read in: " + (SystemClock.currentThreadTimeMillis() - milis));
 					
 
-					if(mMode== PrintsFragment.PRINT_PREVIEW) mData.setMaxLinesFile(maxLines);
-					if(mMode!= PrintsFragment.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
+					if(mMode== PrintsSpecificFragment.PRINT_PREVIEW) mData.setMaxLinesFile(maxLines);
+					if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
 					if (mContinueThread) processGcode(allLines, maxLines);
 
 					if (mContinueThread) mHandler.sendEmptyMessage(0);
@@ -109,13 +109,13 @@ public class GcodeFile  {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                PrintsFragment.resetWhenCancel();
+                PrintsSpecificFragment.resetWhenCancel();
             }
         });
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        if (mMode!= PrintsFragment.DO_SNAPSHOT) {
+        if (mMode!= PrintsSpecificFragment.DO_SNAPSHOT) {
             dialog.show();
             dialog.getWindow().setLayout(500, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
@@ -144,8 +144,8 @@ public class GcodeFile  {
         //Default plate size for printview panel
         int[] auxPlate = {WitboxFaces.WITBOX_LONG,WitboxFaces.WITBOX_WITDH,WitboxFaces.WITBOX_HEIGHT};
 
-        if (PrintsFragment.getCurrentPlate() != null)
-         auxPlate = PrintsFragment.getCurrentPlate();
+        if (PrintsSpecificFragment.getCurrentPlate() != null)
+         auxPlate = PrintsSpecificFragment.getCurrentPlate();
 
 		while (lines<maxLines && mContinueThread) {
 
@@ -233,7 +233,7 @@ public class GcodeFile  {
 			 lines++;
 			 lastIndex = index+1;
 
-			 if (mMode!= PrintsFragment.DO_SNAPSHOT && lines % (maxLines/10) == 0)mProgressDialog.setProgress(lines);
+			 if (mMode!= PrintsSpecificFragment.DO_SNAPSHOT && lines % (maxLines/10) == 0)mProgressDialog.setProgress(lines);
 		}
 
         Log.i(TAG, "GCODE Processed in: " + (SystemClock.currentThreadTimeMillis() - milis));
@@ -250,8 +250,8 @@ public class GcodeFile  {
     			 * Alberto
     			 */
     			//Toast.makeText(mContext, R.string.error_opening_invalid_file, Toast.LENGTH_SHORT).show();
-    			PrintsFragment.resetWhenCancel();
-    			if(mMode!= PrintsFragment.DO_SNAPSHOT) mProgressDialog.dismiss();
+    			PrintsSpecificFragment.resetWhenCancel();
+    			if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog.dismiss();
 
     			return;
     		}
@@ -267,13 +267,13 @@ public class GcodeFile  {
     		mData.clearTypeList();
 
 
-    		if(mMode== PrintsFragment.DONT_SNAPSHOT) {
-//    			PrintsFragment.initSeekBar(mMaxLayer);
-	    		PrintsFragment.draw();
+    		if(mMode== PrintsSpecificFragment.DONT_SNAPSHOT) {
+//    			PrintsSpecificFragment.initSeekBar(mMaxLayer);
+	    		PrintsSpecificFragment.draw();
 				mProgressDialog.dismiss();  
-    		} else if(mMode== PrintsFragment.PRINT_PREVIEW) {
+    		} else if(mMode== PrintsSpecificFragment.PRINT_PREVIEW) {
     			mProgressDialog.dismiss();
-    		} else if (mMode== PrintsFragment.DO_SNAPSHOT) {
+    		} else if (mMode== PrintsSpecificFragment.DO_SNAPSHOT) {
     		}
         }
     };

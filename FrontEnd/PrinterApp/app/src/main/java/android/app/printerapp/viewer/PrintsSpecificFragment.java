@@ -4,14 +4,19 @@ import android.app.Fragment;
 import android.app.printerapp.R;
 import android.app.printerapp.library.LibraryController;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -19,7 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PrintsFragment extends Fragment {
+public class PrintsSpecificFragment extends Fragment {
     //Tabs
     private static final int NORMAL = 0;
     private static final int OVERHANG = 1;
@@ -48,6 +53,12 @@ public class PrintsFragment extends Fragment {
     private static Context mContext;
     private static View mRootView;
 
+//    Views
+    private LinearLayout dataLayoutTitlesLeft;
+    private LinearLayout dataLayoutValuesLeft;
+    private LinearLayout dataLayoutTitlesRight;
+    private LinearLayout dataLayoutValuesRight;
+
     /**
      * ****************************************************************************
      */
@@ -58,7 +69,7 @@ public class PrintsFragment extends Fragment {
 
 
     //Empty constructor
-    public PrintsFragment() {
+    public PrintsSpecificFragment() {
     }
 
     @Override
@@ -84,7 +95,7 @@ public class PrintsFragment extends Fragment {
             //Inflate the fragment
             mRootView = inflater.inflate(R.layout.prints_layout_main,
                     container, false);
-            
+
             mContext = getActivity();
 
             initUIElements();
@@ -110,8 +121,61 @@ public class PrintsFragment extends Fragment {
             });
         }
 
+        dataLayoutTitlesLeft = (LinearLayout) mRootView.findViewById(R.id.prints_left_left_data_relative_layout);
+        dataLayoutValuesLeft = (LinearLayout) mRootView.findViewById(R.id.prints_left_right_data_relative_layout);
+        dataLayoutTitlesRight = (LinearLayout) mRootView.findViewById(R.id.prints_right_left_data_relative_layout);
+        dataLayoutValuesRight = (LinearLayout) mRootView.findViewById(R.id.prints_right_right_data_relative_layout);
+
+//      Placeholder buttons for testing
+        Button addModelButton = (Button) mRootView.findViewById(R.id.print_middle_button);
+        addModelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Hard coding
+                String path = "/storage/emulated/0/PrintManager/Files/Feather/_stl/Feather.stl";
+                openFileDialog(path);
+            }
+        });
+
+        Button clearViewerButton = (Button) mRootView.findViewById(R.id.print_right_button);
+        clearViewerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Hard coding
+                optionClean();
+            }
+        });
+
+        Button addTextButton = (Button) mRootView.findViewById(R.id.print_left_button);
+        addTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Hard coding
+                addData("Title", ": data type 1");
+            }
+        });
+
+
         return mRootView;
 
+    }
+
+    private void addData(String title, String data){
+        addTextView(title, dataLayoutTitlesLeft, true);
+        addTextView(data, dataLayoutValuesLeft, false);
+
+        addTextView(title, dataLayoutTitlesRight, true);
+        addTextView(data, dataLayoutValuesRight, false);
+    }
+
+    private void addTextView(String text, LinearLayout layout, boolean bold){
+        TextView textView = new TextView(mContext);
+        textView.setPadding(5,0,0,0);
+        textView.setText(text);
+        if (bold)
+            textView.setTypeface(Typeface.DEFAULT_BOLD);
+
+        layout.addView(textView);
     }
 
     public static void resetWhenCancel() {
