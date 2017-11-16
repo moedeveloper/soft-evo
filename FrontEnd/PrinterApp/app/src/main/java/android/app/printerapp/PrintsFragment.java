@@ -69,8 +69,6 @@ public class PrintsFragment extends Fragment {
         Context mContext = getActivity();
         // Inflate the layout for this fragment
 
-        ListView printsListView = (ListView) mRootView.findViewById(R.id.prints_data_titles_list_view);
-        printsListView.setAdapter(new DataTextAdapter(mContext));
         return mRootView;
     }
 
