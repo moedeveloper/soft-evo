@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 
@@ -29,19 +28,15 @@ import java.util.List;
 public class STLViewerFragment extends Fragment {
 
     private static final int NORMAL = 0;
-    private static final int OVERHANG = 1;
-    private static final int TRANSPARENT = 2;
-    private static final int XRAY = 3;
-    private static final int LAYER = 4;
+    private static final int LAYER = 1;
 
     private static int mCurrentViewMode = 0;
 
     //Constants
     public static final int DO_SNAPSHOT = 0;
     public static final int DONT_SNAPSHOT = 1;
-    public static final int PRINT_PREVIEW = 3;
+    public static final int PRINT_PREVIEW = 2;
     public static final boolean STL = true;
-    public static final boolean GCODE = false;
 
     //Variables
     private static File mFile;
@@ -87,15 +82,14 @@ public class STLViewerFragment extends Fragment {
 
             mContext = getActivity();
 
-            initUIElements();
-
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
             //Init slicing elements
             mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
-
+            mLayout = (FrameLayout) mRootView.findViewById(R.id.viewer_container_framelayout);
             mSurface = new ViewerSurfaceView(mContext, mDataList, NORMAL, DONT_SNAPSHOT);
             draw();
+
 
             //Hide the action bar when editing the scale of the model
             mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -111,10 +105,6 @@ public class STLViewerFragment extends Fragment {
         }
 
         return mRootView;
-    }
-
-    private void initUIElements() {
-        mLayout = (FrameLayout) mRootView.findViewById(R.id.viewer_container_framelayout);
     }
 
     public static void resetWhenCancel() {
@@ -179,8 +169,6 @@ public class STLViewerFragment extends Fragment {
                     .build()
                     .show();
         }
-
-
     }
 
     public static void openFile(String filePath) {
@@ -240,9 +228,6 @@ public class STLViewerFragment extends Fragment {
         mLayout.addView(mSurface, 0);
     }
 
-    /**
-     * ********************** SURFACE CONTROL *******************************
-     */
     //This method will set the visibility of the surfaceview so it doesn't overlap
     //with the video grid view
     public void setSurfaceVisibility(int i) {
@@ -258,10 +243,6 @@ public class STLViewerFragment extends Fragment {
             }
         }
     }
-
-    /**
-     * *********************************  SIDE PANEL *******************************************************
-     */
 
     public static File getFile() {
         return mFile;
