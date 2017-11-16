@@ -12,19 +12,26 @@ import android.widget.TextView;
 public class DataTextAdapter extends BaseAdapter {
 
     private Context context;
-    private String[] texts = {"aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii", "aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii"};
+    private String[] titles = null;
+    private String[] values = null;
+    private String[] placeholderTexts = {"aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii", "aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii"};
 
     public DataTextAdapter(Context context) {
         this.context = context;
     }
 
-    public DataTextAdapter(String[] texts, Context context){
+    public DataTextAdapter(String[] titles, String[] values, Context context){
         this(context);
-        this.texts= texts;
+        this.titles = titles;
+        this.values = values;
     }
 
     public int getCount() {
-        return texts.length;
+
+        if(titles == null) {
+            return placeholderTexts.length;
+        }
+        return titles.length;
     }
 
     public Object getItem(int position) {
@@ -51,8 +58,19 @@ public class DataTextAdapter extends BaseAdapter {
 
         title = (TextView) dataTextView.findViewById(R.id.data_title_textview);
         value = (TextView) dataTextView.findViewById(R.id.data_value_textview);
-        title.setText(texts[position]);
-        value.setText(": Value");
+
+//      If titles are null, set placeholder text. Otherwise use the given titles
+        if(titles == null) {
+            title.setText(placeholderTexts[position]);
+        } else {
+            title.setText(titles[position]);
+        }
+//      Same with values
+        if(values == null) {
+            value.setText(": Value");
+        }else{
+            value.setText(values[position]);
+        }
 
         return dataTextView;
     }
