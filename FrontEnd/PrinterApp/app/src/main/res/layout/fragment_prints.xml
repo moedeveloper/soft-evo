@@ -1,0 +1,108 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="android.app.printerapp.PrintsFragment">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/right_guideline_prints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="1.0"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="592dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/top_guideline_prints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/left_guideline_prints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.0"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/bottom_guideline_prints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="1.0"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="311dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+    <android.support.constraint.Guideline
+        android:id="@+id/search_separator_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.6"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="355dp" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/search_options_separator_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.1"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="218dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <RelativeLayout
+        android:id="@+id/search_settings_display"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="8dp"
+        app:layout_constraintTop_toBottomOf="@id/top_guideline_prints"
+        app:layout_constraintBottom_toTopOf="@+id/search_options_separator_guideline"
+        app:layout_constraintLeft_toRightOf="@id/left_guideline_prints"
+        app:layout_constraintRight_toLeftOf="@+id/search_separator_guideline"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search options..."
+            android:layout_margin="5dp"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
+    <include layout="@layout/search_layout"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline_prints"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline_prints"
+        app:layout_constraintLeft_toLeftOf="@+id/search_separator_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline_prints">
+
+    </include>
+
+    <ListView
+        android:id="@+id/prints_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toLeftOf="@+id/search_separator_guideline"
+        app:layout_constraintTop_toBottomOf="@+id/search_options_separator_guideline"
+        app:layout_constraintBottom_toTopOf="@id/bottom_guideline_prints"
+        app:layout_constraintLeft_toRightOf="@id/left_guideline_prints"
+        >
+
+    </ListView>
+
+
+
+</android.support.constraint.ConstraintLayout>

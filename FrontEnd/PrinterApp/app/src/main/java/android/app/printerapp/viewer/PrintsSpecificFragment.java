@@ -3,7 +3,6 @@ package android.app.printerapp.viewer;
 import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Print;
-import android.app.printerapp.ui.DetailDataListView;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -72,7 +71,6 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         }
 
         new LoadDataTask().execute(1);
-        DetailDataListView test = new DetailDataListView(mContext, id);
 //      Placeholder buttons for testing
         Button addModelButton = (Button) mRootView.findViewById(R.id.print_middle_button);
         addModelButton.setOnClickListener(new View.OnClickListener() {

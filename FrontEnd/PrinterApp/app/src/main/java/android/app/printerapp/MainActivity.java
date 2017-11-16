@@ -29,6 +29,7 @@ public class MainActivity extends ActionBarActivity {
     private DocumenterPlaceholderFragment mDocumenterFragment; //Documenter fragment
     private LibraryFragment mLibraryFragment; //Storage fragment
     private PrintsSpecificFragment mViewerFragment; //Print panel fragment @static for model load
+    private PrintsFragment mPrintsFragment;
 
     //Class specific variables
     private static Fragment mCurrent; //The current shown fragment @static
@@ -219,10 +220,10 @@ public class MainActivity extends ActionBarActivity {
 
             case 3: {
                 if (getFragmentManager().findFragmentByTag(ListContent.ID_PRINTS) == null) {
-                    mDocumenterFragment = new DocumenterPlaceholderFragment();
-                    fragmentTransaction.add(R.id.maintab3, mDocumenterFragment, ListContent.ID_PRINTS);
+                    mPrintsFragment = new PrintsFragment();
+                    fragmentTransaction.add(R.id.maintab3, mPrintsFragment, ListContent.ID_PRINTS);
                 }
-                mCurrent = mDocumenterFragment;
+                mCurrent = mPrintsFragment;
             }
         }
             if (mViewerFragment != null) {
