@@ -5,100 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--LAYOUT-->
-    <!--Left part of the layout-->
-    <!--Information and data of the print-->
-
-    <TextView
-        android:id="@+id/print_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Print P1548"
-        android:textSize="25sp"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@+id/top_guideline"/>
-
-    <ListView
-        android:id="@+id/prints_data_titles_list_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:paddingLeft="25dp"
-        android:divider="@null"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/print_title"
-        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal">
-    </ListView>
-
-    <ListView
-        android:id="@+id/prints_data_values_list_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:divider="@null"
-        app:layout_constraintLeft_toLeftOf="@+id/text_right_left_guideline"
-        app:layout_constraintTop_toBottomOf="@id/print_title"
-        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal">
-    </ListView>
-
-    <!--The list for tracing the print-->
-    <RelativeLayout
-        android:id="@+id/prints_trace_list_relative_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
-        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
-        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline">
-    </RelativeLayout>
-
-    <!--Right part of the layout-->
-    <!--The STL viewer-->
-    <include layout="@layout/stl_viewer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
-        app:layout_constraintTop_toBottomOf="@+id/top_guideline"
-        app:layout_constraintRight_toLeftOf="@+id/right_guideline"
-        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal" />
-
-    <!--Container for buttons, selection of models to display-->
-    <RelativeLayout
-        android:id="@+id/prints_model_button_relative_layout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
-        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/button_guideline"
-        app:layout_constraintRight_toLeftOf="@+id/right_guideline">
-        <!--Placeholder buttons-->
-        <Button
-            android:text="D1456"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_middle_button"
-            android:layout_centerHorizontal="true" />
-
-        <Button
-            android:text="D0245"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_left_button"
-            android:layout_toLeftOf="@+id/print_middle_button"
-            android:layout_toStartOf="@+id/print_middle_button"/>
-
-        <Button
-            android:text="D8899"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_right_button"
-            android:layout_toRightOf="@+id/print_middle_button"
-            android:layout_toEndOf="@+id/print_middle_button"/>
-
-    </RelativeLayout>
 
     <!--GUIDELINES-->
     <!--Guideline for the far left side-->
@@ -212,5 +118,100 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="178dp" />
 
+
+    <!--LAYOUT-->
+    <!--Left part of the layout-->
+    <!--Information and data of the print-->
+
+    <TextView
+        android:id="@+id/print_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Print P1548"
+        android:textSize="25sp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/top_guideline"/>
+
+    <ListView
+        android:id="@+id/prints_data_titles_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingLeft="25dp"
+        android:divider="@null"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal">
+    </ListView>
+
+    <ListView
+        android:id="@+id/prints_data_values_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:divider="@null"
+        app:layout_constraintLeft_toLeftOf="@+id/text_right_left_guideline"
+        app:layout_constraintTop_toBottomOf="@id/print_title"
+        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal">
+    </ListView>
+
+    <!--The list for tracing the print-->
+    <RelativeLayout
+        android:id="@+id/prints_trace_list_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
+        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
+        app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_guideline">
+    </RelativeLayout>
+
+    <!--Right part of the layout-->
+    <!--The STL viewer-->
+    <include layout="@layout/stl_viewer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintTop_toBottomOf="@+id/top_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline"
+        app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal" />
+
+    <!--Container for buttons, selection of models to display-->
+    <RelativeLayout
+        android:id="@+id/prints_model_button_relative_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
+        app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/button_guideline"
+        app:layout_constraintRight_toLeftOf="@+id/right_guideline">
+        <!--Placeholder buttons-->
+        <Button
+            android:text="D1456"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/print_middle_button"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:text="D0245"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/print_left_button"
+            android:layout_toLeftOf="@+id/print_middle_button"
+            android:layout_toStartOf="@+id/print_middle_button"/>
+
+        <Button
+            android:text="D8899"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/print_right_button"
+            android:layout_toRightOf="@+id/print_middle_button"
+            android:layout_toEndOf="@+id/print_middle_button"/>
+
+    </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

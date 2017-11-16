@@ -14,7 +14,6 @@ public class DataTextAdapter extends BaseAdapter {
     private Context context;
     private String[] titles = null;
     private String[] values = null;
-    private String[] placeholderTexts = {"aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii", "aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii","aaa", "bbb", "ccc", "ddd", "eee", "fff", "eee", "hhh", "iii"};
 
     public DataTextAdapter(Context context) {
         this.context = context;
@@ -29,7 +28,7 @@ public class DataTextAdapter extends BaseAdapter {
     public int getCount() {
 
         if(titles == null) {
-            return placeholderTexts.length;
+            return 0;
         }
         return titles.length;
     }
@@ -59,16 +58,12 @@ public class DataTextAdapter extends BaseAdapter {
         title = (TextView) dataTextView.findViewById(R.id.data_title_textview);
         value = (TextView) dataTextView.findViewById(R.id.data_value_textview);
 
-//      If titles are null, set placeholder text. Otherwise use the given titles
-        if(titles == null) {
-            title.setText(placeholderTexts[position]);
-        } else {
+//      If titles are not null, use given titles
+        if(titles != null) {
             title.setText(titles[position]);
         }
 //      Same with values
-        if(values == null) {
-            value.setText(": Value");
-        }else{
+        if(values != null) {
             value.setText(values[position]);
         }
 
