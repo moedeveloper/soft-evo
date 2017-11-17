@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 /**
@@ -27,7 +28,8 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
     @Override
     public DataEntryItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.data_entry_list_item, parent, false);
-        return new DataEntryItemHolder(view);
+        DataEntryItemHolder itemholder = new DataEntryItemHolder(view);
+        return itemholder;
     }
 
     @Override

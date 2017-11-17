@@ -24,8 +24,9 @@ public class ListContent {
     public static final String ID_DETAIL = "Detail";
     public static final String ID_PRINTVIEW = "PrintView";
     public static final String ID_INITIAL = "Initial";
+    public static final String ID_PRINT_SPECIFIC = "Print_specific";
 
-	/**
+    /**
 	 * A dummy item representing a piece of content.
 	 */
 	public static class DrawerListItem {

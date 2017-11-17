@@ -21,9 +21,12 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
     private Context mContext;
     private View mRootView;
+    private Bundle arguments;
     private int id;
 
     private DatabaseHandler databaseHandler;
+
+    public static final String PRINT_ID = "print_id";
 
 //    Views
     private ListView dataListView;
@@ -34,10 +37,18 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         databaseHandler = DatabaseHandler.getInstance();
     }
 
+    public static PrintsSpecificFragment newInstance(int id){
+        Bundle b = new Bundle();
+        b.putInt(PRINT_ID, id);
+        PrintsSpecificFragment psf = new PrintsSpecificFragment();
+        psf.setArguments(b);
+
+        return psf;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         //Retain instance to keep the Fragment from destroying itself
         setRetainInstance(true);
     }
@@ -47,13 +58,17 @@ public class PrintsSpecificFragment extends STLViewerFragment {
                              Bundle savedInstanceState) {
         //Let parent initialize all STL Viewer elements
         super.onCreateView(inflater, container, savedInstanceState);
-
+        Log.d("Test", "what");
         //Reference to View
         mRootView = null;
 
-        Bundle arguments = getArguments();
+        arguments = getArguments();
         //TODO: Here we should get the printid from arguments, which should be given when creating the fragment
-        id = 1;
+        if(arguments != null) {
+            id = arguments.getInt(PRINT_ID);
+        } else {
+            id = 1;
+        }
         //If is not new
         if (savedInstanceState == null) {
 
@@ -67,7 +82,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         }
 
         //Load data from database
-        new LoadDataTask().execute(1);
+        new LoadDataTask().execute(id);
 
 //      Placeholder buttons for testing
         Button addModelButton = (Button) mRootView.findViewById(R.id.print_middle_button);

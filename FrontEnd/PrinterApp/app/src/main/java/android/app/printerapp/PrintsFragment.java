@@ -14,14 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 
-public class PrintsFragment extends Fragment {
+public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
     private RecyclerView recyclerView;
     private DatabaseHandler databaseHandler;
     private Context mContext;
+
+    public static final String PRINT_CLICKED = "print_clicked";
 
     public PrintsFragment() {
         databaseHandler = DatabaseHandler.getInstance();
@@ -42,8 +46,12 @@ public class PrintsFragment extends Fragment {
 
         new LoadDataTask().execute();
 
-
         return mRootView;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+
     }
 
     //Async task to retrieve data from database, and set the adapter

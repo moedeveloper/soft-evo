@@ -17,10 +17,13 @@ import android.view.View;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 /**
  * Created by alberto-baeza on 1/21/15.
  */
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements PropertyChangeListener {
 
     //List of Fragments
 
@@ -29,6 +32,8 @@ public class MainActivity extends ActionBarActivity {
     private LibraryFragment mLibraryFragment; //Storage fragment
     private PrintsSpecificFragment mViewerFragment; //Print panel fragment @static for model load
     private PrintsFragment mPrintsFragment;
+
+    public static final String PRINT_CLICKED = "print_clicked";
 
     //Class specific variables
     private static Fragment mCurrent; //The current shown fragment @static
@@ -274,5 +279,12 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if(event.getPropertyName() == PRINT_CLICKED){
+            Log.d("Test", "I got clicked! : " + event.getNewValue());
+        }
     }
 }
