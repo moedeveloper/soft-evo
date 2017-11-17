@@ -1,10 +1,10 @@
 package android.app.printerapp.model;
 
 /**
- * Created by SAMSUNG on 2017-11-16.
+ * A model for a print
  */
 
-public class Print{
+public class Print implements DataEntry{
     private String id;
     private String buildsId;
     private String operator;
@@ -16,8 +16,18 @@ public class Print{
     private String endTime;
     private String startTime;
 
+    @Override
+    public String getName() {
+        return "PlaceholderName";
+    }
+
     public String getId(){
         return id;
+    }
+
+    @Override
+    public String getCreationDate() {
+        return "2017-11-17";
     }
 
     public void setId(String id){

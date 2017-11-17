@@ -91,8 +91,8 @@
 
     </include>
 
-    <ListView
-        android:id="@+id/prints_list_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/prints_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintRight_toLeftOf="@+id/search_separator_guideline"
@@ -101,7 +101,7 @@
         app:layout_constraintLeft_toRightOf="@id/left_guideline_prints"
         >
 
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 
 

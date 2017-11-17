@@ -7,7 +7,6 @@ import android.app.printerapp.database.DatabaseController;
 import android.app.printerapp.library.LibraryFragment;
 import android.app.printerapp.library.detail.DetailViewFragment;
 import android.app.printerapp.ui.AnimationHelper;
-import android.app.printerapp.viewer.PrintsSpecificFragment;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;

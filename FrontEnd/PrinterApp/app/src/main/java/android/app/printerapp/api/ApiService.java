@@ -3,6 +3,7 @@ package android.app.printerapp.api;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.Print;
+import android.app.printerapp.model.PrintList;
 
 import java.util.List;
 
@@ -25,5 +26,8 @@ public interface ApiService {
 
     @GET("print/{printId}")
     Call<List<Print>> fetchPrint(@Path("printId") int printId);
+
+    @GET("prints")
+    Call<PrintList> fetchAllPrints();
 
 }

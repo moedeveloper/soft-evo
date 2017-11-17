@@ -2,6 +2,7 @@ package android.app.printerapp.viewer;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.printerapp.PrintsSpecificFragment;
 import android.app.printerapp.R;
 import android.app.printerapp.library.LibraryController;
 import android.app.printerapp.library.LibraryModelCreation;

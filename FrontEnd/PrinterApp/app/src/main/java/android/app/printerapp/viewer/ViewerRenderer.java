@@ -1,6 +1,7 @@
 package android.app.printerapp.viewer;
 
 import android.app.printerapp.Log;
+import android.app.printerapp.PrintsSpecificFragment;
 import android.app.printerapp.library.LibraryModelCreation;
 import android.app.printerapp.viewer.Geometry.Point;
 import android.app.printerapp.viewer.Geometry.Vector;

@@ -6,20 +6,30 @@ import java.util.Date;
  * Created by Johan on 11/1/2017.
  */
 
-public class Detail {
-    private int id;
+public class Detail implements DataEntry {
+    private String id;
     private String name;
+    private String creationDate;
 //    private int companyId;
 //    private String originalFileName;
 //    private int projectId;
 //    private Date creationDate;
 //    private String comment;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setCreationDate(String creationDate){
+        this.creationDate = creationDate;
+    }
+
+    @Override
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
