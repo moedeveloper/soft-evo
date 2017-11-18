@@ -1,8 +1,12 @@
-package android.app.printerapp;
+package android.app.printerapp.ui.DateEntryItemHolders;
 
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.printerapp.ListContent;
+import android.app.printerapp.Log;
+import android.app.printerapp.PrintsSpecificFragment;
+import android.app.printerapp.R;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,7 +21,7 @@ import java.beans.PropertyChangeSupport;
  * Defines the contents of the rows of RecyclerView
  */
 
-public class DataEntryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public abstract class DataEntryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private Object image;
     private TextView name;
@@ -32,6 +36,9 @@ public class DataEntryItemHolder extends RecyclerView.ViewHolder implements View
         itemView.setOnClickListener(this);
     }
 
+    public int getId(){
+        return Integer.parseInt(id.getText().toString());
+    }
 
     public void setId(String id){
         this.id.setText(id);
@@ -54,30 +61,6 @@ public class DataEntryItemHolder extends RecyclerView.ViewHolder implements View
     //TODO: Perhaps move all instantiation of fragments to a factory class
 
     @Override
-    public void onClick(View view) {
-        FragmentManager fragmentManager;
-        try{
-            final Activity activity = (Activity) view.getContext();
-            fragmentManager = activity.getFragmentManager();
-
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentManager.popBackStack();
-
-            PrintsSpecificFragment printsSpecificFragment =
-                    PrintsSpecificFragment.newInstance(Integer.parseInt(id.getText().toString()));
-
-            if(fragmentManager.findFragmentById(R.id.maintab4) == null) {
-                fragmentTransaction.add(R.id.maintab4, printsSpecificFragment, ListContent.ID_PRINT_SPECIFIC);
-            }else {
-                fragmentTransaction.replace(R.id.maintab4, printsSpecificFragment);
-            }
-            fragmentTransaction.show(printsSpecificFragment).commit();
-
-        } catch (ClassCastException e) {
-            Log.d("DataEntryItemHolder", "Can't get the fragment manager with this");
-        }
-
-
-    }
+    public abstract void onClick(View view);
 }
 

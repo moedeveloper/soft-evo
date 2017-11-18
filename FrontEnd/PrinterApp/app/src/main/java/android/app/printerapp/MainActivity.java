@@ -28,7 +28,6 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
     //List of Fragments
 
     private HomeFragment mHomeFragment; //Front page
-    private DocumenterPlaceholderFragment mDocumenterFragment; //Documenter fragment
     private LibraryFragment mLibraryFragment; //Storage fragment
     private PrintsSpecificFragment mViewerFragment; //Print panel fragment @static for model load
     private PrintsFragment mPrintsFragment;

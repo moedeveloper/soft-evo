@@ -1,9 +1,13 @@
-package android.app.printerapp;
+package android.app.printerapp.ui;
 
+import android.app.printerapp.R;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.Print;
+import android.app.printerapp.ui.DateEntryItemHolders.DataEntryItemHolder;
+import android.app.printerapp.ui.DateEntryItemHolders.DetailItemHolder;
+import android.app.printerapp.ui.DateEntryItemHolders.PrintItemHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,14 +36,23 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
         Class<?> d = Detail.class;
         Class<?> b = Build.class;
 
-        if(type == p){
+        View view = null;
+        DataEntryItemHolder itemholder = null;
 
+        if(type == p){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.data_entry_list_item, parent, false);
+            itemholder = new PrintItemHolder(view);
+        }else if(type == d){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.data_entry_list_item, parent, false);
+            itemholder = new DetailItemHolder(view);
+        }else if(type == b){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.data_entry_list_item, parent, false);
+            itemholder = null;
         }
 
-
-        View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.data_entry_list_item, parent, false);
-        DataEntryItemHolder itemholder = new DataEntryItemHolder(view);
         return itemholder;
     }
 

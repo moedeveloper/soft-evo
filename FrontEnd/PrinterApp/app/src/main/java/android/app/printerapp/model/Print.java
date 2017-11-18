@@ -27,7 +27,7 @@ public class Print implements DataEntry{
 
     @Override
     public String getCreationDate() {
-        return "2017-11-17";
+        return startTime;
     }
 
     public void setId(String id){

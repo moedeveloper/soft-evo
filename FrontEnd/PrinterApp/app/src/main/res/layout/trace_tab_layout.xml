@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@drawable/tab_indicator_ab_green"
+    android:gravity="center"
+    android:padding="15dp">
+
+    <!-- Tab title -->
+    <TextView
+        android:id="@+id/trace_tab_title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/body_text_2"
+        android:textSize="@dimen/text_size_medium"
+        android:textAllCaps="true"/>
+
+</LinearLayout>
