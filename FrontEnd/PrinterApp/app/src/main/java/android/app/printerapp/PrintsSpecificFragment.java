@@ -2,12 +2,16 @@ package android.app.printerapp;
 
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
+import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.app.printerapp.viewer.STLViewerFragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +34,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
 //    Views
     private ListView dataListView;
+    private RecyclerView detailsList;
 
 
     //Empty constructor
@@ -76,12 +81,14 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             mRootView = getRootView();
             mContext = getActivity();
 
+            detailsList = (RecyclerView) mRootView.findViewById(R.id.prints_trace_recycler_view);
             dataListView = (ListView) mRootView.findViewById(R.id.prints_data_titles_list_view);
             dataListView.setAdapter(new DataTextAdapter(mContext));
 
         }
 
         //Load data from database
+        new LoadDetailsTask().execute();
         new LoadDataTask().execute(id);
 
 //      Placeholder buttons for testing
@@ -112,9 +119,34 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             }
         });
 
-
         return mRootView;
 
+    }
+
+    private class LoadDetailsTask extends AsyncTask<Integer, Integer, Integer> {
+
+        private DetailList result = null;
+
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            ApiService apiService = databaseHandler.getApiService();
+
+            try {
+                result = apiService.fetchAllDetails().execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return 1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
+            detailsList.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getDetails()));
+            detailsList.setLayoutManager(new LinearLayoutManager(mContext));
+            detailsList.addItemDecoration(new DividerItemDecoration(mContext));
+        }
     }
 
 //  Retrieving data from the database using an AsyncTask to make sure the
@@ -141,12 +173,16 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             super.onPostExecute(integer);
             String[] printTitles = {"Id", "Build id", "Operator", "Machine", "Powder weight start", "Powder weight end",
                     "Build platform material", "Build platform weight", "End time", "Start time"};
-            Print print = result.get(0);
-            String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
-                    print.getPowderWeightStart(), print.getPowderWeightEnd(), print.getBuildPlatformMaterial(),
-                    print.getBuildPlatformWeight(), print.getEndTime(), print.getStartTime()};
+            if(result.size() > 0) {
+                Print print = result.get(0);
+                String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
+                        print.getPowderWeightStart(), print.getPowderWeightEnd(), print.getBuildPlatformMaterial(),
+                        print.getBuildPlatformWeight(), print.getEndTime(), print.getStartTime()};
 
-            dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
+                dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
+            } else {
+               Log.d("PrintsSpecificFragment", "Could not fetch any data with given ID");
+            }
         }
     }
 }

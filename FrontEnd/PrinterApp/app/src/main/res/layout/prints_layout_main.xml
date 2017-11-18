@@ -159,15 +159,15 @@
     </ListView>
 
     <!--The list for tracing the print-->
-    <RelativeLayout
-        android:id="@+id/prints_trace_list_relative_layout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/prints_trace_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
         app:layout_constraintRight_toLeftOf="@+id/middle_guideline_vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottom_guideline">
-    </RelativeLayout>
+    </android.support.v7.widget.RecyclerView>
 
     <!--Right part of the layout-->
     <!--The STL viewer-->

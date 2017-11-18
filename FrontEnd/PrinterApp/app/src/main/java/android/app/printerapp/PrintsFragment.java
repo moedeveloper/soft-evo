@@ -24,6 +24,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
     private RecyclerView recyclerView;
     private DatabaseHandler databaseHandler;
     private Context mContext;
+    private View mRootView;
 
     public static final String PRINT_CLICKED = "print_clicked";
 
@@ -39,7 +40,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mRootView = inflater.inflate(R.layout.fragment_prints, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_prints, container, false);
         mContext = getActivity();
 
         recyclerView = (RecyclerView) mRootView.findViewById(R.id.prints_recycler_view);
@@ -78,8 +79,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
             if(result == null){
                 return;
             }
-
-            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<Print>(mContext, result.getPrints()));
+            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getPrints()));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
     }

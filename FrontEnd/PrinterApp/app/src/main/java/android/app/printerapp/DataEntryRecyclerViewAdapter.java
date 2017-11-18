@@ -1,14 +1,14 @@
 package android.app.printerapp;
 
+import android.app.printerapp.model.Build;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
-import android.content.Context;
+import android.app.printerapp.model.Print;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.beans.PropertyChangeListener;
 import java.util.List;
 
 /**
@@ -17,17 +17,28 @@ import java.util.List;
 
 public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerView.Adapter<DataEntryItemHolder> {
 
-    Context context;
     List<E> dataset;
 
-    public DataEntryRecyclerViewAdapter (Context context, List<E> dataset){
-        this.context = context;
+    public DataEntryRecyclerViewAdapter (List<E> dataset){
         this.dataset = dataset;
     }
 
     @Override
     public DataEntryItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.data_entry_list_item, parent, false);
+
+        Class<?> type = dataset.get(0).getClass();
+
+        Class<?> p = Print.class;
+        Class<?> d = Detail.class;
+        Class<?> b = Build.class;
+
+        if(type == p){
+
+        }
+
+
+        View view = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.data_entry_list_item, parent, false);
         DataEntryItemHolder itemholder = new DataEntryItemHolder(view);
         return itemholder;
     }

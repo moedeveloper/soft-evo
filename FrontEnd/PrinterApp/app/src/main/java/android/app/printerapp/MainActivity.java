@@ -212,13 +212,8 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
 
             break;
             case 2: {
+                //TODO: Add detail view here
                 closeDetailView();
-                //Check if we already created the Fragment to avoid having multiple instances
-                if (getFragmentManager().findFragmentByTag(ListContent.ID_BUILDS) == null) {
-                    mViewerFragment = new PrintsSpecificFragment();
-                    fragmentTransaction.add(R.id.maintab2, mViewerFragment, ListContent.ID_BUILDS);
-                }
-                mCurrent = mViewerFragment;
             }
             break;
 
@@ -230,22 +225,25 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
                 mCurrent = mPrintsFragment;
             }
         }
-            if (mViewerFragment != null) {
-                if (mCurrent != mViewerFragment) {
-                    //Make the surface invisible to avoid frame overlapping
-                    mViewerFragment.setSurfaceVisibility(0);
+
+        //TODO: Find a way to do this
+        /*PrintsSpecificFragment psc = (PrintsSpecificFragment) mManager.findFragmentByTag(ListContent.ID_PRINT_SPECIFIC);
+            if(psc != null){
+                if(mCurrent != psc){
+                    psc.setSurfaceVisibility(0);
 
                 } else {
                     //Make the surface visible when we press
-                    mViewerFragment.setSurfaceVisibility(1);
+                    psc.setSurfaceVisibility(1);
                 }
             }
+            */
 
-            //Show current fragment
-            if (mCurrent != null) {
-                Log.i("OUT", "Changing " + mCurrent.getTag());
-                fragmentTransaction.show(mCurrent).commit();
-            }
+        //Show current fragment
+        if (mCurrent != null) {
+            Log.i("OUT", "Changing " + mCurrent.getTag());
+            fragmentTransaction.show(mCurrent).commit();
+        }
 
     }
 
