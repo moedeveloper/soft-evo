@@ -17,9 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,19 +33,24 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     private Context mContext;
     private View mRootView;
     private Bundle arguments;
+
     private int id;
-    private TabHost traceTabHost;
     private Print print;
     private DatabaseHandler databaseHandler;
 
+    //CONSTANTS
     public static final String PRINT_ID = "print_id";
+    private final int MAX_BUTTONS_PER_LAYOUT = 5;
 
-//    Views
+    //Views
     private ListView dataListView;
     private RecyclerView detailsList;
+    private LinearLayout upperButtonLayout;
+    private LinearLayout lowerButtonLayout;
+    private TabHost traceTabHost;
+    List<ToggleButton> toggleDetailButtons = new ArrayList<>();
 
-
-//  Empty constructor
+    //Empty constructor
     public PrintsSpecificFragment() {
         databaseHandler = DatabaseHandler.getInstance();
     }
@@ -67,13 +75,16 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         
-//      Let parent initialize all STL Viewer elements
+        //Let parent initialize all STL Viewer elements
         super.onCreateView(inflater, container, savedInstanceState);
         
-//      Reference to View
+        //Reference to View
         mRootView = null;
+
+        //Clean the STL Viewer options everytime we create a new fragment
+        optionClean();
        
-//      Retrieves all given arguments
+        //Retrieves all given arguments
         arguments = getArguments();
         
         if(arguments != null) {
@@ -82,9 +93,9 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             id = 1;
         }
         
-//      If is not new
+        //If is not new
         if (savedInstanceState == null) {
-//          Get the rootview from its parent
+            //Get the rootview from its parent
             mRootView = getRootView();
             mContext = getActivity();
 
@@ -93,47 +104,24 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             dataListView.setAdapter(new DataTextAdapter(mContext));
 
         }
-        
-//      Find tab host for tracing and initialize it
+
+        //Retrieve button layouts
+        upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
+        lowerButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_lower_buttons_layout);
+
+
+        //Find tab host for tracing and initialize it
         traceTabHost = (TabHost) mRootView.findViewById(R.id.trace_tab_host);
         initializeTraceTabHost();
 
-//      Load data from database
+        //Load data from database
         new LoadDataTask().execute();
-
-//      Placeholder buttons for testing
-        Button addModelButton = (Button) mRootView.findViewById(R.id.print_middle_button);
-        addModelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Hard coding
-                String path = "/storage/emulated/0/PrintManager/Files/Feather/_stl/Feather.stl";
-                openFileDialog(path);
-            }
-        });
-
-        Button clearViewerButton = (Button) mRootView.findViewById(R.id.print_right_button);
-        clearViewerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Hard coding
-                optionClean();
-            }
-        });
-
-        Button addTextButton = (Button) mRootView.findViewById(R.id.print_left_button);
-        addTextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Hard coding
-            }
-        });
 
         return mRootView;
 
     }
 
-//  Method for initializing the tab host
+    //Method for initializing the tab host
     private void initializeTraceTabHost(){
         traceTabHost.setup();
 
@@ -156,7 +144,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         traceTabHost.addTab(spec);
     }
 
-//  Create tab indicator to customize tabs for the tabhost
+    //Create tab indicator to customize tabs for the tabhost
     private View getTabIndicator(String title) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.trace_tab_layout, null);
         TextView tv = (TextView) view.findViewById(R.id.trace_tab_title_textview);
@@ -164,7 +152,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         return view;
     }
 
-//  Async task used to load all data to be displayed
+    //Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
         private List<Print> printResult = null;
@@ -176,19 +164,19 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             ApiService apiService = databaseHandler.getApiService();
 
             try {
-//              Fetch prints
+                //Fetch prints
                 printResult =  apiService.fetchPrint(id).execute().body();
-                if(printResult != null) {
+                if(printResult != null && printResult.size() > 0) {
                     print = printResult.get(0);
                 } else {
                     Log.d("PrintsSpecificFragment", "Could not fetch any data with given ID");
                     return 1;
                 }
-//              Based on build id given in prints fetch all links to detail
+                //Based on build id given in prints fetch all links to detail
                 buildDetailResult = apiService.fetchDetailBuildLink(
                         Integer.parseInt(print.getBuildsId())).execute().body();
 
-//              For each detail found, retrieve their data
+                //For each detail found, retrieve their data
                 for(BuildDetailLink link : buildDetailResult){
                     List<Detail> detail = apiService.fetchDetail(
                             Integer.parseInt(link.getDetailsId())).execute().body();
@@ -205,12 +193,12 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
 
-//          If we failed to retrieve a print, do nothing
+            //If we failed to retrieve a print, do nothing
             if(print == null) {
                 Log.d("PrintsSpecificFragment", "Failed to retrieve prints");
                 return;
             }
-//          Fill the fields for the print
+            //Fill the fields for the print
             String[] printTitles = {"Id", "Build id", "Operator", "Machine", "Powder weight start", "Powder weight end",
                     "Build platform material", "Build platform weight", "End time", "Start time"};
             String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
@@ -219,18 +207,78 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
             dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
 
-
-//          Fill the details field
+            //Fill the details field
             View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
             detailsList.setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
             detailsList.setLayoutManager(new LinearLayoutManager(mContext));
             detailsList.addItemDecoration(new DividerItemDecoration(mContext));
 
-//          Create detail buttons
-            for(Detail d : linkedDetails){
-                Button button = new Button(mContext);
-                button.setText("D" + d.getId());
+            //Create detail buttons
+            for(int i = 0; i < linkedDetails.size(); i++){
+                createDetailButton("D" + linkedDetails.get(i).getId());
             }
+
+            //If the amount of details we have are more than 1
+            //create a toggle button for showing all details at once
+            if(linkedDetails.size() > 1) {
+                ToggleButton showAll = new ToggleButton(mContext);
+                showAll.setText("Show all");
+                showAll.setTextOn("Show all");
+                showAll.setTextOff("Show all");
+                showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                        if (checked) {
+                            setChecked(compoundButton);
+                        }
+                    }
+                });
+
+
+                toggleDetailButtons.add(showAll);
+                lowerButtonLayout.addView(showAll);
+            }
+        }
+    }
+
+
+    private void setChecked(CompoundButton button){
+        for(ToggleButton current : toggleDetailButtons) {
+            if(button != current) {
+                current.setChecked(false);
+            }
+        }
+    }
+
+    //Method for creating Detail buttons for the STL viewer
+    private void createDetailButton(String name){
+        ToggleButton button = new ToggleButton(mContext);
+        button.setText(name);
+        button.setTextOn(name);
+        button.setTextOff(name);
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    setChecked(buttonView);
+                    //TODO: Open the specific detail view
+                    optionClean();
+                    String path = "/storage/emulated/0/PrintManager/Files/Feather/_stl/Feather.stl";
+                    openFileDialog(path);
+                }
+            }
+        });
+
+        //Add button to the list to make them connected
+        toggleDetailButtons.add(button);
+
+        //Adds the buttons to the layouts
+        if(upperButtonLayout.getChildCount() < MAX_BUTTONS_PER_LAYOUT){
+            upperButtonLayout.addView(button);
+        }else if(lowerButtonLayout.getChildCount() < MAX_BUTTONS_PER_LAYOUT*2) {
+            lowerButtonLayout.addView(button);
+        }else{
+            //TODO: Find out what to do
         }
     }
 }

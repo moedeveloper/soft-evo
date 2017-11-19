@@ -58,7 +58,7 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="355dp" />
 
-    <!--Guideline for buttons to select trace type-->
+    <!--Guideline for tracing list-->
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,15 +78,13 @@
         tools:layout_editor_absoluteY="187dp"
         tools:layout_editor_absoluteX="0dp" />
 
-    <!--Guideline to create an area for buttons-->
+    <!--Guideline to create an area for detail buttons-->
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button_guideline"
-        app:layout_constraintGuide_percent="0.7"
-        android:orientation="horizontal"
-        tools:layout_editor_absoluteY="218dp"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintGuide_percent="0.8"
+        android:orientation="horizontal" />
 
     <!--Guidelines for data, LEFT SIDE -->
     <!--Guideline for text separation left-->
@@ -245,29 +243,46 @@
         app:layout_constraintTop_toTopOf="@+id/middle_guideline_horizontal"
         app:layout_constraintBottom_toTopOf="@+id/button_guideline"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline">
-        <!--Placeholder buttons-->
-        <Button
-            android:text="D1456"
+
+        <!--Upper buttons layout-->
+        <LinearLayout
+            android:id="@+id/prints_detail_upper_buttons_layout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_middle_button"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_centerHorizontal="true" />
-
-        <Button
-            android:text="D0245"
+        <!--Lower buttons layout-->
+        <LinearLayout
+            android:id="@+id/prints_detail_lower_buttons_layout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_left_button"
-            android:layout_toLeftOf="@id/print_middle_button"
-            android:layout_toStartOf="@id/print_middle_button"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/prints_detail_upper_buttons_layout" />
 
-        <Button
-            android:text="D8899"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/print_right_button"
-            android:layout_toRightOf="@id/print_middle_button"
-            android:layout_toEndOf="@id/print_middle_button"/>
+        <!--&lt;!&ndash;Placeholder buttons&ndash;&gt;-->
+        <!--<Button-->
+            <!--android:text="D1456"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/print_middle_button"-->
+            <!--android:layout_centerHorizontal="true" />-->
+
+        <!--<Button-->
+            <!--android:text="D0245"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/print_left_button"-->
+            <!--android:layout_toLeftOf="@id/print_middle_button"-->
+            <!--android:layout_toStartOf="@id/print_middle_button"/>-->
+
+        <!--<Button-->
+            <!--android:text="D8899"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/print_right_button"-->
+            <!--android:layout_toRightOf="@id/print_middle_button"-->
+            <!--android:layout_toEndOf="@id/print_middle_button"/>-->
 
     </RelativeLayout>
 
