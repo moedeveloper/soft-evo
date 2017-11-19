@@ -17,6 +17,12 @@ companyRouter.route('/companies')
  
 });
 
+companyRouter.route('/companies/:name')
+.post(function (req,res, next) {
+    var promises = [];
+    promises.push(database.saveNewCompany({name: req.params.name}));
+});
+
 companyRouter.route('/company/:id').get(function(req, res, next){
     var companyId = req.params.companyId
     database.getCompanyById(companyId).then(function(result){

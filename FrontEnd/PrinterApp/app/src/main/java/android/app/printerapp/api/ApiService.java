@@ -1,5 +1,6 @@
 package android.app.printerapp.api;
 
+import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.Print;
@@ -10,6 +11,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+
 
 /**
  * Created by Johan on 11/1/2017.
@@ -29,5 +31,8 @@ public interface ApiService {
 
     @GET("prints")
     Call<PrintList> fetchAllPrints();
+
+    @GET("companies")
+    Call<List<Company>> fetchAllCompanies();
 
 }

@@ -76,6 +76,14 @@ function getCompanyById(id){
     const query = 'select * from companies where id=?'
     return getDataByParameters(query, [id])
 }
+
+function saveNewCompany(company) {
+	const sqlQuery = "insert into companies (name) values ('" + company.name + "')";
+	pool.getConnection(function (err, connection){
+		connection.query(sqlQuery, function(){});
+	});
+}
+
 function getData(sqlQuery){
 	var deferred = Q.defer();
 	pool.getConnection(function (err, connection) {

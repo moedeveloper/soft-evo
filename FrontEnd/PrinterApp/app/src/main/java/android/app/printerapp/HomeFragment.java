@@ -1,6 +1,5 @@
 package android.app.printerapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -75,7 +74,7 @@ public class HomeFragment extends Fragment {
         addDetailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), add_details.class);
+                Intent intent = new Intent(view.getContext(), AddDetailsActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
