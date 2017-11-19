@@ -5,4 +5,12 @@ package android.app.printerapp.model;
  */
 
 public class Build {
+
+    private String buildDetailLinkId;
+
+    public String getBuildDetailLinkId(){
+        return buildDetailLinkId;
+    }
 }
+
+
