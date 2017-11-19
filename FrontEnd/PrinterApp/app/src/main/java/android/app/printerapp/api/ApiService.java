@@ -1,6 +1,6 @@
 package android.app.printerapp.api;
 
-import android.app.printerapp.model.Company;
+import android.app.printerapp.model.CompanyList;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.Print;
@@ -8,8 +8,12 @@ import android.app.printerapp.model.PrintList;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 
@@ -33,6 +37,15 @@ public interface ApiService {
     Call<PrintList> fetchAllPrints();
 
     @GET("companies")
-    Call<List<Company>> fetchAllCompanies();
+    Call<CompanyList> fetchAllCompanies();
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: text/html; charset=utf-8"
+    })
+    @POST("company/create")
+    Call<String> createNewCompany(@Body RequestBody companyDetails);
+
+    @POST("company/create")
+    Call<String> createNewCompany(@Body CompanyDTO company);
 }

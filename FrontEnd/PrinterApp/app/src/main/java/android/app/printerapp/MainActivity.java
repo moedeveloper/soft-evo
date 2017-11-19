@@ -144,12 +144,9 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-
                 View currentView = mTabHost.getCurrentView();
                 AnimationHelper.inFromRightAnimation(currentView);
-
                 onItemSelected(mTabHost.getCurrentTab());
-
             }
         });
 

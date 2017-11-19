@@ -17,6 +17,10 @@ public class Company implements DataEntry {
         this.id = id;
     }
 
+    public Company(String companyName) {
+        this(companyName, 0);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -40,11 +44,16 @@ public class Company implements DataEntry {
         throw new NotImplementedYet();
     }
 
-    private class NotImplementedYet extends RuntimeException {
-    }
-
     @Override
     public String toString() {
         return name;
     }
+
+    public String requestBody() {
+        return String.format("{\"name\": \"%s\"}", name);
+    }
+
+    private static class NotImplementedYet extends RuntimeException {
+    }
 }
+
