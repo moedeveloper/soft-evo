@@ -2,7 +2,8 @@ package android.app.printerapp;
 
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
-import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.BuildDetailLink;
+import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
@@ -21,6 +22,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PrintsSpecificFragment extends STLViewerFragment {
@@ -29,8 +31,8 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     private View mRootView;
     private Bundle arguments;
     private int id;
-    private TabHost mTabHost;
-
+    private TabHost traceTabHost;
+    private Print print;
     private DatabaseHandler databaseHandler;
 
     public static final String PRINT_ID = "print_id";
@@ -40,7 +42,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     private RecyclerView detailsList;
 
 
-    //Empty constructor
+//  Empty constructor
     public PrintsSpecificFragment() {
         databaseHandler = DatabaseHandler.getInstance();
     }
@@ -50,13 +52,13 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         b.putInt(PRINT_ID, id);
         PrintsSpecificFragment psf = new PrintsSpecificFragment();
         psf.setArguments(b);
-
         return psf;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //Retain instance to keep the Fragment from destroying itself
         setRetainInstance(true);
     }
@@ -64,23 +66,25 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Let parent initialize all STL Viewer elements
+        
+//      Let parent initialize all STL Viewer elements
         super.onCreateView(inflater, container, savedInstanceState);
-        Log.d("Test", "what");
-        //Reference to View
+        
+//      Reference to View
         mRootView = null;
-
+       
+//      Retrieves all given arguments
         arguments = getArguments();
-        //TODO: Here we should get the printid from arguments, which should be given when creating the fragment
+        
         if(arguments != null) {
             id = arguments.getInt(PRINT_ID);
         } else {
             id = 1;
         }
-        //If is not new
+        
+//      If is not new
         if (savedInstanceState == null) {
-
-            //Get the rootview from its parent
+//          Get the rootview from its parent
             mRootView = getRootView();
             mContext = getActivity();
 
@@ -89,13 +93,13 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             dataListView.setAdapter(new DataTextAdapter(mContext));
 
         }
+        
+//      Find tab host for tracing and initialize it
+        traceTabHost = (TabHost) mRootView.findViewById(R.id.trace_tab_host);
+        initializeTraceTabHost();
 
-        mTabHost = (TabHost) mRootView.findViewById(R.id.trace_tab_host);
-        setTabHost();
-
-        //Load data from database
-        new LoadDetailsTask().execute();
-        new LoadDataTask().execute(id);
+//      Load data from database
+        new LoadDataTask().execute();
 
 //      Placeholder buttons for testing
         Button addModelButton = (Button) mRootView.findViewById(R.id.print_middle_button);
@@ -129,38 +133,27 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
     }
 
-    private void setTabHost(){
-        mTabHost.setup();
+//  Method for initializing the tab host
+    private void initializeTraceTabHost(){
+        traceTabHost.setup();
 
-        //Home tab
-        TabHost.TabSpec spec = mTabHost.newTabSpec(ListContent.ID_DETAILS);
+        //Details tab
+        TabHost.TabSpec spec = traceTabHost.newTabSpec(ListContent.ID_DETAILS);
         spec.setIndicator(getTabIndicator("Detail"));
         spec.setContent(R.id.trace_tab1);
+        traceTabHost.addTab(spec);
 
-        mTabHost.addTab(spec);
-
-        spec = mTabHost.newTabSpec(ListContent.ID_MATERIALS);
+        //Materials tab
+        spec = traceTabHost.newTabSpec(ListContent.ID_MATERIALS);
         spec.setIndicator(getTabIndicator("Material"));
         spec.setContent(R.id.trace_tab2);
-        mTabHost.addTab(spec);
+        traceTabHost.addTab(spec);
 
-        spec = mTabHost.newTabSpec(ListContent.ID_TESTS);
+        //Tests tab
+        spec = traceTabHost.newTabSpec(ListContent.ID_TESTS);
         spec.setIndicator(getTabIndicator("Tests"));
         spec.setContent(R.id.trace_tab3);
-        mTabHost.addTab(spec);
-//
-//        //Details tab
-//        spec = mTabHost.newTabSpec(ListContent.ID_DETAILS);
-//        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_details)));
-//        spec.setContent(R.id.maintab1);
-//        mTabHost.addTab(spec);
-//
-//        //Builds tab
-//        spec = mTabHost.newTabSpec(ListContent.ID_BUILDS);
-//        spec.setIndicator(getTabIndicator(getResources().getString(R.string.fragment_builds)));
-//        spec.setContent(R.id.maintab2);
-//        mTabHost.addTab(spec);
-
+        traceTabHost.addTab(spec);
     }
 
 //  Create tab indicator to customize tabs for the tabhost
@@ -171,45 +164,37 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         return view;
     }
 
-    private class LoadDetailsTask extends AsyncTask<Integer, Integer, Integer> {
-
-        private DetailList result = null;
-
-        @Override
-        protected Integer doInBackground(Integer... integers) {
-            ApiService apiService = databaseHandler.getApiService();
-
-            try {
-                result = apiService.fetchAllDetails().execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return 1;
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
-            View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
-            detailsList.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getDetails()));
-            detailsList.setLayoutManager(new LinearLayoutManager(mContext));
-            detailsList.addItemDecoration(new DividerItemDecoration(mContext));
-        }
-    }
-
-//  Retrieving data from the database using an AsyncTask to make sure the
-//  it doesn't lock the app
+//  Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
-        private List<Print> result = null;
+        private List<Print> printResult = null;
+        private List<BuildDetailLink> buildDetailResult = null;
+        private List<Detail> linkedDetails = new ArrayList<Detail>();
 
         @Override
         protected Integer doInBackground(Integer... integers) {
-            int id = integers[0];
             ApiService apiService = databaseHandler.getApiService();
 
             try {
-                result =  apiService.fetchPrint(id).execute().body();
+//              Fetch prints
+                printResult =  apiService.fetchPrint(id).execute().body();
+                if(printResult != null) {
+                    print = printResult.get(0);
+                } else {
+                    Log.d("PrintsSpecificFragment", "Could not fetch any data with given ID");
+                    return 1;
+                }
+//              Based on build id given in prints fetch all links to detail
+                buildDetailResult = apiService.fetchDetailBuildLink(
+                        Integer.parseInt(print.getBuildsId())).execute().body();
+
+//              For each detail found, retrieve their data
+                for(BuildDetailLink link : buildDetailResult){
+                    List<Detail> detail = apiService.fetchDetail(
+                            Integer.parseInt(link.getDetailsId())).execute().body();
+                    linkedDetails.add(detail.get(0));
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -219,17 +204,32 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
+
+//          If we failed to retrieve a print, do nothing
+            if(print == null) {
+                Log.d("PrintsSpecificFragment", "Failed to retrieve prints");
+                return;
+            }
+//          Fill the fields for the print
             String[] printTitles = {"Id", "Build id", "Operator", "Machine", "Powder weight start", "Powder weight end",
                     "Build platform material", "Build platform weight", "End time", "Start time"};
-            if(result.size() > 0) {
-                Print print = result.get(0);
-                String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
-                        print.getPowderWeightStart(), print.getPowderWeightEnd(), print.getBuildPlatformMaterial(),
-                        print.getBuildPlatformWeight(), print.getEndTime(), print.getStartTime()};
+            String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
+                    print.getPowderWeightStart(), print.getPowderWeightEnd(), print.getBuildPlatformMaterial(),
+                    print.getBuildPlatformWeight(), print.getEndTime(), print.getStartTime()};
 
-                dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
-            } else {
-               Log.d("PrintsSpecificFragment", "Could not fetch any data with given ID");
+            dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
+
+
+//          Fill the details field
+            View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
+            detailsList.setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
+            detailsList.setLayoutManager(new LinearLayoutManager(mContext));
+            detailsList.addItemDecoration(new DividerItemDecoration(mContext));
+
+//          Create detail buttons
+            for(Detail d : linkedDetails){
+                Button button = new Button(mContext);
+                button.setText("D" + d.getId());
             }
         }
     }

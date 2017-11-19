@@ -16,6 +16,7 @@ public final class DatabaseHandler {
     private ApiService apiService;
 
     private DatabaseHandler(){
+//      Initialize the connection
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
                 .readTimeout(20,TimeUnit.SECONDS).build();
@@ -25,7 +26,6 @@ public final class DatabaseHandler {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         apiService = retrofit.create(ApiService.class);
-
     }
 
     public static DatabaseHandler getInstance(){

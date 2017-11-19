@@ -33,7 +33,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/tab_height"
                         android:layout_alignParentLeft="true"
-                        android:paddingLeft="0dip"></TabWidget>
+                        android:paddingLeft="0dip"/>
 
                     <FrameLayout
                         android:id="@android:id/tabcontent"
@@ -45,42 +45,42 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                         <LinearLayout
                             android:id="@+id/maintab1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                         <LinearLayout
                             android:id="@+id/maintab2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                         <LinearLayout
                             android:id="@+id/maintab3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                         <LinearLayout
                             android:id="@+id/maintab4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                         <LinearLayout
                             android:id="@+id/maintab5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@color/pager_background"
-                            android:orientation="vertical"></LinearLayout>
+                            android:orientation="vertical"/>
 
                     </FrameLayout>
                 </LinearLayout>
@@ -91,7 +91,7 @@
                 android:id="@+id/right_panel_container"
                 android:layout_width="380dp"
                 android:layout_height="match_parent"
-                android:layout_gravity="right|center_vertical" />
+                android:layout_gravity="end|center_vertical" />
         </FrameLayout>
 
     </android.support.v4.widget.DrawerLayout>

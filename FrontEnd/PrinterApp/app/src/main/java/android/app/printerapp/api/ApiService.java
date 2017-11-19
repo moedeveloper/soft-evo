@@ -1,16 +1,21 @@
 package android.app.printerapp.api;
 
+import android.app.printerapp.model.BuildDetailLink;
+import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
+import android.app.printerapp.model.Build;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Url;
 
 
 /**
@@ -19,6 +24,9 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     String BASE_URL = "http://mo3app.azurewebsites.net/api/";
+
+    @GET("download/file/{fileId}")
+    Call<ResponseBody> fetchFile(@Path("filePath") int fileId);
 
     @GET("details")
     Call<DetailList> fetchAllDetails();
@@ -31,6 +39,12 @@ public interface ApiService {
 
     @GET("prints")
     Call<PrintList> fetchAllPrints();
+
+    @GET("build/{buildId}")
+    Call<List<Build>> fetchBuild(@Path("buildId") int buildId);
+
+    @GET("details/build/{buildId}")
+    Call<List<BuildDetailLink>> fetchDetailBuildLink(@Path("buildId") int buildId);
 
     @GET("companies")
     Call<List<Company>> fetchAllCompanies();
