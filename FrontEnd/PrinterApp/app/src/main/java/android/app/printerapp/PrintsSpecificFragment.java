@@ -1,5 +1,6 @@
 package android.app.printerapp;
 
+import android.app.AlertDialog;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.BuildDetailLink;
@@ -9,14 +10,15 @@ import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.app.printerapp.viewer.STLViewerFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,9 +26,21 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class PrintsSpecificFragment extends STLViewerFragment {
 
@@ -49,6 +63,12 @@ public class PrintsSpecificFragment extends STLViewerFragment {
     private LinearLayout lowerButtonLayout;
     private TabHost traceTabHost;
     List<ToggleButton> toggleDetailButtons = new ArrayList<>();
+
+    //Alert dialog builder
+    AlertDialog.Builder alertDialogBuilder;
+
+    //Files
+    File[] files;
 
     //Empty constructor
     public PrintsSpecificFragment() {
@@ -92,8 +112,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         } else {
             id = 1;
         }
-        
-        //If is not new
+
         if (savedInstanceState == null) {
             //Get the rootview from its parent
             mRootView = getRootView();
@@ -102,12 +121,60 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             detailsList = (RecyclerView) mRootView.findViewById(R.id.prints_trace_recycler_view);
             dataListView = (ListView) mRootView.findViewById(R.id.prints_data_list_view);
             dataListView.setAdapter(new DataTextAdapter(mContext));
-
         }
+
+        //Alert dialog for when data cannot be loaded from the server
+        alertDialogBuilder = new AlertDialog.Builder(mContext);
+        alertDialogBuilder.setMessage("Retrieving data from the database failed. Would you like to try again?");
+        alertDialogBuilder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        new LoadDataTask().execute();
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
 
         //Retrieve button layouts
         upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
         lowerButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_lower_buttons_layout);
+
+        Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(1);
+
+        call.enqueue(new Callback<ResponseBody>(){
+
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    Log.d("PrintsSpecificFragment", "server contacted and has file");
+                    boolean writtenToDisk = writeResponseBodyToDisk(response.body());
+                    Log.d("PrintsSpecificFragment", "file download was a success? " + writtenToDisk);
+
+                    //TODO: Downloads directory for now, use better directory
+                    files = scanStlFiles(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+                    for(File f : files){
+                        Log.d("PrintsSpecificFragment", f.getPath());
+                    }
+
+                }else{
+                    Log.d("PrintsSpecificFragment", "server contact failed");
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("PrintsSpecificFragment", "error");
+            }
+        });
 
 
         //Find tab host for tracing and initialize it
@@ -119,6 +186,76 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
         return mRootView;
 
+    }
+
+    private File[] scanStlFiles(String path){
+        File dir = new File(path);
+        FileFilter filter = new FileFilter(){
+
+            @Override
+            public boolean accept(File file) {
+                return file.getAbsolutePath().matches(".*\\.stl");
+            }
+        };
+        return dir.listFiles(filter);
+    }
+
+    private boolean writeResponseBodyToDisk(ResponseBody body) {
+        try {
+            // TODO: Set correct directory
+            // TODO: Make sure space is available
+            // TODO: Remove files after use
+            // TODO: When cache getting full, start removing the oldest files
+
+            File stlFile = new File(mContext.getCacheDir() + File.separator + "test.stl");
+
+            Log.d("PrintsSpecificFragment", "directory: " + mContext.getCacheDir() +
+                    "\ntotal space:" + stlFile.getTotalSpace() + "\nfree space: " +
+                    stlFile.getFreeSpace());
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            try {
+                byte[] fileReader = new byte[4096];
+
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
+
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(stlFile);
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+
+                    fileSizeDownloaded += read;
+
+                    Log.d("PrintsSpecificFragment", "file download: " + fileSizeDownloaded + " of " + fileSize);
+                }
+
+                outputStream.flush();
+
+                return true;
+            } catch (IOException e) {
+                return false;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     //Method for initializing the tab host
@@ -150,6 +287,16 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         TextView tv = (TextView) view.findViewById(R.id.trace_tab_title_textview);
         tv.setText(title);
         return view;
+    }
+
+    //Async task used to download files
+    private class DownloadSTLTask extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Retrofit retrofit;
+            return null;
+        }
     }
 
     //Async task used to load all data to be displayed
@@ -195,6 +342,8 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
             //If we failed to retrieve a print, do nothing
             if(print == null) {
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
                 Log.d("PrintsSpecificFragment", "Failed to retrieve prints");
                 return;
             }
@@ -220,24 +369,6 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
             //If the amount of details we have are more than 1
             //create a toggle button for showing all details at once
-            if(linkedDetails.size() > 1) {
-                ToggleButton showAll = new ToggleButton(mContext);
-                showAll.setText("Show all");
-                showAll.setTextOn("Show all");
-                showAll.setTextOff("Show all");
-                showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-                        if (checked) {
-                            setChecked(compoundButton);
-                        }
-                    }
-                });
-
-
-                toggleDetailButtons.add(showAll);
-                lowerButtonLayout.addView(showAll);
-            }
         }
     }
 
@@ -261,9 +392,9 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked) {
                     setChecked(buttonView);
-                    //TODO: Open the specific detail view
+                    //TODO: Search for the correct file to open
                     optionClean();
-                    String path = "/storage/emulated/0/PrintManager/Files/Feather/_stl/Feather.stl";
+                    String path = files[(int)(Math.random()*4)].getAbsolutePath();
                     openFileDialog(path);
                 }
             }

@@ -119,13 +119,21 @@ public class LibraryFragment extends Fragment {
 
                 mListView.setEmptyView(emptyView);
 
-                emptyView.findViewById(R.id.scan_device_button).setOnClickListener(new View.OnClickListener() {
+                emptyView.findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         optionSearchSystem();
                     }
                 });
             }
+
+            mRootView.findViewById(R.id.test).setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    optionSearchSystem();
+                }
+            });
 
 
 
@@ -379,7 +387,6 @@ public class LibraryFragment extends Fragment {
 
     //Search for models in filesystem
     public void optionSearchSystem() {
-
         new FileScanner(Environment.getExternalStorageDirectory().getAbsolutePath(), getActivity());
 
     }

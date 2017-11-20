@@ -15,6 +15,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 
@@ -25,8 +26,9 @@ import retrofit2.http.Url;
 public interface ApiService {
     String BASE_URL = "http://mo3app.azurewebsites.net/api/";
 
-    @GET("download/file/{fileId}")
-    Call<ResponseBody> fetchFile(@Path("filePath") int fileId);
+    @Streaming
+    @GET ("download/file/{fileId}")
+    Call<ResponseBody> downloadStlFile(@Path("fileId") int fileId);
 
     @GET("details")
     Call<DetailList> fetchAllDetails();

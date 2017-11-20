@@ -260,30 +260,6 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/prints_detail_upper_buttons_layout" />
 
-        <!--&lt;!&ndash;Placeholder buttons&ndash;&gt;-->
-        <!--<Button-->
-            <!--android:text="D1456"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_middle_button"-->
-            <!--android:layout_centerHorizontal="true" />-->
-
-        <!--<Button-->
-            <!--android:text="D0245"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_left_button"-->
-            <!--android:layout_toLeftOf="@id/print_middle_button"-->
-            <!--android:layout_toStartOf="@id/print_middle_button"/>-->
-
-        <!--<Button-->
-            <!--android:text="D8899"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_right_button"-->
-            <!--android:layout_toRightOf="@id/print_middle_button"-->
-            <!--android:layout_toEndOf="@id/print_middle_button"/>-->
-
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
