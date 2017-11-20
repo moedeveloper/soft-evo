@@ -1,5 +1,6 @@
 package android.app.printerapp.api;
 
+import android.app.printerapp.model.CompanyList;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
@@ -11,9 +12,13 @@ import android.app.printerapp.model.Build;
 
 import java.util.List;
 
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -49,6 +54,15 @@ public interface ApiService {
     Call<List<BuildDetailLink>> fetchDetailBuildLink(@Path("buildId") int buildId);
 
     @GET("companies")
-    Call<List<Company>> fetchAllCompanies();
+    Call<CompanyList> fetchAllCompanies();
 
+    @Headers({
+            "Accept: application/json",
+            "Content-Type: text/html; charset=utf-8"
+    })
+    @POST("company/create")
+    Call<String> createNewCompany(@Body RequestBody companyDetails);
+
+    @POST("company/create")
+    Call<String> createNewCompany(@Body CompanyDTO company);
 }

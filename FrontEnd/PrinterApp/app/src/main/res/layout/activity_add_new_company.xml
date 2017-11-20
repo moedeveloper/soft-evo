@@ -9,9 +9,10 @@
 
     <TableLayout
         android:layout_width="522dp"
-        android:layout_height="144dp"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="173dp">
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="182dp">
+
 
         <TableRow
             android:id="@+id/tableRowLabel"
@@ -39,30 +40,24 @@
                 android:layout_height="wrap_content"
                 android:width="1050dp"
                 android:hint="New Company"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:inputType="textPersonName" />
 
         </TableRow>
 
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <Button
+                android:id="@+id/add_new_company_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="200dp"
+
+                android:padding="5dp"
+                android:text="Add" />
+        </TableRow>
     </TableLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        tools:layout_editor_absoluteX="228dp"
-        tools:layout_editor_absoluteY="196dp">
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="134dp"
-        android:layout_height="48dp"
-        android:layout_column="3"
-        android:layout_weight="1"
-        android:padding="5dp"
-        android:text="Add"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="340dp" />
 
 </android.support.constraint.ConstraintLayout>
