@@ -56,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         }
 
         super.onCreate(savedInstanceState);
+        FileManager.deleteCache(this);
         setContentView(R.layout.main_activity);
 
         mTabHost = (TabHost) findViewById(R.id.tabHost);
@@ -234,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
                     psc.setSurfaceVisibility(1);
                 }
             }
-            */
+        */
 
         //Show current fragment
         if (mCurrent != null) {
@@ -281,5 +282,11 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         if(event.getPropertyName() == PRINT_CLICKED){
             Log.d("Test", "I got clicked! : " + event.getNewValue());
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        FileManager.deleteCache(this);
     }
 }

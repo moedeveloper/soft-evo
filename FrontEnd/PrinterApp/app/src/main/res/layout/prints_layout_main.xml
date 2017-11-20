@@ -181,36 +181,38 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+<!--Make this dynamic ***********************************************************-->
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/trace_tab1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@color/pager_background"-->
+                    <!--android:orientation="vertical">-->
 
-                <LinearLayout
-                    android:id="@+id/trace_tab1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
+                    <!--<android.support.v7.widget.RecyclerView-->
+                        <!--android:id="@+id/prints_trace_recycler_view"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+                    <!--</android.support.v7.widget.RecyclerView>-->
+                <!--</LinearLayout>-->
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/prints_trace_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/trace_tab2"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@color/pager_background"-->
+                    <!--android:orientation="vertical"-->
+                    <!--&gt;-->
+                <!--</LinearLayout>-->
 
-                <LinearLayout
-                    android:id="@+id/trace_tab2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/trace_tab3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
-                </LinearLayout>
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/trace_tab3"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:background="@color/pager_background"-->
+                    <!--android:orientation="vertical">-->
+                <!--</LinearLayout>-->
+<!--**********************************************************************************-->
             </FrameLayout>
         </LinearLayout>
     </TabHost>

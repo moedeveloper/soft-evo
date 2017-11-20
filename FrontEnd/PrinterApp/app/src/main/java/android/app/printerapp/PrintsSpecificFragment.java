@@ -23,27 +23,17 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class PrintsSpecificFragment extends Fragment {
 
@@ -55,13 +45,14 @@ public class PrintsSpecificFragment extends Fragment {
     private Print print;
     private DatabaseHandler databaseHandler;
 
+    Map<String, RecyclerView> allTraceLists;
+
     //CONSTANTS
     public static final String PRINT_ID = "print_id";
     private final int MAX_BUTTONS_PER_LAYOUT = 5;
 
     //Views
     private ListView dataListView;
-    private RecyclerView detailsList;
     private LinearLayout upperButtonLayout;
     private LinearLayout lowerButtonLayout;
     private TabHost traceTabHost;
@@ -120,7 +111,6 @@ public class PrintsSpecificFragment extends Fragment {
                   container, false);
             mContext = getActivity();
 
-            detailsList = (RecyclerView) mRootView.findViewById(R.id.prints_trace_recycler_view);
             dataListView = (ListView) mRootView.findViewById(R.id.prints_data_list_view);
             dataListView.setAdapter(new DataTextAdapter(mContext));
         }
@@ -151,39 +141,16 @@ public class PrintsSpecificFragment extends Fragment {
                     }
                 });
 
+        //Scan for files
+        FileManager.downloadFile(mContext);
+        files = FileManager.scanStlFiles(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+        for(File f : files){
+            Log.d("PrintsSpecificFragment", f.getPath());
+        }
+
         //Retrieve button layouts
         upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
         lowerButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_lower_buttons_layout);
-
-        Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(1);
-
-        call.enqueue(new Callback<ResponseBody>(){
-
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
-                    Log.d("PrintsSpecificFragment", "server contacted and has file");
-                    boolean writtenToDisk = writeResponseBodyToDisk(response.body());
-                    Log.d("PrintsSpecificFragment", "file download was a success? " + writtenToDisk);
-
-                    //TODO: Downloads directory for now, use better directory
-                    files = scanStlFiles(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
-                    for(File f : files){
-                        Log.d("PrintsSpecificFragment", f.getPath());
-                    }
-
-                }else{
-                    Log.d("PrintsSpecificFragment", "server contact failed");
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.e("PrintsSpecificFragment", "error");
-            }
-        });
-
 
         //Find tab host for tracing and initialize it
         traceTabHost = (TabHost) mRootView.findViewById(R.id.trace_tab_host);
@@ -196,96 +163,43 @@ public class PrintsSpecificFragment extends Fragment {
 
     }
 
-    private File[] scanStlFiles(String path){
-        File dir = new File(path);
-        FileFilter filter = new FileFilter(){
+    private class TraceTabFactory implements TabHost.TabContentFactory {
 
-            @Override
-            public boolean accept(File file) {
-                return file.getAbsolutePath().matches(".*\\.stl");
-            }
-        };
-        return dir.listFiles(filter);
-    }
+        public View createTabContent(String tag) {
 
-    private boolean writeResponseBodyToDisk(ResponseBody body) {
-        try {
-            // TODO: Set correct directory
-            // TODO: Make sure space is available
-            // TODO: Remove files after use
-            // TODO: When cache getting full, start removing the oldest files
+            LinearLayout linearLayout = new LinearLayout(mContext);
+            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                                                        LinearLayout.LayoutParams.MATCH_PARENT));
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-            File stlFile = new File(mContext.getCacheDir() + File.separator + "test.stl");
+            RecyclerView recyclerView = new RecyclerView(mContext);
+            //Save the recyclerview in our map so we can access it
+            allTraceLists.put(tag, recyclerView);
+            linearLayout.addView(recyclerView);
 
-            Log.d("PrintsSpecificFragment", "directory: " + mContext.getCacheDir() +
-                    "\ntotal space:" + stlFile.getTotalSpace() + "\nfree space: " +
-                    stlFile.getFreeSpace());
-
-            InputStream inputStream = null;
-            OutputStream outputStream = null;
-
-            try {
-                byte[] fileReader = new byte[4096];
-
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
-
-                inputStream = body.byteStream();
-                outputStream = new FileOutputStream(stlFile);
-
-                while (true) {
-                    int read = inputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
-                    }
-
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
-
-                    Log.d("PrintsSpecificFragment", "file download: " + fileSizeDownloaded + " of " + fileSize);
-                }
-
-                outputStream.flush();
-
-                return true;
-            } catch (IOException e) {
-                return false;
-            } finally {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            }
-        } catch (IOException e) {
-            return false;
+            return linearLayout;
         }
     }
 
     //Method for initializing the tab host
     private void initializeTraceTabHost(){
         traceTabHost.setup();
+        allTraceLists = new HashMap<>();
 
         //Details tab
-        TabHost.TabSpec spec = traceTabHost.newTabSpec(ListContent.ID_DETAILS);
-        spec.setIndicator(getTabIndicator("Detail"));
-        spec.setContent(R.id.trace_tab1);
-        traceTabHost.addTab(spec);
+        createTab(ListContent.ID_DETAILS, "Detail");
 
         //Materials tab
-        spec = traceTabHost.newTabSpec(ListContent.ID_MATERIALS);
-        spec.setIndicator(getTabIndicator("Material"));
-        spec.setContent(R.id.trace_tab2);
-        traceTabHost.addTab(spec);
+        createTab(ListContent.ID_MATERIALS, "Material");
 
         //Tests tab
-        spec = traceTabHost.newTabSpec(ListContent.ID_TESTS);
-        spec.setIndicator(getTabIndicator("Tests"));
-        spec.setContent(R.id.trace_tab3);
+        createTab(ListContent.ID_TESTS, "Tests");
+    }
+
+    private void createTab(String tag, String title){
+        TabHost.TabSpec spec = traceTabHost.newTabSpec(tag);
+        spec.setIndicator(getTabIndicator(title));
+        spec.setContent(new TraceTabFactory());
         traceTabHost.addTab(spec);
     }
 
@@ -295,16 +209,6 @@ public class PrintsSpecificFragment extends Fragment {
         TextView tv = (TextView) view.findViewById(R.id.trace_tab_title_textview);
         tv.setText(title);
         return view;
-    }
-
-    //Async task used to download files
-    private class DownloadSTLTask extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Retrofit retrofit;
-            return null;
-        }
     }
 
     //Async task used to load all data to be displayed
@@ -366,9 +270,9 @@ public class PrintsSpecificFragment extends Fragment {
 
             //Fill the details field
             View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
-            detailsList.setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
-            detailsList.setLayoutManager(new LinearLayoutManager(mContext));
-            detailsList.addItemDecoration(new DividerItemDecoration(mContext));
+            allTraceLists.get(ListContent.ID_DETAILS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
+            allTraceLists.get(ListContent.ID_DETAILS).setLayoutManager(new LinearLayoutManager(mContext));
+            allTraceLists.get(ListContent.ID_DETAILS).addItemDecoration(new DividerItemDecoration(mContext));
 
             //Create detail buttons
             for(int i = 0; i < linkedDetails.size(); i++){
@@ -398,9 +302,12 @@ public class PrintsSpecificFragment extends Fragment {
                 if(isChecked) {
                     setChecked(buttonView);
                     //TODO: Search for the correct file to open
-                    stlViewer.optionClean();
-                    String path = files[(int)(Math.random()*4)].getAbsolutePath();
-                    stlViewer.openFileDialog(path);
+                    STLViewer.optionClean();
+                    String path = files[(int)(Math.random()*files.length)].getAbsolutePath();
+                    STLViewer.openFileDialog(path);
+                }else{
+                    STLViewer.optionClean();
+                    STLViewer.draw();
                 }
             }
         });
