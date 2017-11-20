@@ -114,13 +114,17 @@ public class PrintsSpecificFragment extends Fragment {
         //Clean the STL Viewer options every time we create a new fragment
         STLViewer.optionClean();
 
-        //Alert dialog for when data cannot be loaded from the server
+        //Create an alert dialog which we will use for when data cannot be loaded from the server
         createAlertDialog();
 
+        //Scan for STL files and put them in "files" variable
         scanForFiles();
+
+        //Initialize the Tab Host for tracing
         initializeTraceTabHost();
 
-        //Load data from database
+        //Load all data we need from database
+        //and then display the data into the views we have
         new LoadDataTask().execute();
 
         return mRootView;
