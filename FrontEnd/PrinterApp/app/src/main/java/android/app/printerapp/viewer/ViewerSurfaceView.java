@@ -199,7 +199,7 @@ public class ViewerSurfaceView extends GLSurfaceView{
                 mPreviousDragX = mPreviousX;
                 mPreviousDragY = mPreviousY;
 
-                if (mMode!= PrintsSpecificFragment.PRINT_PREVIEW){
+                if (mMode!= STLViewer.PRINT_PREVIEW){
 
                 /*
                 Detect double-tapping to restore the panel

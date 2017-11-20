@@ -285,7 +285,7 @@ public class Geometry {
 		 boolean outOfPlate = false;
 		 int k = 0;
 
-         int[] auxPlate = PrintsSpecificFragment.getCurrentPlate();
+         int[] auxPlate = STLViewer.getCurrentPlate();
 
 		 if (newMaxX > auxPlate[0] || newMinX < -auxPlate[0]
 				|| newMaxY > auxPlate[1] || newMinY < -auxPlate[1]) outOfPlate = true;

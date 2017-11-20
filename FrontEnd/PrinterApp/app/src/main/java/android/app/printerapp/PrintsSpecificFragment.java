@@ -1,6 +1,7 @@
 package android.app.printerapp;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.BuildDetailLink;
@@ -8,7 +9,7 @@ import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
-import android.app.printerapp.viewer.STLViewerFragment;
+import android.app.printerapp.viewer.STLViewer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -35,6 +37,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -42,7 +45,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class PrintsSpecificFragment extends STLViewerFragment {
+public class PrintsSpecificFragment extends Fragment {
 
     private Context mContext;
     private View mRootView;
@@ -69,6 +72,7 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
     //Files
     File[] files;
+    private STLViewer stlViewer;
 
     //Empty constructor
     public PrintsSpecificFragment() {
@@ -100,9 +104,6 @@ public class PrintsSpecificFragment extends STLViewerFragment {
         
         //Reference to View
         mRootView = null;
-
-        //Clean the STL Viewer options everytime we create a new fragment
-        optionClean();
        
         //Retrieves all given arguments
         arguments = getArguments();
@@ -115,13 +116,20 @@ public class PrintsSpecificFragment extends STLViewerFragment {
 
         if (savedInstanceState == null) {
             //Get the rootview from its parent
-            mRootView = getRootView();
+            mRootView = inflater.inflate(R.layout.prints_layout_main,
+                  container, false);
             mContext = getActivity();
 
             detailsList = (RecyclerView) mRootView.findViewById(R.id.prints_trace_recycler_view);
             dataListView = (ListView) mRootView.findViewById(R.id.prints_data_list_view);
             dataListView.setAdapter(new DataTextAdapter(mContext));
         }
+
+        stlViewer = (STLViewer) mRootView.findViewById(R.id.stl_viewer);
+
+        //Clean the STL Viewer options everytime we create a new fragment
+        stlViewer.optionClean();
+
 
         //Alert dialog for when data cannot be loaded from the server
         alertDialogBuilder = new AlertDialog.Builder(mContext);
@@ -366,9 +374,6 @@ public class PrintsSpecificFragment extends STLViewerFragment {
             for(int i = 0; i < linkedDetails.size(); i++){
                 createDetailButton("D" + linkedDetails.get(i).getId());
             }
-
-            //If the amount of details we have are more than 1
-            //create a toggle button for showing all details at once
         }
     }
 
@@ -393,9 +398,9 @@ public class PrintsSpecificFragment extends STLViewerFragment {
                 if(isChecked) {
                     setChecked(buttonView);
                     //TODO: Search for the correct file to open
-                    optionClean();
+                    stlViewer.optionClean();
                     String path = files[(int)(Math.random()*4)].getAbsolutePath();
-                    openFileDialog(path);
+                    stlViewer.openFileDialog(path);
                 }
             }
         });
