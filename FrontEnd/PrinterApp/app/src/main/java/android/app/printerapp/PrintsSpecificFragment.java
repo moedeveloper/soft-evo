@@ -35,22 +35,16 @@ import java.util.List;
 import java.util.Map;
 
 
-public class PrintsSpecificFragment extends Fragment {
+public class PrintsSpecificFragment extends SpecificFragment {
 //---------------------------------------------------------------------------------------
 //          VARIABLES
 //---------------------------------------------------------------------------------------
-
-    //Variables for this view
-    private Context mContext;
-    private View mRootView;
-    private Bundle arguments;
 
     //Variables for specific print
     private int id;
     private Print print;
 
     //Api
-    private DatabaseHandler databaseHandler;
     File[] files;
 
     //Constants
@@ -58,28 +52,15 @@ public class PrintsSpecificFragment extends Fragment {
     private final int MAX_BUTTONS_PER_LAYOUT = 5;
 
     //Views
-    private ListView dataListView;
     private LinearLayout upperButtonLayout;
     private LinearLayout lowerButtonLayout;
-    private TabHost traceTabHost;
     private STLViewer stlViewer;
     List<ToggleButton> toggleDetailButtons = new ArrayList<>();
-    Map<String, RecyclerView> allTraceLists;
-
-    //Alert dialog builder
-    AlertDialog.Builder alertDialogBuilder;
 
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
 //---------------------------------------------------------------------------------------
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //Retain instance to keep the Fragment from destroying itself
-        setRetainInstance(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,21 +70,12 @@ public class PrintsSpecificFragment extends Fragment {
 
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
-            //Get the rootview from its parent
-            mRootView = inflater.inflate(R.layout.prints_layout_main, container, false);
-            mContext = getActivity();
-            databaseHandler = DatabaseHandler.getInstance();
-
             //Retrieve references to views
-            dataListView = (ListView) mRootView.findViewById(R.id.prints_data_list_view);
-            dataListView.setAdapter(new DataTextAdapter(mContext));
             stlViewer = (STLViewer) mRootView.findViewById(R.id.stl_viewer);
             upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
             lowerButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_lower_buttons_layout);
-            traceTabHost = (TabHost) mRootView.findViewById(R.id.trace_tab_host);
 
-            //Retrieve all given arguments
-            arguments = getArguments();
+            //Retrieve id from arguments
             if(arguments != null) {
                 id = arguments.getInt(PRINT_ID);
             } else {
@@ -114,20 +86,31 @@ public class PrintsSpecificFragment extends Fragment {
         //Clean the STL Viewer options every time we create a new fragment
         STLViewer.optionClean();
 
-        //Create an alert dialog which we will use for when data cannot be loaded from the server
-        createAlertDialog();
-
         //Scan for STL files and put them in "files" variable
         scanForFiles();
-
-        //Initialize the Tab Host for tracing
-        initializeTraceTabHost();
 
         //Load all data we need from database
         //and then display the data into the views we have
         new LoadDataTask().execute();
 
         return mRootView;
+    }
+
+    @Override
+    public int getLayoutResourceId() {
+        return R.layout.prints_layout_main;
+    }
+
+    @Override
+    public void loadData() {
+        new LoadDataTask().execute();
+    }
+
+    @Override
+    public void createTabs() {
+        createTab(ListContent.ID_DETAILS, "Detail");
+        createTab(ListContent.ID_MATERIALS, "Material");
+        createTab(ListContent.ID_TESTS, "Tests");
     }
 
 //---------------------------------------------------------------------------------------
@@ -162,49 +145,6 @@ public class PrintsSpecificFragment extends Fragment {
         PrintsSpecificFragment psf = new PrintsSpecificFragment();
         psf.setArguments(b);
         return psf;
-    }
-
-    //Builds an alert dialog to be shown used when data cannot be retrieved
-    private void createAlertDialog(){
-        alertDialogBuilder = new AlertDialog.Builder(mContext);
-        alertDialogBuilder.setMessage("Retrieving data from the database failed. Would you like to try again?");
-        alertDialogBuilder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener(){
-
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        new LoadDataTask().execute();
-                    }
-                });
-        alertDialogBuilder.setNegativeButton("Cancel",
-                new DialogInterface.OnClickListener(){
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {}
-                });
-    }
-
-    //Method for initializing the tab host
-    private void initializeTraceTabHost(){
-        traceTabHost.setup();
-        allTraceLists = new HashMap<>();
-        createTab(ListContent.ID_DETAILS, "Detail");
-        createTab(ListContent.ID_MATERIALS, "Material");
-        createTab(ListContent.ID_TESTS, "Tests");
-    }
-
-    private void createTab(String tag, String title){
-        TabHost.TabSpec spec = traceTabHost.newTabSpec(tag);
-        spec.setIndicator(getTabIndicator(title));
-        spec.setContent(new TraceTabFactory());
-        traceTabHost.addTab(spec);
-    }
-
-    //Creation of tab indicator, used to customize tabs for the tabhost
-    private View getTabIndicator(String title) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.trace_tab_layout, null);
-        TextView tv = (TextView) view.findViewById(R.id.trace_tab_title_textview);
-        tv.setText(title);
-        return view;
     }
 
     //Method for creating Detail buttons for the STL viewer
@@ -244,24 +184,6 @@ public class PrintsSpecificFragment extends Fragment {
 //---------------------------------------------------------------------------------------
 //          PRIVATE CLASSES
 //---------------------------------------------------------------------------------------
-
-    private class TraceTabFactory implements TabHost.TabContentFactory {
-
-        public View createTabContent(String tag) {
-
-            LinearLayout linearLayout = new LinearLayout(mContext);
-            linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT));
-            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-            RecyclerView recyclerView = new RecyclerView(mContext);
-            //Save the recyclerview in our map so we can access it
-            allTraceLists.put(tag, recyclerView);
-            linearLayout.addView(recyclerView);
-
-            return linearLayout;
-        }
-    }
 
     //Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
