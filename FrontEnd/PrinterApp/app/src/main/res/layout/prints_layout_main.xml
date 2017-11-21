@@ -181,36 +181,6 @@
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/trace_tab1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/prints_trace_recycler_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                    </android.support.v7.widget.RecyclerView>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/trace_tab2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/trace_tab3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/pager_background"
-                    android:orientation="vertical">
-                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
@@ -224,15 +194,25 @@
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline" />
+
     <!--The STL viewer-->
-    <include layout="@layout/stl_viewer"
+    <RelativeLayout
+        android:id="@+id/stl_viewer_holder_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/pager_background"
         android:layout_margin="@dimen/content_padding_small"
         app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"
-        app:layout_constraintTop_toTopOf="@+id/top_guideline" />
+        app:layout_constraintTop_toTopOf="@+id/top_guideline">
+
+        <android.app.printerapp.viewer.STLViewer
+            android:id="@+id/stl_viewer"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
 
     <!--Container for buttons, selection of models to display-->
     <RelativeLayout
@@ -259,30 +239,6 @@
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/prints_detail_upper_buttons_layout" />
-
-        <!--&lt;!&ndash;Placeholder buttons&ndash;&gt;-->
-        <!--<Button-->
-            <!--android:text="D1456"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_middle_button"-->
-            <!--android:layout_centerHorizontal="true" />-->
-
-        <!--<Button-->
-            <!--android:text="D0245"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_left_button"-->
-            <!--android:layout_toLeftOf="@id/print_middle_button"-->
-            <!--android:layout_toStartOf="@id/print_middle_button"/>-->
-
-        <!--<Button-->
-            <!--android:text="D8899"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:id="@+id/print_right_button"-->
-            <!--android:layout_toRightOf="@id/print_middle_button"-->
-            <!--android:layout_toEndOf="@id/print_middle_button"/>-->
 
     </RelativeLayout>
 

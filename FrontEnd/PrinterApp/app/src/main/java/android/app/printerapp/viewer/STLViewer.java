@@ -1,17 +1,12 @@
 package android.app.printerapp.viewer;
 
-import android.app.Fragment;
 import android.app.printerapp.R;
 import android.app.printerapp.library.LibraryController;
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -21,111 +16,85 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Alex
- * A fragment containing the STL Viewer. Extend this class to use the viewer.
+ * Created by SAMSUNG on 2017-11-20.
+ * Right now, this only works if inflated using XML.
  */
 
-public class STLViewerFragment extends Fragment {
+public class STLViewer extends FrameLayout {
+    //---------------------------------------
+    // VARIABLES
+    //---------------------------------------
 
+    //  - Constants -
     private static final int NORMAL = 0;
     private static final int LAYER = 1;
 
-    private static int mCurrentViewMode = 0;
-
-    //Constants
     public static final int DO_SNAPSHOT = 0;
     public static final int DONT_SNAPSHOT = 1;
     public static final int PRINT_PREVIEW = 2;
     public static final boolean STL = true;
 
-    //Variables
+    // - Data variables for the viewer-
     private static File mFile;
+    private static List<DataStorage> mDataList = new ArrayList<DataStorage>();
+    private static int[] mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG,
+            WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
+    private static int mCurrentViewMode = 0;
 
+    // - View variables -
+    private static Context mContext;
     private static ViewerSurfaceView mSurface;
     private static FrameLayout mLayout;
 
-    private static List<DataStorage> mDataList = new ArrayList<DataStorage>();
-
-    private static Context mContext;
-    private static View mRootView;
-
-    private static int[] mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG,
-                        WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
-
-
-    public STLViewerFragment() {
+    //---------------------------------------
+    // CONSTRUCTORS
+    //---------------------------------------
+    public STLViewer(@NonNull Context context) {
+        super(context);
+        initializeViews(context);
     }
 
-    protected View getRootView(){
-        return mRootView;
+    public STLViewer(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initializeViews(context);
     }
 
+    public STLViewer(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initializeViews(context);
+    }
+
+    //---------------------------------------
+    // METHODS FOR INITIALIZING THE VIEW
+    //---------------------------------------
+    //Initializes the layout
+    private void initializeViews(Context context){
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.stl_viewer, this);
+    }
+
+    //Upon finishing inflating, do this
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+
+        //Init elements for the viewer
+        mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
+        mSurface = new ViewerSurfaceView(getContext(), mDataList, NORMAL, DONT_SNAPSHOT);
+        mContext = getContext();
+        mLayout = this;
+        draw();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //Reference to View
-        mRootView = null;
-
-        //If is not new
-        if (savedInstanceState == null) {
-
-            //Show custom option menu
-            //Inflate the fragment
-            mRootView = inflater.inflate(R.layout.prints_layout_main,
-                    container, false);
-
-            mContext = getActivity();
-
-            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
-            //Init slicing elements
-            mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
-            mLayout = (FrameLayout) mRootView.findViewById(R.id.viewer_container_framelayout);
-            mSurface = new ViewerSurfaceView(mContext, mDataList, NORMAL, DONT_SNAPSHOT);
-            draw();
-
-
-            //Hide the action bar when editing the scale of the model
-            mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-
-                    Rect r = new Rect();
-                    mRootView.getWindowVisibleDisplayFrame(r);
-
-                }
-            });
-
-        }
-
-        return mRootView;
-    }
-
-    public static void resetWhenCancel() {
-        try {
-            mDataList.remove(mDataList.size() - 1);
-            mSurface.requestRender();
-
-            mCurrentViewMode = NORMAL;
-            mSurface.configViewMode(mCurrentViewMode);
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-    }
-
+    //---------------------------------------
+    // METHODS FOR CONTROLLING THE VIEW
+    //---------------------------------------
     /**
      * Open a dialog if it's a GCODE to warn the user about unsaved data loss
      *
      * @param filePath
      */
+
     public static void openFileDialog(final String filePath) {
 
         if (LibraryController.hasExtension(0, filePath)) {
@@ -171,6 +140,21 @@ public class STLViewerFragment extends Fragment {
         }
     }
 
+    public static void resetWhenCancel() {
+        try {
+            mDataList.remove(mDataList.size() - 1);
+            mSurface.requestRender();
+
+            mCurrentViewMode = NORMAL;
+            mSurface.configViewMode(mCurrentViewMode);
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    //Opens given file (STL)
     public static void openFile(String filePath) {
         DataStorage data = null;
         //Open the file
@@ -194,16 +178,21 @@ public class STLViewerFragment extends Fragment {
         mDataList.add(data);
     }
 
-    //Clear all data
+    //Clear all data in the STL Viewer
     public static void optionClean() {
         mDataList.clear();
         mFile = null;
     }
 
+    //Draws the 3d viewer
     public static void draw() {
-        //Once the file has been opened, we need to refresh the data list. If we are opening a .gcode file, we need to ic_action_delete the previous files (.stl and .gcode)
-        //If we are opening a .stl file, we need to ic_action_delete the previous file only if it was a .gcode file.
-        //We have to do this here because user can cancel the opening of the file and the Print Panel would appear empty if we clear the data list.
+        //Once the file has been opened, we need to refresh the data list.
+        //If we are opening a .gcode file, we need to ic_action_delete the
+        //previous files (.stl and .gcode)
+        //If we are opening a .stl file, we need to ic_action_delete the previous file only
+        //if it was a .gcode file.
+        //We have to do this here because user can cancel the opening of the file and the
+        //Print Panel would appear empty if we clear the data list
 
         String filePath = "";
         if (mFile != null) filePath = mFile.getAbsolutePath();
@@ -226,12 +215,12 @@ public class STLViewerFragment extends Fragment {
         //Add the view
         mLayout.removeAllViews();
         mLayout.addView(mSurface, 0);
+        mSurface.setVisibility(View.VISIBLE);
     }
 
     //This method will set the visibility of the surfaceview so it doesn't overlap
     //with the video grid view
     public void setSurfaceVisibility(int i) {
-
         if (mSurface != null) {
             switch (i) {
                 case 0:
@@ -251,5 +240,6 @@ public class STLViewerFragment extends Fragment {
     public static int[] getCurrentPlate() {
         return mCurrentPlate;
     }
+
 
 }

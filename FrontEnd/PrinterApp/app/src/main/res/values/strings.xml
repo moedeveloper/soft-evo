@@ -113,6 +113,7 @@
     <string name="companyLabelText">Company</string>
     <string name="addDetails">Add details</string>
     <string name="title_activity_add_new_company">Add New Company</string>
+    <string name="title_activity_calendar">Calendar</string>
 
 
 </resources>

@@ -152,7 +152,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 		this.mState = state;
 		
 		this.mMode = mode;
-        this.mPlate = PrintsSpecificFragment.getCurrentPlate();
+        this.mPlate = STLViewer.getCurrentPlate();
 	}
 	
 	public void setTransparent (boolean transparent) {
@@ -210,7 +210,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
             mPlate = type;
 
             //Create plate to pre-generate the plate
-            if (mMode == PrintsSpecificFragment.PRINT_PREVIEW){
+            if (mMode == STLViewer.PRINT_PREVIEW){
                 mWitboxFaceBack = new WitboxFaces (BACK, mPlate);
                 mWitboxFaceRight = new WitboxFaces (RIGHT, mPlate);
                 mWitboxFaceLeft = new WitboxFaces (LEFT, mPlate);
@@ -282,7 +282,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 		
-		if (mMode == PrintsSpecificFragment.DO_SNAPSHOT || mMode == PrintsSpecificFragment.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, PrintsSpecificFragment.getCurrentPlate());
+		if (mMode == STLViewer.DO_SNAPSHOT || mMode == STLViewer.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, STLViewer.getCurrentPlate());
 
         mWitboxFaceBack = new WitboxFaces (BACK, mPlate);
         mWitboxFaceRight = new WitboxFaces (RIGHT, mPlate);
@@ -312,7 +312,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
         // this projection matrix is applied to object coordinates		
         Matrix.perspectiveM(mProjectionMatrix, 0, 45, ratio, Z_NEAR, Z_FAR);
         
-        if (mMode == PrintsSpecificFragment.DO_SNAPSHOT || mMode == PrintsSpecificFragment.PRINT_PREVIEW) {
+        if (mMode == STLViewer.DO_SNAPSHOT || mMode == STLViewer.PRINT_PREVIEW) {
         	DataStorage data = mDataList.get(0);
 
 	        float h = data.getHeight();
@@ -551,7 +551,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 
-        if (mMode == PrintsSpecificFragment.DO_SNAPSHOT) {
+        if (mMode == STLViewer.DO_SNAPSHOT) {
         	mInfinitePlane.draw(mMVPMatrix, mMVMatrix);
         	takeSnapshot(unused);
 

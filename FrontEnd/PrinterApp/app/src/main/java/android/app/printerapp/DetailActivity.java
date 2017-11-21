@@ -9,9 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,11 +21,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class DetailActivity extends ActionBarActivity implements Callback<List<Detail>> {
-    ProgressBar progressBar;
-    TextView name;
-    TextView companyName;
-    View leftLayout;
-    View rightLayout;
+        ProgressBar progressBar;
+        TextView name;
+        TextView companyName;
+        View leftLayout;
+        View rightLayout;
 
     private int detailId;
 

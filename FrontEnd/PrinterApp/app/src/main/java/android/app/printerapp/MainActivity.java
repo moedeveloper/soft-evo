@@ -7,6 +7,7 @@ import android.app.printerapp.database.DatabaseController;
 import android.app.printerapp.library.LibraryFragment;
 import android.app.printerapp.library.detail.DetailViewFragment;
 import android.app.printerapp.ui.AnimationHelper;
+import android.app.printerapp.viewer.STLViewer;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,6 +56,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         }
 
         super.onCreate(savedInstanceState);
+        FileManager.deleteCache(this);
         setContentView(R.layout.main_activity);
 
         mTabHost = (TabHost) findViewById(R.id.tabHost);
@@ -144,12 +146,9 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-
                 View currentView = mTabHost.getCurrentView();
                 AnimationHelper.inFromRightAnimation(currentView);
-
                 onItemSelected(mTabHost.getCurrentTab());
-
             }
         });
 
@@ -236,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
                     psc.setSurfaceVisibility(1);
                 }
             }
-            */
+        */
 
         //Show current fragment
         if (mCurrent != null) {
@@ -269,7 +268,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
             public void run() {
 
                 if (path!=null) {
-                    PrintsSpecificFragment.openFileDialog(path);
+                    STLViewer.openFileDialog(path);
                     Log.d("TestPath", path);
                 }
 
@@ -283,5 +282,11 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         if(event.getPropertyName() == PRINT_CLICKED){
             Log.d("Test", "I got clicked! : " + event.getNewValue());
         }
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        FileManager.deleteCache(this);
     }
 }

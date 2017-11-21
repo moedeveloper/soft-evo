@@ -3,7 +3,6 @@ package android.app.printerapp.viewer;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.printerapp.Log;
-import android.app.printerapp.PrintsSpecificFragment;
 import android.app.printerapp.R;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -41,7 +40,7 @@ public class GcodeFile  {
 		mData = data;
 		mMode = mode;
 		mContinueThread = true;
-		if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog = prepareProgressDialog(context);
+		if(mMode!= STLViewer.DO_SNAPSHOT) mProgressDialog = prepareProgressDialog(context);
 
 		mData.setPathFile(mFile.getAbsolutePath());		
 		mData.initMaxMin();
@@ -72,8 +71,8 @@ public class GcodeFile  {
                     Log.i(TAG, "GCODE Read in: " + (SystemClock.currentThreadTimeMillis() - milis));
 					
 
-					if(mMode== PrintsSpecificFragment.PRINT_PREVIEW) mData.setMaxLinesFile(maxLines);
-					if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
+					if(mMode== STLViewer.PRINT_PREVIEW) mData.setMaxLinesFile(maxLines);
+					if(mMode!= STLViewer.DO_SNAPSHOT) mProgressDialog.setMax(maxLines);
 					if (mContinueThread) processGcode(allLines, maxLines);
 
 					if (mContinueThread) mHandler.sendEmptyMessage(0);
@@ -110,13 +109,13 @@ public class GcodeFile  {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                PrintsSpecificFragment.resetWhenCancel();
+                STLViewer.resetWhenCancel();
             }
         });
 
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
-        if (mMode!= PrintsSpecificFragment.DO_SNAPSHOT) {
+        if (mMode!= STLViewer.DO_SNAPSHOT) {
             dialog.show();
             dialog.getWindow().setLayout(500, LinearLayout.LayoutParams.WRAP_CONTENT);
         }
@@ -145,8 +144,8 @@ public class GcodeFile  {
         //Default plate size for printview panel
         int[] auxPlate = {WitboxFaces.WITBOX_LONG,WitboxFaces.WITBOX_WITDH,WitboxFaces.WITBOX_HEIGHT};
 
-        if (PrintsSpecificFragment.getCurrentPlate() != null)
-         auxPlate = PrintsSpecificFragment.getCurrentPlate();
+        if (STLViewer.getCurrentPlate() != null)
+         auxPlate = STLViewer.getCurrentPlate();
 
 		while (lines<maxLines && mContinueThread) {
 
@@ -234,7 +233,7 @@ public class GcodeFile  {
 			 lines++;
 			 lastIndex = index+1;
 
-			 if (mMode!= PrintsSpecificFragment.DO_SNAPSHOT && lines % (maxLines/10) == 0)mProgressDialog.setProgress(lines);
+			 if (mMode!= STLViewer.DO_SNAPSHOT && lines % (maxLines/10) == 0)mProgressDialog.setProgress(lines);
 		}
 
         Log.i(TAG, "GCODE Processed in: " + (SystemClock.currentThreadTimeMillis() - milis));
@@ -251,8 +250,8 @@ public class GcodeFile  {
     			 * Alberto
     			 */
     			//Toast.makeText(mContext, R.string.error_opening_invalid_file, Toast.LENGTH_SHORT).show();
-    			PrintsSpecificFragment.resetWhenCancel();
-    			if(mMode!= PrintsSpecificFragment.DO_SNAPSHOT) mProgressDialog.dismiss();
+    			STLViewer.resetWhenCancel();
+    			if(mMode!= STLViewer.DO_SNAPSHOT) mProgressDialog.dismiss();
 
     			return;
     		}
@@ -268,13 +267,13 @@ public class GcodeFile  {
     		mData.clearTypeList();
 
 
-    		if(mMode== PrintsSpecificFragment.DONT_SNAPSHOT) {
-//    			PrintsSpecificFragment.initSeekBar(mMaxLayer);
-	    		PrintsSpecificFragment.draw();
+    		if(mMode== STLViewer.DONT_SNAPSHOT) {
+//    			STLViewer.initSeekBar(mMaxLayer);
+	    		STLViewer.draw();
 				mProgressDialog.dismiss();  
-    		} else if(mMode== PrintsSpecificFragment.PRINT_PREVIEW) {
+    		} else if(mMode== STLViewer.PRINT_PREVIEW) {
     			mProgressDialog.dismiss();
-    		} else if (mMode== PrintsSpecificFragment.DO_SNAPSHOT) {
+    		} else if (mMode== STLViewer.DO_SNAPSHOT) {
     		}
         }
     };

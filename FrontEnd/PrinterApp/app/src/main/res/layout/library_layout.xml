@@ -42,6 +42,13 @@
                 style="@style/NavigationMenuItem"
                 android:text="@string/library_models_favorites" />
 
+            <Button
+                android:id="@+id/test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/NavigationMenuItem"
+                android:text="Load files" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -101,8 +108,8 @@
                     <com.material.widget.PaperButton
                         android:id="@+id/scan_device_button"
                         style="@style/MaterialDesignButton.Raised"
-                        android:layout_gravity="center"
                         android:layout_width="250dp"
+                        android:layout_gravity="center"
                         android:layout_margin="@dimen/content_margin_normal"
                         app:paper_text="@string/library_menu_scan"
                         app:paper_text_color="@color/body_text_2" />

@@ -6,6 +6,7 @@ import android.app.printerapp.R;
 import android.app.printerapp.viewer.DataStorage;
 import android.app.printerapp.viewer.GcodeFile;
 import android.app.printerapp.PrintsSpecificFragment;
+import android.app.printerapp.viewer.STLViewer;
 import android.app.printerapp.viewer.StlFile;
 import android.app.printerapp.viewer.ViewerSurfaceView;
 import android.content.Context;
@@ -161,12 +162,12 @@ public class LibraryModelCreation {
         if (StlFile.checkFileSize(file,mContext)){
 
             if(LibraryController.hasExtension(0, path)) {
-                StlFile.openStlFile (context, file, data, PrintsSpecificFragment.DO_SNAPSHOT);
+                StlFile.openStlFile (context, file, data, STLViewer.DO_SNAPSHOT);
             } else if (LibraryController.hasExtension(1, path)) {
-                GcodeFile.openGcodeFile(context, file, data, PrintsSpecificFragment.DO_SNAPSHOT);
+                GcodeFile.openGcodeFile(context, file, data, STLViewer.DO_SNAPSHOT);
             }
 
-            mSnapshotSurface = new ViewerSurfaceView(context, list, ViewerSurfaceView.NORMAL, PrintsSpecificFragment.DO_SNAPSHOT);
+            mSnapshotSurface = new ViewerSurfaceView(context, list, ViewerSurfaceView.NORMAL, STLViewer.DO_SNAPSHOT);
             list.add(data);
 
         } else mAlert.dismiss();

@@ -2,16 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context="android.app.printerapp.AddNewCompany">
 
-
     <TableLayout
-        android:layout_width="522dp"
-        android:layout_height="144dp"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="173dp">
+        android:layout_width="582dp"
+        android:layout_height="555dp"
+        android:layout_gravity="left|center"
+        android:layout_margin="40dp"
+        android:padding="150dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="117dp"
+        tools:layout_editor_absoluteY="182dp">
 
         <TableRow
             android:id="@+id/tableRowLabel"
@@ -39,30 +42,28 @@
                 android:layout_height="wrap_content"
                 android:width="1050dp"
                 android:hint="New Company"
-                android:inputType="textPersonName"
-                android:text="Name" />
-
+                android:inputType="textPersonName" />
         </TableRow>
 
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <Button
+                android:id="@+id/add_new_company_button"
+                style="@android:style/Widget.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:width="30dp"
+                android:height="10dp"
+                android:layout_margin="2dp"
+                android:padding="5dp"
+                android:layout_weight="1"
+                android:text="Add"
+                tools:layout_editor_absoluteX="144dp"
+                tools:layout_editor_absoluteY="332dp" />
+        </TableRow>
     </TableLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        tools:layout_editor_absoluteX="228dp"
-        tools:layout_editor_absoluteY="196dp">
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="134dp"
-        android:layout_height="48dp"
-        android:layout_column="3"
-        android:layout_weight="1"
-        android:padding="5dp"
-        android:text="Add"
-        tools:layout_editor_absoluteX="139dp"
-        tools:layout_editor_absoluteY="340dp" />
 
 </android.support.constraint.ConstraintLayout>
