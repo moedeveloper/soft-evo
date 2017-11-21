@@ -36,6 +36,8 @@ public class DetailActivity extends ActionBarActivity implements Callback<List<D
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_activity);
 
+        detailId = getIntent().getIntExtra("detailId", -1);
+
         progressBar = (ProgressBar) findViewById(R.id.detail_activity_progress_bar);
         name = (TextView) findViewById(R.id.detail_activity_name_label);
         companyName = (TextView) findViewById(R.id.detail_activity_company);
@@ -53,7 +55,7 @@ public class DetailActivity extends ActionBarActivity implements Callback<List<D
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        Call<List<Detail>> call = apiService.fetchDetail(1);
+        Call<List<Detail>> call = apiService.fetchDetail(detailId);
         call.enqueue(this);
     }
 
