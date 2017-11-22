@@ -5,6 +5,7 @@ import android.app.printerapp.model.Build;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.Print;
+import android.app.printerapp.ui.DateEntryItemHolders.BuildItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.DataEntryItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.DetailItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.PrintItemHolder;
@@ -50,7 +51,7 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
         }else if(type == b){
             view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.data_entry_list_item, parent, false);
-            itemholder = null;
+            itemholder = new BuildItemHolder(view);
         }
 
         return itemholder;

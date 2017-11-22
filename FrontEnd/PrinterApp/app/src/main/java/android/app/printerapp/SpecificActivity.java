@@ -1,6 +1,7 @@
 package android.app.printerapp;
 
 import android.app.Fragment;
+import android.app.printerapp.dataviews.BuildSpecificFragment;
 import android.app.printerapp.dataviews.DetailsSpecificFragment;
 import android.app.printerapp.dataviews.PrintsSpecificFragment;
 import android.os.Bundle;
@@ -42,7 +43,7 @@ public class SpecificActivity extends ActionBarActivity {
             case START_DETAIL_FRAGMENT:
                 return DetailsSpecificFragment.newInstance(id);
             case START_BUILD_FRAGMENT:
-                return null; //TODO: Implement this
+                return BuildSpecificFragment.newInstance(id);
             case START_PRINT_FRAGMENT:
                 return PrintsSpecificFragment.newInstance(id);
             default:

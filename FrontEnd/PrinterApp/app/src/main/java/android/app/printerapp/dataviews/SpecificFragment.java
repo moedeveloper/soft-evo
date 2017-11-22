@@ -3,6 +3,7 @@ package android.app.printerapp.dataviews;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.printerapp.R;
+import android.app.printerapp.SpecificActivity;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.content.Context;
@@ -43,8 +44,6 @@ abstract class SpecificFragment extends Fragment {
     Map<String, RecyclerView> allTraceLists;
 
     //Constants
-    public static final String ID = "data_id";
-
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
 //---------------------------------------------------------------------------------------
@@ -99,7 +98,7 @@ abstract class SpecificFragment extends Fragment {
 
     public static SpecificFragment newInstance(int id){
         Bundle b = new Bundle();
-        b.putInt(ID, id);
+        b.putInt(SpecificActivity.ID, id);
         PrintsSpecificFragment psf = new PrintsSpecificFragment();
         psf.setArguments(b);
         return psf;

@@ -6,11 +6,10 @@ package android.app.printerapp.model;
 
 public class Build implements DataEntry{
 
-    private String buildDetailLinkId;
-
-    public String getBuildDetailLinkId(){
-        return buildDetailLinkId;
-    }
+    private String id;
+    private String creationDate;
+    private String imageId;
+    private String comment;
 
     @Override
     public String getName() {
@@ -19,12 +18,36 @@ public class Build implements DataEntry{
 
     @Override
     public String getId() {
-        return null;
+        return id;
     }
 
     @Override
     public String getCreationDate() {
-        return null;
+        return creationDate;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
 

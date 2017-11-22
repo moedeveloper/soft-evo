@@ -8,12 +8,12 @@ import java.util.List;
 
 public class BuildList {
 
-    List<Build> builds;
+    List<Build> buildsApi;
 
 
-    public List<Build> getBuilds() { return builds;}
+    public List<Build> getBuilds() { return buildsApi;}
 
     public void setBuilds(List<Build> builds) {
-        this.builds = builds;
+        this.buildsApi = builds;
     }
 }

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.printerapp.database.DatabaseController;
+import android.app.printerapp.dataviews.BuildsFragment;
 import android.app.printerapp.dataviews.HomeFragment;
 import android.app.printerapp.dataviews.PrintsFragment;
 import android.app.printerapp.dataviews.PrintsSpecificFragment;
@@ -33,8 +34,8 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
 
     private HomeFragment mHomeFragment; //Front page
     private LibraryFragment mLibraryFragment; //Storage fragment
-    private PrintsSpecificFragment mViewerFragment; //Print panel fragment @static for model load
     private PrintsFragment mPrintsFragment;
+    private BuildsFragment mBuildsFragment;
 
     public static final String PRINT_CLICKED = "print_clicked";
 
@@ -72,8 +73,6 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         mDialog = new DialogController(this);
 
         //Initialize fragments
-        mViewerFragment = (PrintsSpecificFragment) getFragmentManager().findFragmentByTag(ListContent.ID_VIEWER);
-
         mManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
@@ -213,8 +212,11 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
 
             break;
             case 2: {
-                //TODO: Add detail view here
-                closeDetailView();
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_BUILDS) == null) {
+                    mBuildsFragment = new BuildsFragment();
+                    fragmentTransaction.add(R.id.maintab2, mBuildsFragment, ListContent.ID_BUILDS);
+                }
+                mCurrent = mBuildsFragment;
             }
             break;
 

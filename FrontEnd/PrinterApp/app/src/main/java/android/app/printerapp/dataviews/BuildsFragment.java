@@ -6,6 +6,7 @@ package android.app.printerapp.dataviews;
 
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
+import android.app.printerapp.Log;
 import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
@@ -13,7 +14,6 @@ import android.app.printerapp.model.BuildList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.IOException;
-import java.util.List;
 
 public class BuildsFragment extends Fragment {
 
@@ -79,6 +78,7 @@ public class BuildsFragment extends Fragment {
             if(result == null){
                 return;
             }
+
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getBuilds()));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
