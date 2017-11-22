@@ -119,12 +119,12 @@ public class LibraryFragment extends Fragment {
 
                 mListView.setEmptyView(emptyView);
 
-                emptyView.findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        optionSearchSystem();
-                    }
-                });
+//                emptyView.findViewById(R.id.test).setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        optionSearchSystem();
+//                    }
+//                });
             }
 
             mRootView.findViewById(R.id.test).setOnClickListener(new View.OnClickListener(){
