@@ -10,11 +10,12 @@ public class Detail implements DataEntry {
     private String id;
     private String name;
     private String creationDate;
-//    private int companyId;
-//    private String originalFileName;
-//    private int projectId;
+    private int companyId;
+    private String fileId;
+    private int projectId;
 //    private Date creationDate;
-//    private String comment;
+    private String comment;
+
 
     public String getId() {
         return id;
@@ -41,30 +42,30 @@ public class Detail implements DataEntry {
         this.name = name;
     }
 
-//    public int getCompanyId() {
-//        return companyId;
-//    }
-//
-//    public void setCompanyId(int companyId) {
-//        this.companyId = companyId;
-//    }
-//
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
+
 //    public String getOriginalFileName() {
-//        return originalFileName;
+//        return fileId;
 //    }
 //
-//    public void setOriginalFileName(String originalFileName) {
-//        this.originalFileName = originalFileName;
+//    public void setOriginalFileName(String fileId) {
+//        this.fileId = fileId;
 //    }
-//
-//    public int getProjectId() {
-//        return projectId;
-//    }
-//
-//    public void setProjectId(int projectId) {
-//        this.projectId = projectId;
-//    }
-//
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
 //    public Date getCreationDate() {
 //        return creationDate;
 //    }
@@ -72,12 +73,20 @@ public class Detail implements DataEntry {
 //    public void setCreationDate(Date creationDate) {
 //        this.creationDate = creationDate;
 //    }
-//
-//    public String getComment() {
-//        return comment;
-//    }
-//
-//    public void setComment(String comment) {
-//        this.comment = comment;
-//    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
 }

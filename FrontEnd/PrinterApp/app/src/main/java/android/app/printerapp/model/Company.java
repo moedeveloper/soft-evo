@@ -29,6 +29,10 @@ public class Company implements DataEntry {
         this.id = id;
     }
 
+    public int getIntId() {
+        return this.id;
+    }
+
     @Override
     public String getName() {
         return name;

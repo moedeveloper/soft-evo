@@ -31,7 +31,8 @@ import retrofit2.http.Url;
 
 public interface ApiService {
     String BASE_URL = "http://mo3app.azurewebsites.net/api/";
-//-------------------------------------------
+
+    //-------------------------------------------
 //      DETAILS
 //-------------------------------------------
     @GET("details")
@@ -44,8 +45,11 @@ public interface ApiService {
     Call<List<BuildDetailLink>> fetchDetailBuildLink(@Path("buildId") int buildId);
 
     @Streaming
-    @GET ("download/file/{fileId}")
+    @GET("download/file/{fileId}")
     Call<ResponseBody> downloadStlFile(@Path("fileId") int fileId);
+
+    @POST("details/create")
+    Call<String> createDetails(@Body DetailDto detail);
 
     //-------------------------------------------
 //      PRINTS
@@ -56,7 +60,7 @@ public interface ApiService {
     @GET("prints")
     Call<PrintList> fetchAllPrints();
 
-//-------------------------------------------
+    //-------------------------------------------
 //      BUILDS
 //-------------------------------------------
     @GET("build/{buildId}")
@@ -65,7 +69,7 @@ public interface ApiService {
     @GET("builds")
     Call<BuildList> fetchAllBuilds();
 
-//-------------------------------------------
+    //-------------------------------------------
 //      COMPANIES
 //-------------------------------------------
     @GET("companies")
