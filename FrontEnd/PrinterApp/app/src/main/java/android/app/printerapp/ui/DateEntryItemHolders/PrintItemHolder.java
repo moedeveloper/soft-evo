@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.printerapp.ListContent;
 import android.app.printerapp.Log;
-import android.app.printerapp.PrintsSpecificFragment;
+import android.app.printerapp.dataviews.PrintsSpecificFragment;
 import android.app.printerapp.R;
 import android.view.View;
 

@@ -1,5 +1,7 @@
-package android.app.printerapp;
+package android.app.printerapp.dataviews;
 
+import android.app.printerapp.AddDetailsActivity;
+import android.app.printerapp.R;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;

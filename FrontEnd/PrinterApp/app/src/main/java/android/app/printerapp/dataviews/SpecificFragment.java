@@ -1,7 +1,8 @@
-package android.app.printerapp;
+package android.app.printerapp.dataviews;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.printerapp.R;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.content.Context;
@@ -144,6 +145,7 @@ abstract class SpecificFragment extends Fragment {
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             RecyclerView recyclerView = new RecyclerView(mContext);
+
             //Save the recyclerview in our map so we can access it
             allTraceLists.put(tag, recyclerView);
             linearLayout.addView(recyclerView);

@@ -1,5 +1,6 @@
 package android.app.printerapp.api;
 
+import android.app.printerapp.model.BuildList;
 import android.app.printerapp.model.CompanyList;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.BuildDetailLinkList;
@@ -30,29 +31,43 @@ import retrofit2.http.Url;
 
 public interface ApiService {
     String BASE_URL = "http://mo3app.azurewebsites.net/api/";
-
-    @Streaming
-    @GET ("download/file/{fileId}")
-    Call<ResponseBody> downloadStlFile(@Path("fileId") int fileId);
-
+//-------------------------------------------
+//      DETAILS
+//-------------------------------------------
     @GET("details")
     Call<DetailList> fetchAllDetails();
 
     @GET("details/{detailId}")
     Call<List<Detail>> fetchDetail(@Path("detailId") int detailId);
 
+    @GET("details/build/{buildId}")
+    Call<List<BuildDetailLink>> fetchDetailBuildLink(@Path("buildId") int buildId);
+
+    @Streaming
+    @GET ("download/file/{fileId}")
+    Call<ResponseBody> downloadStlFile(@Path("fileId") int fileId);
+
+    //-------------------------------------------
+//      PRINTS
+//-------------------------------------------
     @GET("print/{printId}")
     Call<List<Print>> fetchPrint(@Path("printId") int printId);
 
     @GET("prints")
     Call<PrintList> fetchAllPrints();
 
+//-------------------------------------------
+//      BUILDS
+//-------------------------------------------
     @GET("build/{buildId}")
     Call<List<Build>> fetchBuild(@Path("buildId") int buildId);
 
-    @GET("details/build/{buildId}")
-    Call<List<BuildDetailLink>> fetchDetailBuildLink(@Path("buildId") int buildId);
+    @GET("builds")
+    Call<BuildList> fetchAllBuilds();
 
+//-------------------------------------------
+//      COMPANIES
+//-------------------------------------------
     @GET("companies")
     Call<CompanyList> fetchAllCompanies();
 

@@ -69,16 +69,6 @@ public class STLViewer extends FrameLayout {
     //---------------------------------------
     //Initializes the layout
     private void initializeViews(Context context){
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.stl_viewer, this);
-    }
-
-    //Upon finishing inflating, do this
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-
-        //Init elements for the viewer
         mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
         mSurface = new ViewerSurfaceView(getContext(), mDataList, NORMAL, DONT_SNAPSHOT);
         mContext = getContext();

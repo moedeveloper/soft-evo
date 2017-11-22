@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="android.app.printerapp.PrintsFragment">
+    tools:context="android.app.printerapp.dataviews.PrintsFragment">
 
     <android.support.constraint.Guideline
         android:id="@+id/right_guideline_prints"

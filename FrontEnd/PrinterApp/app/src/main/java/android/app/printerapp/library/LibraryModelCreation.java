@@ -5,7 +5,6 @@ import android.app.printerapp.Log;
 import android.app.printerapp.R;
 import android.app.printerapp.viewer.DataStorage;
 import android.app.printerapp.viewer.GcodeFile;
-import android.app.printerapp.PrintsSpecificFragment;
 import android.app.printerapp.viewer.STLViewer;
 import android.app.printerapp.viewer.StlFile;
 import android.app.printerapp.viewer.ViewerSurfaceView;

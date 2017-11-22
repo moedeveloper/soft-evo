@@ -1,6 +1,5 @@
 package android.app.printerapp.viewer;
 
-import android.app.printerapp.PrintsSpecificFragment;
 import android.content.Context;
 import android.opengl.GLES20;
 

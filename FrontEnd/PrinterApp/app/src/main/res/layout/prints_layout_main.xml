@@ -195,7 +195,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline" />
 
-    <!--The STL viewer-->
+    <!--Top right side of the layout, used to hold stl viewer or image-->
     <RelativeLayout
         android:id="@+id/stl_viewer_holder_layout"
         android:layout_width="0dp"
@@ -206,12 +206,6 @@
         app:layout_constraintRight_toLeftOf="@+id/right_guideline"
         app:layout_constraintBottom_toTopOf="@+id/middle_guideline_horizontal"
         app:layout_constraintTop_toTopOf="@+id/top_guideline">
-
-        <android.app.printerapp.viewer.STLViewer
-            android:id="@+id/stl_viewer"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_centerInParent="true" />
     </RelativeLayout>
 
     <!--Container for buttons, selection of models to display-->
