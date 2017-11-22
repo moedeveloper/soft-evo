@@ -42,6 +42,9 @@ abstract class SpecificFragment extends Fragment {
 
     Map<String, RecyclerView> allTraceLists;
 
+    //Constants
+    public static final String ID = "data_id";
+
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
 //---------------------------------------------------------------------------------------
@@ -93,6 +96,14 @@ abstract class SpecificFragment extends Fragment {
 //---------------------------------------------------------------------------------------
 //          SETUP METHODS
 //---------------------------------------------------------------------------------------
+
+    public static SpecificFragment newInstance(int id){
+        Bundle b = new Bundle();
+        b.putInt(ID, id);
+        PrintsSpecificFragment psf = new PrintsSpecificFragment();
+        psf.setArguments(b);
+        return psf;
+    }
 
     //Builds an alert dialog to be shown used when data cannot be retrieved
     private void createAlertDialog(){
