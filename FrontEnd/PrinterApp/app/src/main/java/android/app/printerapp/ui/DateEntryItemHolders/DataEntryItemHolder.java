@@ -1,6 +1,8 @@
 package android.app.printerapp.ui.DateEntryItemHolders;
 
 import android.app.printerapp.R;
+import android.app.printerapp.SpecificActivity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -49,6 +51,12 @@ public abstract class DataEntryItemHolder extends RecyclerView.ViewHolder implem
     //TODO: Perhaps move all instantiation of fragments to a factory class
 
     @Override
-    public abstract void onClick(View view);
+    public void onClick(View view) {
+        Intent intent = new Intent(view.getContext(), SpecificActivity.class);
+        intent.putExtra(SpecificActivity.CHOSEN_FRAGMENT_INTENT_TAG, getFragmentType());
+        view.getContext().startActivity(intent);
+    }
+
+    public abstract int getFragmentType();
 }
 

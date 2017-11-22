@@ -71,6 +71,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="android.app.printerapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".SpecificActivity"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="landscape"
+            android:label="" />
 
         <activity android:name=".CalendarPickerDate"></activity>
     </application>
