@@ -46,4 +46,9 @@ public class DetailItemHolder extends DataEntryItemHolder {
             Log.d("DataEntryItemHolder", "Can't get the fragment manager with this");
         }
     }
+
+    @Override
+    public int getFragmentType() {
+        return 0;
+    }
 }

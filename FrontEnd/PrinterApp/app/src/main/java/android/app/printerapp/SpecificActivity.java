@@ -1,6 +1,8 @@
 package android.app.printerapp;
 
 import android.app.Fragment;
+import android.app.printerapp.dataviews.DetailsSpecificFragment;
+import android.app.printerapp.dataviews.PrintsSpecificFragment;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;

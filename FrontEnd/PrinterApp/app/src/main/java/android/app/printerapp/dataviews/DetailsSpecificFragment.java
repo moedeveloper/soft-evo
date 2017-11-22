@@ -1,4 +1,4 @@
-package android.app.printerapp;
+package android.app.printerapp.dataviews;
 
 /**
  * Created by jcmma on 2017-11-21.
