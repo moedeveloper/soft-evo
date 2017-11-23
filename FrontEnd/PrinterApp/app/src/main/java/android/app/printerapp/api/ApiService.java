@@ -69,6 +69,9 @@ public interface ApiService {
     @GET("build/{buildId}")
     Call<List<Build>> fetchBuild(@Path("buildId") int buildId);
 
+    @GET("build/details/{detailId}")
+    Call<List<BuildDetailLink>> fetchBuildDetailLink(@Path("detailId") int detailId);
+
     @GET("builds")
     Call<BuildList> fetchAllBuilds();
 

@@ -39,7 +39,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
     //Variables for specific print
     private int id;
     private Detail detail;
-    private List<Print> linkedPrints;
+    private List<Print> linkedPrints = new ArrayList<>();
     private List<Build> linkedBuilds = new ArrayList<>();
 
     //Api
@@ -130,6 +130,14 @@ public class DetailsSpecificFragment extends SpecificFragment {
 
     @Override
     void onTagSelected(Object tag) {
+        if(tag == null){
+            return;
+        }
+        if(tag.equals(ListContent.ID_PRINTS)){
+            allTraceLists.get(ListContent.ID_PRINTS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedPrints));
+            allTraceLists.get(ListContent.ID_PRINTS).setLayoutManager(new LinearLayoutManager(mContext));
+            allTraceLists.get(ListContent.ID_PRINTS).addItemDecoration(new DividerItemDecoration(mContext));
+        }
     }
 
 //---------------------------------------------------------------------------------------
@@ -145,15 +153,17 @@ public class DetailsSpecificFragment extends SpecificFragment {
             try {
                 detail = apiService.fetchDetail(id).execute().body().get(0);
                 //TODO: Implement an API function for getting builds from detail id
-//                List<BuildDetailLink> buildDetailResult = apiService.fetchDetailBuildLink(id).execute().body();
-//                linkedPrints = apiService.fetchPrintFromBuild(id).execute().body();
+                List<BuildDetailLink> buildDetailResult = apiService.fetchBuildDetailLink(id).execute().body();
 
-                //For each detail found, retrieve their data
-//                for(BuildDetailLink link : buildDetailResult){
-//                    List<Detail> detail = apiService.fetchDetail(
-//                            Integer.parseInt(link.getDetailsId())).execute().body();
-//                    linkedBuilds.add(detail.get(0));
-//                }
+                //For each build found, retrieve their data
+                for(BuildDetailLink link : buildDetailResult){
+                    List<Build> build = apiService.fetchBuild(
+                            Integer.parseInt(link.getBuildId())).execute().body();
+                    linkedBuilds.add(build.get(0));
+                    List<Print> print = apiService.fetchPrintFromBuild(
+                            Integer.parseInt(link.getBuildId())).execute().body();
+                    linkedPrints.add(print.get(0));
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -178,9 +188,9 @@ public class DetailsSpecificFragment extends SpecificFragment {
 
             dataListView.setAdapter(new DataTextAdapter(detailTitles, detailValues, mContext));
 
-//            allTraceLists.get(ListContent.ID_PRINTS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedBuilds));
-//            allTraceLists.get(ListContent.ID_PRINTS).setLayoutManager(new LinearLayoutManager(mContext));
-//            allTraceLists.get(ListContent.ID_PRINTS).addItemDecoration(new DividerItemDecoration(mContext));
+            allTraceLists.get(ListContent.ID_BUILDS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedBuilds));
+            allTraceLists.get(ListContent.ID_BUILDS).setLayoutManager(new LinearLayoutManager(mContext));
+            allTraceLists.get(ListContent.ID_BUILDS).addItemDecoration(new DividerItemDecoration(mContext));
 
             super.onPostExecute(integer);
 
