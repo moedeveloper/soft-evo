@@ -49,6 +49,11 @@ public class Company implements DataEntry {
     }
 
     @Override
+    public String getIdName() {
+        return "C" + id;
+    }
+
+    @Override
     public String toString() {
         return name;
     }

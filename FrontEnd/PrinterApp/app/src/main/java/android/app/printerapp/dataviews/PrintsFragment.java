@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PrintsFragment extends Fragment{
+public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
     private RecyclerView recyclerView;
     private DatabaseHandler databaseHandler;
@@ -63,6 +63,7 @@ public class PrintsFragment extends Fragment{
             recyclerView = (RecyclerView) mRootView.findViewById(R.id.prints_recycler_view);
             searchHolder = (RelativeLayout) mRootView.findViewById(R.id.search_holder);
             searchView = new SearchView(mContext);
+            searchView.addPropertyChangeListener(this);
             searchView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
                     ConstraintLayout.LayoutParams.MATCH_PARENT));
             searchHolder.addView(searchView);
@@ -75,32 +76,19 @@ public class PrintsFragment extends Fragment{
             searchView.createSearchOption("Test", new String[]{"Starfish","Elephant"});
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
-                android.R.layout.simple_dropdown_item_1line, printIds);
-        searchView.setAdapter(adapter);
-
-        searchView.setOnClickListenerForGoButton(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AutoCompleteTextView searchEntry = (AutoCompleteTextView) searchView.findViewById(R.id.search_bar);
-                DataEntryRecyclerViewAdapter adapter = new DataEntryRecyclerViewAdapter<>(
-                        filterList(prints, searchEntry.getText().toString()));
-                recyclerView.swapAdapter(adapter, false);
-            }
-        });
-
         return mRootView;
     }
 
-    //Filters a list of DataEntry, by ID
-    private List<DataEntry> filterList(List<? extends DataEntry> list, String filter){
-        List<DataEntry> returnList = new ArrayList<>();
-        for(DataEntry current : list){
-            if(("P" + current.getId()).contains(filter)){
-                returnList.add(current);
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if(event.getPropertyName().equals(SearchView.GO_BUTTON_CLICKED)){
+            if(event.getNewValue() == null){
+                return;
             }
+
+            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter((List<DataEntry>) event.getNewValue()));
+
         }
-        return returnList;
     }
 
     //Async task to retrieve data from database, and set the adapter
@@ -130,14 +118,14 @@ public class PrintsFragment extends Fragment{
 
             prints = result.getPrints();
 
-            //Save all print ids in a list. Add P as a prefix to define that it's a print
-            for(Print current : prints){
-                printIds.add("P" + current.getId());
-            }
-
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(prints));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
+
+            //Update the data in search view
+
+
+            searchView.updateData(prints);
     }
 }
 

@@ -9,5 +9,6 @@ public interface DataEntry {
     public String getName();
     public String getId();
     public String getCreationDate();
+    public String getIdName();
 
 }
