@@ -59,7 +59,7 @@ public interface ApiService {
 
     @GET("prints")
     Call<PrintList> fetchAllPrints();
-    
+
     @GET("print/build/{buildId}")
     Call<List<Print>> fetchPrintFromBuild(@Path("buildId") int buildId);
 
