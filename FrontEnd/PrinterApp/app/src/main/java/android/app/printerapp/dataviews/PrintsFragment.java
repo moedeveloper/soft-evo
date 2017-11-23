@@ -3,6 +3,7 @@ package android.app.printerapp.dataviews;
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.R;
+import android.app.printerapp.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.PrintList;
@@ -10,11 +11,14 @@ import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,6 +31,8 @@ public class PrintsFragment extends Fragment{
     private DatabaseHandler databaseHandler;
     private Context mContext;
     private View mRootView;
+    private RelativeLayout searchHolder;
+    private SearchView searchView;
 
     public static final String PRINT_CLICKED = "print_clicked";
 
@@ -47,6 +53,15 @@ public class PrintsFragment extends Fragment{
             mRootView = inflater.inflate(R.layout.fragment_prints, container, false);
             mContext = getActivity();
             recyclerView = (RecyclerView) mRootView.findViewById(R.id.prints_recycler_view);
+            searchHolder = (RelativeLayout) mRootView.findViewById(R.id.search_holder);
+            searchView = new SearchView(mContext);
+            searchView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
+                    ConstraintLayout.LayoutParams.MATCH_PARENT));
+            searchHolder.addView(searchView);
+        }
+
+        for(int i = 0; i < 10; i++){
+            searchView.createSearchOption("Test", new String[]{"Starfish","Elephant"});
         }
 
         new LoadDataTask().execute();

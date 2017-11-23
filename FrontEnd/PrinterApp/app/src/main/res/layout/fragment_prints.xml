@@ -81,15 +81,15 @@
             />
     </RelativeLayout>
 
-    <include layout="@layout/search_layout"
+    <RelativeLayout
+        android:id="@+id/search_holder"
         android:layout_height="0dp"
         android:layout_width="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_guideline_prints"
         app:layout_constraintRight_toLeftOf="@+id/right_guideline_prints"
         app:layout_constraintLeft_toLeftOf="@+id/search_separator_guideline"
         app:layout_constraintTop_toTopOf="@+id/top_guideline_prints">
-
-    </include>
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/prints_recycler_view"
