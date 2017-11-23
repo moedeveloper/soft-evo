@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.printerapp.database.DatabaseController;
 import android.app.printerapp.dataviews.BuildsFragment;
+import android.app.printerapp.dataviews.DetailsFragment;
 import android.app.printerapp.dataviews.HomeFragment;
 import android.app.printerapp.dataviews.PrintsFragment;
 import android.app.printerapp.dataviews.PrintsSpecificFragment;
@@ -34,6 +35,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
 
     private HomeFragment mHomeFragment; //Front page
     private LibraryFragment mLibraryFragment; //Storage fragment
+    private DetailsFragment mDetailsFragment;
     private PrintsFragment mPrintsFragment;
     private BuildsFragment mBuildsFragment;
 
@@ -203,10 +205,10 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
             case 1: {
                 //Check if we already created the Fragment to avoid having multiple instances
                 if (getFragmentManager().findFragmentByTag(ListContent.ID_DETAILS) == null) {
-                    mLibraryFragment = new LibraryFragment();
-                    fragmentTransaction.add(R.id.maintab1, mLibraryFragment, ListContent.ID_DETAILS);
+                    mDetailsFragment = new DetailsFragment();
+                    fragmentTransaction.add(R.id.maintab1, mDetailsFragment, ListContent.ID_DETAILS);
                 }
-                mCurrent = mLibraryFragment;
+                mCurrent = mDetailsFragment;
 
             }
 
