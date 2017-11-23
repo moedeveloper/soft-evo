@@ -2,7 +2,6 @@ package android.app.printerapp.dataviews;
 
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.ListContent;
-import android.app.printerapp.Log;
 import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.BuildDetailLink;
@@ -112,14 +111,15 @@ public class BuildSpecificFragment extends SpecificFragment {
 
     @Override
     void onTagSelected(Object tag) {
-/* Doesnt work.. why?
+
+        if(tag == null){
+            return;
+        }
         if(tag.equals(ListContent.ID_PRINTS)){
             allTraceLists.get(ListContent.ID_PRINTS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedPrints));
             allTraceLists.get(ListContent.ID_PRINTS).setLayoutManager(new LinearLayoutManager(mContext));
             allTraceLists.get(ListContent.ID_PRINTS).addItemDecoration(new DividerItemDecoration(mContext));
         }
-
-    */
     }
 
 //---------------------------------------------------------------------------------------
