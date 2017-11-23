@@ -35,7 +35,7 @@ public class ApiController implements Callback<DetailList> {
         if (response.isSuccessful()) {
             DetailList detailList = response.body();
             for (Detail detail : detailList.getDetails()) {
-                System.out.println(detail.getName());
+                // System.out.println(detail.getName());
             }
         } else {
             System.out.println(response.errorBody());

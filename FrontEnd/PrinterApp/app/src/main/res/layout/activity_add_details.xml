@@ -173,15 +173,16 @@
                     android:padding="2dp"
                     android:text="Date"
                     android:textAlignment="center" />
-
+<!--
+                    style="@android:style/Widget.Holo.CalendarView"
+                    android:datePickerMode="spinner"
+-->
                 <EditText
                     android:id="@+id/dateInput"
-                    style="@android:style/Widget.Holo.CalendarView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
                     android:layout_weight="1"
-                    android:datePickerMode="spinner"
                     android:ems="10"
                     android:gravity="left|center"
                     android:hint="Select date"
@@ -233,35 +234,6 @@
                     tools:layout_editor_absoluteY="370dp" />
 
             </TableRow>
-        </GridLayout>
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:id="@+id/buttonStl"
-                        style="@android:style/Widget.Button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:inputType="textUri"
-                        android:padding="5dp"
-                        android:text="Upload STL"
-                        android:textStyle="bold" />
-
-                </TableRow>
-            </LinearLayout>
         </GridLayout>
 
         <GridLayout
