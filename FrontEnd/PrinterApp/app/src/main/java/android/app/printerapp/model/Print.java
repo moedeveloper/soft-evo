@@ -30,6 +30,11 @@ public class Print implements DataEntry{
         return startTime;
     }
 
+    @Override
+    public String getIdName() {
+        return "P" + id;
+    }
+
     public void setId(String id){
         this.id = id;
     }

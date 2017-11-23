@@ -30,6 +30,11 @@ public class Detail implements DataEntry {
         return creationDate;
     }
 
+    @Override
+    public String getIdName() {
+        return "D" + id;
+    }
+
     public void setId(String id) {
         this.id = id;
     }

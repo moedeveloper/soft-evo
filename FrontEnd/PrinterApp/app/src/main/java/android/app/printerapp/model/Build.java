@@ -26,6 +26,11 @@ public class Build implements DataEntry{
         return creationDate;
     }
 
+    @Override
+    public String getIdName() {
+        return "B" + id;
+    }
+
     public String getComment() {
         return comment;
     }

@@ -140,7 +140,7 @@ abstract class SpecificFragment extends Fragment {
             public void onTabChanged(String tabId) {
                 View currentView = traceTabHost.getCurrentView();
                 AnimationHelper.inFromRightAnimation(currentView);
-                onTagSelected(currentView.getTag());
+                onTagSelected(traceTabHost.getCurrentTabTag());
             }
         });
 
