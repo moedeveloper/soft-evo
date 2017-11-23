@@ -18,7 +18,7 @@ public class Print implements DataEntry{
 
     @Override
     public String getName() {
-        return "PlaceholderName";
+        return "P" + id;
     }
 
     public String getId(){

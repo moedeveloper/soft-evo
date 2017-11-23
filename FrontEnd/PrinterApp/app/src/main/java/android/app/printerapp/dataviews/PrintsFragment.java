@@ -6,6 +6,8 @@ import android.app.printerapp.R;
 import android.app.printerapp.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
+import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
@@ -17,12 +19,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PrintsFragment extends Fragment{
@@ -33,6 +39,8 @@ public class PrintsFragment extends Fragment{
     private View mRootView;
     private RelativeLayout searchHolder;
     private SearchView searchView;
+    private List<Print> prints;
+    private List<String> printIds = new ArrayList<>();
 
     public static final String PRINT_CLICKED = "print_clicked";
 
@@ -60,13 +68,39 @@ public class PrintsFragment extends Fragment{
             searchHolder.addView(searchView);
         }
 
+
+        new LoadDataTask().execute();
+
         for(int i = 0; i < 10; i++){
             searchView.createSearchOption("Test", new String[]{"Starfish","Elephant"});
         }
 
-        new LoadDataTask().execute();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
+                android.R.layout.simple_dropdown_item_1line, printIds);
+        searchView.setAdapter(adapter);
+
+        searchView.setOnClickListenerForGoButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AutoCompleteTextView searchEntry = (AutoCompleteTextView) searchView.findViewById(R.id.search_bar);
+                DataEntryRecyclerViewAdapter adapter = new DataEntryRecyclerViewAdapter<>(
+                        filterList(prints, searchEntry.getText().toString()));
+                recyclerView.swapAdapter(adapter, false);
+            }
+        });
 
         return mRootView;
+    }
+
+    //Filters a list of DataEntry, by ID
+    private List<DataEntry> filterList(List<? extends DataEntry> list, String filter){
+        List<DataEntry> returnList = new ArrayList<>();
+        for(DataEntry current : list){
+            if(("P" + current.getId()).contains(filter)){
+                returnList.add(current);
+            }
+        }
+        return returnList;
     }
 
     //Async task to retrieve data from database, and set the adapter
@@ -93,7 +127,15 @@ public class PrintsFragment extends Fragment{
             if(result == null){
                 return;
             }
-            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getPrints()));
+
+            prints = result.getPrints();
+
+            //Save all print ids in a list. Add P as a prefix to define that it's a print
+            for(Print current : prints){
+                printIds.add("P" + current.getId());
+            }
+
+            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(prints));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
     }

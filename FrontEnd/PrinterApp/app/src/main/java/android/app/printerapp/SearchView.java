@@ -5,14 +5,17 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.text.AttributedCharacterIterator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +30,7 @@ public class SearchView extends ConstraintLayout {
     private LinearLayout leftSearchOptionsLayout;
     private LinearLayout rightSearchOptionsLayout;
     private AutoCompleteTextView searchBar;
+    private Button goButton;
 
     //Constants
     private static final String[] COUNTRIES = new String[] {
@@ -56,12 +60,21 @@ public class SearchView extends ConstraintLayout {
         leftSearchOptionsLayout = (LinearLayout) findViewById(R.id.left_search_options);
         rightSearchOptionsLayout = (LinearLayout) findViewById(R.id.right_search_options);
         searchBar = (AutoCompleteTextView) findViewById(R.id.search_bar);
+        goButton = (Button) findViewById(R.id.search_go_button);
 
         //Set adapter for searchbar
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,
                 android.R.layout.simple_dropdown_item_1line, COUNTRIES);
         searchBar.setAdapter(adapter);
+    }
 
+    public void setOnClickListenerForGoButton(OnClickListener listener){
+        goButton.setOnClickListener(listener);
+    }
+
+    public void setAdapter(ArrayAdapter<String> adapter){
+        searchBar.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     public void createSearchOption(String title, String[] options){
