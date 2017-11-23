@@ -49,6 +49,7 @@ public class BuildsFragment extends Fragment {
             recyclerView = (RecyclerView) mRootView.findViewById(R.id.prints_recycler_view);
         }
 
+
         new LoadDataTask().execute();
 
         return mRootView;

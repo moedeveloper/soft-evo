@@ -2,13 +2,20 @@ package android.app.printerapp.dataviews;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.printerapp.DividerItemDecoration;
+import android.app.printerapp.ListContent;
 import android.app.printerapp.R;
 import android.app.printerapp.SpecificActivity;
 import android.app.printerapp.api.DatabaseHandler;
+import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.ui.AnimationHelper;
+import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +26,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,8 +48,7 @@ abstract class SpecificFragment extends Fragment {
     //Views
     private TabHost traceTabHost;
     protected ListView dataListView;
-
-    Map<String, RecyclerView> allTraceLists;
+    protected Map<String, RecyclerView> allTraceLists;
 
     //Constants
 //---------------------------------------------------------------------------------------
@@ -128,7 +135,19 @@ abstract class SpecificFragment extends Fragment {
         traceTabHost.setup();
         allTraceLists = new HashMap<>();
         createTabs();
+        traceTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                View currentView = traceTabHost.getCurrentView();
+                AnimationHelper.inFromRightAnimation(currentView);
+                onTagSelected(currentView.getTag());
+            }
+        });
+
     }
+
+    abstract void onTagSelected(Object tag);
+
 
     protected void createTab(String tag, String title){
         TabHost.TabSpec spec = traceTabHost.newTabSpec(tag);
@@ -155,6 +174,9 @@ abstract class SpecificFragment extends Fragment {
             linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
             RecyclerView recyclerView = new RecyclerView(mContext);
+
+            recyclerView.setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,
+                    RecyclerView.LayoutParams.MATCH_PARENT));
 
             //Save the recyclerview in our map so we can access it
             allTraceLists.put(tag, recyclerView);

@@ -19,4 +19,9 @@ public class DetailsSpecificFragment extends SpecificFragment {
     public void createTabs() {
 
     }
+
+    @Override
+    void onTagSelected(Object tag) {
+
+    }
 }

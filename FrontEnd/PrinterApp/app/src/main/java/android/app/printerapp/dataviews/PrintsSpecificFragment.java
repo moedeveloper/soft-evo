@@ -146,6 +146,11 @@ public class PrintsSpecificFragment extends SpecificFragment {
         return psf;
     }
 
+    @Override
+    void onTagSelected(Object tag) {
+
+    }
+
     //Method for creating Detail buttons for the STL viewer
     private void createDetailButton(String name){
         ToggleButton button = new ToggleButton(mContext);
@@ -242,7 +247,6 @@ public class PrintsSpecificFragment extends SpecificFragment {
             dataListView.setAdapter(new DataTextAdapter(printTitles, printValues, mContext));
 
             //Fill the details field
-            View view = LayoutInflater.from(mContext).inflate(R.layout.data_entry_list_item, null);
             allTraceLists.get(ListContent.ID_DETAILS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
             allTraceLists.get(ListContent.ID_DETAILS).setLayoutManager(new LinearLayoutManager(mContext));
             allTraceLists.get(ListContent.ID_DETAILS).addItemDecoration(new DividerItemDecoration(mContext));
