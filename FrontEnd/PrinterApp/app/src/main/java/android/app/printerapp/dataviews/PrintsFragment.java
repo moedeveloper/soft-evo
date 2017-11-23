@@ -40,9 +40,6 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
     private RelativeLayout searchHolder;
     private SearchView searchView;
     private List<Print> prints;
-    private List<String> printIds = new ArrayList<>();
-
-    public static final String PRINT_CLICKED = "print_clicked";
 
     public PrintsFragment() {
         databaseHandler = DatabaseHandler.getInstance();
@@ -72,9 +69,16 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
         new LoadDataTask().execute();
 
-        for(int i = 0; i < 10; i++){
-            searchView.createSearchOption("Test", new String[]{"Starfish","Elephant"});
-        }
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
 
         return mRootView;
     }
@@ -123,8 +127,6 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
 
             //Update the data in search view
-
-
             searchView.updateData(prints);
     }
 }

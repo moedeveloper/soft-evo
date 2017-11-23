@@ -23,6 +23,8 @@ import java.util.List;
  * Created by SAMSUNG on 2017-11-23.
  * In order to make the outer view (most likely a fragment such as PrintsFragment) update itself
  * after search, it must listen to this, by implementing PropertyChangeListener.
+ * Everytime the new view updates its data, it must also call the method updateData() on this
+ * class. This updates the AutoCompleteTextView.
  */
 
 public class SearchView extends ConstraintLayout {
@@ -126,11 +128,9 @@ public class SearchView extends ConstraintLayout {
 
     }
 
-
 //---------------------------------------------------------------------------------------
 //          METHODS TO CONTROL THE CLASS
 //---------------------------------------------------------------------------------------
-
 
     public void updateData(List<? extends DataEntry> data){
 
@@ -155,20 +155,10 @@ public class SearchView extends ConstraintLayout {
     private List<DataEntry> filterList(List<? extends DataEntry> list, String filter){
         List<DataEntry> returnList = new ArrayList<>();
         for(DataEntry current : list){
-            if(("p" + current.getId()).contains(filter.toLowerCase())){
+            if(current.getIdName().toLowerCase().contains(filter.toLowerCase())){
                 returnList.add(current);
             }
         }
         return returnList;
     }
-
-
-
-
-
-
-
-
-
-
 }
