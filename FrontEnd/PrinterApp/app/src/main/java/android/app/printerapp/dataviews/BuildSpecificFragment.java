@@ -16,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -69,7 +70,11 @@ public class BuildSpecificFragment extends SpecificFragment {
         }
 
         RelativeLayout imageHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
-        imageHolder.setBackgroundColor(getResources().getColor(R.color.theme_primary));
+        ImageView imageView = new ImageView(mContext);
+        imageView.setImageResource(R.drawable.magics);
+        imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT));
+        imageHolder.addView(imageView);
 
 
         //Load all data we need from database

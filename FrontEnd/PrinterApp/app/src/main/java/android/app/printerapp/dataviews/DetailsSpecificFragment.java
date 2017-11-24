@@ -17,11 +17,17 @@ import android.app.printerapp.viewer.STLViewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ToggleButton;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +54,9 @@ public class DetailsSpecificFragment extends SpecificFragment {
     //Constants
     public static final String DETAIL_ID = "detail_id";
 
+    //Views
     private STLViewer stlViewer;
+    private LinearLayout upperButtonLayout;
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
@@ -70,6 +78,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
             }
         }
 
+        upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
         stlViewer = new STLViewer(mContext);
         RelativeLayout stlHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
         stlHolder.addView(stlViewer);
@@ -192,8 +201,25 @@ public class DetailsSpecificFragment extends SpecificFragment {
             allTraceLists.get(ListContent.ID_BUILDS).setLayoutManager(new LinearLayoutManager(mContext));
             allTraceLists.get(ListContent.ID_BUILDS).addItemDecoration(new DividerItemDecoration(mContext));
 
-            super.onPostExecute(integer);
-
+            ToggleButton showDetailButton = new ToggleButton(mContext);
+            showDetailButton.setText("Show model");
+            showDetailButton.setTextOn("Hide model");
+            showDetailButton.setTextOff("Show model");
+            showDetailButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        //TODO: Search for the correct file to open
+                        STLViewer.optionClean();
+                        String path = files[(int) (Math.random() * files.length)].getAbsolutePath();
+                        STLViewer.openFileDialog(path);
+                    } else {
+                        STLViewer.optionClean();
+                        STLViewer.draw();
+                    }
+                }
+            });
+            upperButtonLayout.addView(showDetailButton);
 
         }
 

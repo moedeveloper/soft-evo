@@ -7,6 +7,7 @@ import android.app.printerapp.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.BuildList;
+import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
@@ -20,13 +21,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by jcmma on 2017-11-23.
  */
 
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements PropertyChangeListener {
     private RecyclerView recyclerView;
     private DatabaseHandler databaseHandler;
     private Context mContext;
@@ -55,13 +59,37 @@ public class DetailsFragment extends Fragment {
             searchView = new SearchView(mContext);
             searchView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
                     ConstraintLayout.LayoutParams.MATCH_PARENT));
+            searchView.addPropertyChangeListener(this);
             searchHolder.addView(searchView);
         }
 
 
         new LoadDataTask().execute();
 
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
+
         return mRootView;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent event) {
+        if(event.getPropertyName().equals(SearchView.GO_BUTTON_CLICKED)){
+            if(event.getNewValue() == null){
+                return;
+            }
+
+            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter((List<DataEntry>) event.getNewValue()));
+
+        }
     }
 
     //Async task to retrieve data from database, and set the adapter
@@ -92,6 +120,7 @@ public class DetailsFragment extends Fragment {
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getDetails()));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
+            searchView.updateData(result.getDetails());
         }
     }
 }
