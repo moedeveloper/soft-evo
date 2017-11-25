@@ -117,10 +117,18 @@ public class DetailsSpecificFragment extends SpecificFragment {
 //---------------------------------------------------------------------------------------
     //Scans for files and saves them in a variable
     private void scanForFiles(){
-        FileManager.downloadFile(mContext);
-        files = FileManager.scanStlFiles(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+        files = FileManager.scanStlFiles(mContext.getDir("Octoprint", mContext.MODE_PRIVATE).getAbsolutePath());
         for(File f : files){
             Log.d("DetailsSpecificFragment", f.getPath());
+        }
+    }
+
+    private void downloadAndOpenFile() {
+        if (!FileManager.modelExistsInSystem(detail)) {
+            FileManager.downloadAndOpenFile(mContext, detail);
+        } else {
+            STLViewer.optionClean();
+            STLViewer.openFileDialog(FileManager.getModelFile(detail).getAbsolutePath());
         }
     }
 
@@ -209,10 +217,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        //TODO: Search for the correct file to open
-                        STLViewer.optionClean();
-                        String path = files[(int) (Math.random() * files.length)].getAbsolutePath();
-                        STLViewer.openFileDialog(path);
+                        downloadAndOpenFile();
                     } else {
                         STLViewer.optionClean();
                         STLViewer.draw();

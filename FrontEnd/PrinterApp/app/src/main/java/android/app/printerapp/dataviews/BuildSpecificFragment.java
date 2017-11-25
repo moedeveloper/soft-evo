@@ -168,11 +168,6 @@ public class BuildSpecificFragment extends SpecificFragment {
             allTraceLists.get(ListContent.ID_DETAILS).addItemDecoration(new DividerItemDecoration(mContext));
 
             super.onPostExecute(integer);
-
-
         }
-
     }
-
-
 }

@@ -1,6 +1,8 @@
 package android.app.printerapp;
 
 import android.app.printerapp.api.DatabaseHandler;
+import android.app.printerapp.model.Detail;
+import android.app.printerapp.viewer.STLViewer;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -12,6 +14,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -24,6 +28,8 @@ import retrofit2.Response;
 
 public class FileManager {
 
+    private static List<File> detailModels = new ArrayList<>();
+
 
     public static void deleteCache(Context context) {
         try {
@@ -34,32 +40,46 @@ public class FileManager {
 
     public static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
+        String[] children = dir.list();
+        for (int i = 0; i < children.length; i++) {
+            boolean success = deleteDir(new File(dir, children[i]));
+            if (!success) {
+                return false;
             }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
         }
+        return dir.delete();
+    } else if(dir!= null && dir.isFile()) {
+        return dir.delete();
+    } else {
+        return false;
     }
+}
 
     public static void deleteFile(File file, Context context){
 
+    }
+
+    public static File getModelFile(Detail detail){
+        for(File file : detailModels){
+            if((file.getName().replace(".stl", "")).equals(detail.getIdName())){
+               return file;
+            }
+        }
+
+        return null;
     }
 
     public static void discardUnusedFiles(){
 
     }
 
-    public static void downloadFile(final Context context){
+    public static boolean modelExistsInSystem(Detail detail){
+        return getModelFile(detail) != null;
+    }
+
+    public static void downloadAndOpenFile(final Context context, final Detail detail){
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
-        Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(1);
+        Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(Integer.parseInt(detail.getFileId()));
         call.enqueue(new Callback<ResponseBody>(){
 
             @Override
@@ -69,9 +89,15 @@ public class FileManager {
                     new AsyncTask<Void,Void,Void>(){
                         @Override
                         protected Void doInBackground(Void... voids) {
-                            boolean writtenToDisk = FileManager.writeResponseBodyToDisk(response.body(), context);
+                            boolean writtenToDisk = FileManager.writeResponseBodyToDisk(response.body(), context, detail.getIdName());
                             Log.d("PrintsSpecificFragment", "file download was a success? " + writtenToDisk);
                             return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Void aVoid) {
+                            super.onPostExecute(aVoid);
+                            openFileInSTL(context, detail);
                         }
                     }.execute();
 
@@ -101,16 +127,16 @@ public class FileManager {
     }
 
     //Write to disk
-    public static boolean writeResponseBodyToDisk(ResponseBody body, Context context) {
+    public static boolean writeResponseBodyToDisk(ResponseBody body, Context context, String fileName) {
         try {
             // TODO: Set correct directory
             // TODO: Make sure space is available
             // TODO: Remove files after use
             // TODO: When cache getting full, start removing the oldest files
 
-            File stlFile = new File(context.getDir("Octoprint", context.MODE_PRIVATE) + File.separator + "test.stl");
+            File stlFile = new File(context.getDir("Octoprint", context.MODE_PRIVATE) + File.separator + fileName + ".stl");
 
-            Log.d("PrintsSpecificFragment", "directory: " + context.getCacheDir() +
+            Log.d("PrintsSpecificFragment", "directory: " + context.getDir("Octoprint", context.MODE_PRIVATE) +
                     "\ntotal space:" + stlFile.getTotalSpace() + "\nfree space: " +
                     stlFile.getFreeSpace());
 
@@ -138,6 +164,9 @@ public class FileManager {
                     fileSizeDownloaded += read;
 
                     Log.d("PrintsSpecificFragment", "file download: " + fileSizeDownloaded + " of " + fileSize);
+
+                    //Add model to our list reference of the files
+                    detailModels.add(stlFile);
                 }
 
                 outputStream.flush();
@@ -156,6 +185,16 @@ public class FileManager {
             }
         } catch (IOException e) {
             return false;
+        }
+    }
+
+    //STLViewer has static methods. This is not good.
+    private static void openFileInSTL(Context mContext, Detail d) {
+        STLViewer.optionClean();
+        File modelFile = FileManager.getModelFile(d);
+
+        if(modelFile != null){
+            STLViewer.openFileDialog(modelFile.getAbsolutePath());
         }
     }
 }
