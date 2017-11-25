@@ -28,17 +28,20 @@ import retrofit2.Response;
 
 public class FileManager {
 
+    //List to keep track of all models loaded this instance
     private static List<File> detailModels = new ArrayList<>();
 
-
+    //Deletes the folder we use to hold model files
     public static void deleteCache(Context context) {
         try {
-            File dir = context.getCacheDir();
+            File dir = context.getDir("Octoprint", context.MODE_PRIVATE);
             deleteDir(dir);
         } catch (Exception e) {}
+        detailModels.clear();
     }
 
-    public static boolean deleteDir(File dir) {
+    //Recursively deletes all files in directory including the directory itself
+    private static boolean deleteDir(File dir) {
         if (dir != null && dir.isDirectory()) {
         String[] children = dir.list();
         for (int i = 0; i < children.length; i++) {
@@ -47,18 +50,15 @@ public class FileManager {
                 return false;
             }
         }
-        return dir.delete();
-    } else if(dir!= null && dir.isFile()) {
-        return dir.delete();
-    } else {
-        return false;
-    }
-}
-
-    public static void deleteFile(File file, Context context){
-
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 
+    //Gets the modelFile from Detail as input
     public static File getModelFile(Detail detail){
         for(File file : detailModels){
             if((file.getName().replace(".stl", "")).equals(detail.getIdName())){
@@ -69,14 +69,12 @@ public class FileManager {
         return null;
     }
 
-    public static void discardUnusedFiles(){
-
-    }
-
+    //Checks if model exists in system
     public static boolean modelExistsInSystem(Detail detail){
         return getModelFile(detail) != null;
     }
 
+    //Download and opens file in the STLViewer
     public static void downloadAndOpenFile(final Context context, final STLViewer viewer, final Detail detail){
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(Integer.parseInt(detail.getFileId()));
@@ -97,7 +95,7 @@ public class FileManager {
                         @Override
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
-                            openFileInSTL(viewer, detail);
+                            openFileInSTLViewer(viewer, detail);
                         }
                     }.execute();
 
@@ -114,6 +112,7 @@ public class FileManager {
         });
     }
 
+    //Scans for all stl files in given directory
     public static File[] scanStlFiles(String path){
         File dir = new File(path);
         FileFilter filter = new FileFilter(){
@@ -188,8 +187,8 @@ public class FileManager {
         }
     }
 
-    //STLViewer has static methods. This is not good.
-    private static void openFileInSTL(STLViewer viewer, Detail d) {
+    //Helper function to open the file in the STL Viewer
+    private static void openFileInSTLViewer(STLViewer viewer, Detail d) {
         viewer.optionClean();
         File modelFile = FileManager.getModelFile(d);
 

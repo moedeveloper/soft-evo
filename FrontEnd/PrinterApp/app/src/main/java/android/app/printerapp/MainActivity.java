@@ -58,6 +58,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
         }
 
         super.onCreate(savedInstanceState);
+
         FileManager.deleteCache(this);
         setContentView(R.layout.main_activity);
 
