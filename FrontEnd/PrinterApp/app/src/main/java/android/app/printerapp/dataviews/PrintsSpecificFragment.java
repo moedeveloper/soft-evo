@@ -53,6 +53,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
     private LinearLayout lowerButtonLayout;
     List<ToggleButton> toggleDetailButtons = new ArrayList<>();
     private STLViewer stlViewer;
+    private CompoundButton currentCheckedButton;
 
     //Data
     private List<Print> printResult = null;
@@ -63,6 +64,17 @@ public class PrintsSpecificFragment extends SpecificFragment {
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
 //---------------------------------------------------------------------------------------
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(currentCheckedButton == null){
+            stlViewer.optionClean();
+        } else {
+            downloadAndOpenFile(currentCheckedButton.getText().toString());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,6 +166,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
                 current.setChecked(false);
             }
         }
+        currentCheckedButton = button;
     }
 
 //---------------------------------------------------------------------------------------
@@ -187,6 +200,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
                     setChecked(buttonView);
                     downloadAndOpenFile(idName);
                 } else {
+                    currentCheckedButton = null;
                     stlViewer.optionClean();
                     stlViewer.draw();
                 }

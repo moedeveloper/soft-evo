@@ -57,10 +57,25 @@ public class DetailsSpecificFragment extends SpecificFragment {
     //Views
     private STLViewer stlViewer;
     private LinearLayout upperButtonLayout;
+    private ToggleButton  showDetailButton;
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
 //---------------------------------------------------------------------------------------
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(showDetailButton == null){
+            return;
+        }
+        if(showDetailButton.isChecked()){
+            downloadAndOpenFile();
+        } else {
+            stlViewer.optionClean();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -209,7 +224,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
             allTraceLists.get(ListContent.ID_BUILDS).setLayoutManager(new LinearLayoutManager(mContext));
             allTraceLists.get(ListContent.ID_BUILDS).addItemDecoration(new DividerItemDecoration(mContext));
 
-            ToggleButton showDetailButton = new ToggleButton(mContext);
+            showDetailButton = new ToggleButton(mContext);
             showDetailButton.setText("Show model");
             showDetailButton.setTextOn("Hide model");
             showDetailButton.setTextOff("Show model");
