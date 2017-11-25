@@ -84,7 +84,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
         stlHolder.addView(stlViewer);
 
         //Clean the STL Viewer options every time we create a new fragment
-        STLViewer.optionClean();
+        stlViewer.optionClean();
 
         //Scan for STL files and put them in "files" variable
         scanForFiles();
@@ -125,10 +125,10 @@ public class DetailsSpecificFragment extends SpecificFragment {
 
     private void downloadAndOpenFile() {
         if (!FileManager.modelExistsInSystem(detail)) {
-            FileManager.downloadAndOpenFile(mContext, detail);
+            FileManager.downloadAndOpenFile(mContext, stlViewer, detail);
         } else {
-            STLViewer.optionClean();
-            STLViewer.openFileDialog(FileManager.getModelFile(detail).getAbsolutePath());
+            stlViewer.optionClean();
+            stlViewer.openFileDialog(FileManager.getModelFile(detail).getAbsolutePath());
         }
     }
 
@@ -219,8 +219,8 @@ public class DetailsSpecificFragment extends SpecificFragment {
                     if (isChecked) {
                         downloadAndOpenFile();
                     } else {
-                        STLViewer.optionClean();
-                        STLViewer.draw();
+                        stlViewer.optionClean();
+                        stlViewer.draw();
                     }
                 }
             });

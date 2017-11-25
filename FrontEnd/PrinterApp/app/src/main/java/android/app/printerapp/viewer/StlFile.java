@@ -45,8 +45,10 @@ public class StlFile {
 
     private static final int MAX_SIZE = 50000000; //50Mb
 
+    private static STLViewer currentStlViewer;
 
-    public static void openStlFile(Context context, File file, DataStorage data, int mode) {
+
+    public static void openStlFile(STLViewer stlViewer, Context context, File file, DataStorage data, int mode) {
         Log.i(TAG, "Open STL File");
 
         mContext = context;
@@ -65,13 +67,13 @@ public class StlFile {
         mData.setPathFile(mFile.getAbsolutePath());
         mData.initMaxMin();
 
-
+        currentStlViewer = stlViewer;
         startThreadToOpenFile(context, uri);
 
 
     }
 
-    public static void startThreadToOpenFile(final Context context, final Uri uri) {
+    public static void startThreadToOpenFile( final Context context, final Uri uri) {
 
         mThread = new Thread() {
             @Override
@@ -160,7 +162,7 @@ public class StlFile {
                     e.printStackTrace();
                 }
 
-                STLViewer.resetWhenCancel();
+                currentStlViewer.resetWhenCancel();
             }
         });
 
@@ -183,7 +185,7 @@ public class StlFile {
         public void handleMessage(Message msg) {
             if (mData.getCoordinateListSize() < 1) {
                 Toast.makeText(mContext, R.string.error_opening_invalid_file, Toast.LENGTH_SHORT).show();
-                STLViewer.resetWhenCancel();
+                currentStlViewer.resetWhenCancel();
                 if (mMode != STLViewer.DO_SNAPSHOT) mProgressDialog.dismiss();
                 return;
             }
@@ -199,7 +201,7 @@ public class StlFile {
 
     		//Finish
 			if (mMode== STLViewer.DONT_SNAPSHOT) {
-				STLViewer.draw();
+                currentStlViewer.draw();
 				mProgressDialog.dismiss();
 
                 //TODO better filtering

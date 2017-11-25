@@ -8,9 +8,6 @@ import android.app.printerapp.dataviews.BuildsFragment;
 import android.app.printerapp.dataviews.DetailsFragment;
 import android.app.printerapp.dataviews.HomeFragment;
 import android.app.printerapp.dataviews.PrintsFragment;
-import android.app.printerapp.dataviews.PrintsSpecificFragment;
-import android.app.printerapp.library.LibraryFragment;
-import android.app.printerapp.library.detail.DetailViewFragment;
 import android.app.printerapp.ui.AnimationHelper;
 import android.app.printerapp.viewer.STLViewer;
 import android.graphics.drawable.ColorDrawable;
@@ -34,7 +31,6 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
     //List of Fragments
 
     private HomeFragment mHomeFragment; //Front page
-    private LibraryFragment mLibraryFragment; //Storage fragment
     private DetailsFragment mDetailsFragment;
     private PrintsFragment mPrintsFragment;
     private BuildsFragment mBuildsFragment;
@@ -249,38 +245,6 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
             Log.i("OUT", "Changing " + mCurrent.getTag());
             fragmentTransaction.show(mCurrent).commit();
         }
-
-    }
-
-    public static void closeDetailView(){
-        //Refresh printview fragment if exists
-        Fragment fragment = mManager.findFragmentByTag(ListContent.ID_DETAIL);
-        if (fragment != null) ((DetailViewFragment) fragment).removeRightPanel();
-    }
-
-    /**
-     * Send a file to the Viewer to display
-     *
-     * @param path File path
-     */
-    public static void requestOpenFile(final String path) {
-
-        //This method will simulate a click and all its effects
-        performClick(1);
-        //Handler will avoid crash
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                if (path!=null) {
-                    STLViewer.openFileDialog(path);
-                    Log.d("TestPath", path);
-                }
-
-            }
-        });
 
     }
 

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.printerapp.Log;
 import android.app.printerapp.R;
 import android.app.printerapp.viewer.DataStorage;
-import android.app.printerapp.viewer.GcodeFile;
 import android.app.printerapp.viewer.STLViewer;
 import android.app.printerapp.viewer.StlFile;
 import android.app.printerapp.viewer.ViewerSurfaceView;
@@ -54,7 +53,7 @@ public class LibraryModelCreation {
     private static int mCount = 0;
 	
 	//Static method to create a folder structure
-	public static void createFolderStructure(Context context, File source){
+	public static void createFolderStructure(STLViewer stlViewer, Context context, File source){
 		//Catch null pointer because file browser buttons aren't implemented
 		if (source!=null){
 			mName = source.getName().substring(0, source.getName().lastIndexOf('.'));
@@ -119,7 +118,7 @@ public class LibraryModelCreation {
 		
 		                }
 						
-						openModel(mContext, target.getAbsolutePath());
+						openModel(stlViewer, mContext, target.getAbsolutePath());
 
 					} catch (IOException e){
 						e.printStackTrace();
@@ -135,7 +134,7 @@ public class LibraryModelCreation {
 	 * @param context
 	 * @param path
 	 */
-	private static void openModel (final Context context, final String path) {
+	private static void openModel (final STLViewer stlViewer, final Context context, final String path) {
 		View generatingProjectDialog = LayoutInflater.from(context).inflate(R.layout.dialog_loading_project, null);
 		mSnapshotLayout = (FrameLayout) generatingProjectDialog.findViewById (R.id.framesnapshot);
 
@@ -161,12 +160,10 @@ public class LibraryModelCreation {
         if (StlFile.checkFileSize(file,mContext)){
 
             if(LibraryController.hasExtension(0, path)) {
-                StlFile.openStlFile (context, file, data, STLViewer.DO_SNAPSHOT);
-            } else if (LibraryController.hasExtension(1, path)) {
-                GcodeFile.openGcodeFile(context, file, data, STLViewer.DO_SNAPSHOT);
+                StlFile.openStlFile(stlViewer, context, file, data, STLViewer.DO_SNAPSHOT);
             }
 
-            mSnapshotSurface = new ViewerSurfaceView(context, list, ViewerSurfaceView.NORMAL, STLViewer.DO_SNAPSHOT);
+            mSnapshotSurface = new ViewerSurfaceView (stlViewer, context, list, ViewerSurfaceView.NORMAL, STLViewer.DO_SNAPSHOT);
             list.add(data);
 
         } else mAlert.dismiss();
@@ -185,7 +182,7 @@ public class LibraryModelCreation {
 	/**
 	 * Creates the snapshot of the model
 	 */
-	public static void saveSnapshot (final int width, final int height, final ByteBuffer bb ) {
+	public static void saveSnapshot (STLViewer stlViewer, final int width, final int height, final ByteBuffer bb ) {
 		int screenshotSize = width * height;
 	      
         int pixelsBuffer[] = new int[screenshotSize];
@@ -215,13 +212,13 @@ public class LibraryModelCreation {
             e.printStackTrace();
         }  
         
-        dismissSnapshotAlert ();
+        dismissSnapshotAlert (stlViewer);
     }	
 	
 	/**
 	 * Dismiss the loading project dialog after a few seconds.
 	 */
-	private static void dismissSnapshotAlert () {
+	private static void dismissSnapshotAlert (final STLViewer stlViewer) {
 
 		mHandler.postDelayed(new Runnable() {
             public void run() {
@@ -229,7 +226,7 @@ public class LibraryModelCreation {
 
                 //Only show delete dialog if there is no queue //TODO
                 if (mFileQueue==null) deleteFileDialog();
-                else checkQueue();
+                else checkQueue(stlViewer);
 
                 Intent intent = new Intent("notify");
                 intent.putExtra("message", "Files");
@@ -265,23 +262,8 @@ public class LibraryModelCreation {
 
     }
 
-    /************************************************************
-     *
-     * JOB QUEUE
-     *
-     ***********************************************************/
-
-    //Send a file list to enqueue jobs
-    public static void enqueueJobs(Context context, ArrayList<File> q){
-
-        mFileQueue = q;
-        mCount = mFileQueue.size();
-        createFolderStructure(context, mFileQueue.get(0));
-
-    }
-
     //Check if there are more files in the queue
-    public static void checkQueue(){
+    public static void checkQueue(STLViewer stlViewer){
 
         if (mFileQueue != null) {
 
@@ -289,7 +271,7 @@ public class LibraryModelCreation {
 
             if (mFileQueue.size() > 0) { //If there are more
 
-                createFolderStructure(mContext, mFileQueue.get(0)); //Create folder again
+                createFolderStructure(stlViewer, mContext, mFileQueue.get(0)); //Create folder again
 
             } else {
 

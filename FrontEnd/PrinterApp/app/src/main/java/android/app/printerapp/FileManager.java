@@ -77,7 +77,7 @@ public class FileManager {
         return getModelFile(detail) != null;
     }
 
-    public static void downloadAndOpenFile(final Context context, final Detail detail){
+    public static void downloadAndOpenFile(final Context context, final STLViewer viewer, final Detail detail){
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(Integer.parseInt(detail.getFileId()));
         call.enqueue(new Callback<ResponseBody>(){
@@ -97,7 +97,7 @@ public class FileManager {
                         @Override
                         protected void onPostExecute(Void aVoid) {
                             super.onPostExecute(aVoid);
-                            openFileInSTL(context, detail);
+                            openFileInSTL(viewer, detail);
                         }
                     }.execute();
 
@@ -189,12 +189,12 @@ public class FileManager {
     }
 
     //STLViewer has static methods. This is not good.
-    private static void openFileInSTL(Context mContext, Detail d) {
-        STLViewer.optionClean();
+    private static void openFileInSTL(STLViewer viewer, Detail d) {
+        viewer.optionClean();
         File modelFile = FileManager.getModelFile(d);
 
         if(modelFile != null){
-            STLViewer.openFileDialog(modelFile.getAbsolutePath());
+            viewer.openFileDialog(modelFile.getAbsolutePath());
         }
     }
 }

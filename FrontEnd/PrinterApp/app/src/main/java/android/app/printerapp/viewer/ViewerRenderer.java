@@ -144,14 +144,17 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
     private int[] mPlate;
 
     private int mAxis = -1;
+
+    private STLViewer stlViewer;
 			
-	public ViewerRenderer (List<DataStorage> dataList, Context context, int state, int mode) {
+	public ViewerRenderer (STLViewer viewer, List<DataStorage> dataList, Context context, int state, int mode) {
 		this.mDataList = dataList;
 		this.mContext = context;
 		this.mState = state;
 		
 		this.mMode = mode;
-        this.mPlate = STLViewer.getCurrentPlate();
+        this.mPlate = viewer.getCurrentPlate();
+        this.stlViewer = viewer;
 	}
 	
 	public void setTransparent (boolean transparent) {
@@ -263,7 +266,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 					if (mDataList.get(i).getVertexArray()!=null) {
 
                         Log.i("VERTEX", "adding");
-                        mStlObjectList.add(new StlObject(mDataList.get(i), mContext, mState));
+                        mStlObjectList.add(new StlObject(stlViewer, mDataList.get(i), mContext, mState));
                     }
 				    else Log.i("VERTEX", "ONE NULL " + i);
                 }
@@ -281,7 +284,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 		
-		if (mMode == STLViewer.DO_SNAPSHOT || mMode == STLViewer.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, STLViewer.getCurrentPlate());
+		if (mMode == STLViewer.DO_SNAPSHOT || mMode == STLViewer.PRINT_PREVIEW) mInfinitePlane = new WitboxPlate(mContext, true, stlViewer.getCurrentPlate());
 
         mWitboxFaceBack = new WitboxFaces (BACK, mPlate);
         mWitboxFaceRight = new WitboxFaces (RIGHT, mPlate);
@@ -582,7 +585,7 @@ public class ViewerRenderer implements GLSurfaceView.Renderer  {
 
 
 
-        LibraryModelCreation.saveSnapshot(mWidth, mHeight, bb);
+        LibraryModelCreation.saveSnapshot(stlViewer, mWidth, mHeight, bb);
 	}
 	
 

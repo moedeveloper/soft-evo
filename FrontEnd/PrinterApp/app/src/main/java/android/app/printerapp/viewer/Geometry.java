@@ -172,7 +172,7 @@ public class Geometry {
 
 	 }
 	 
-	 public static boolean relocateIfOverlaps (List<DataStorage> objects) {
+	 public static boolean relocateIfOverlaps (STLViewer viewer, List<DataStorage> objects) {
 		 int objectToFit = objects.size()-1;
 
          DataStorage data;
@@ -223,7 +223,7 @@ public class Geometry {
 				newMaxY = d.getLastCenter().y + Math.abs(d.getMaxY() - d.getLastCenter().y) + deep + OFFSET;
 				newMinY = d.getLastCenter().y + Math.abs(d.getMaxY() - d.getLastCenter().y) +OFFSET; 
 							
-				if (isValidPosition(newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
+				if (isValidPosition(viewer, newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
 					changeModelToFit(newMaxX, newMinX, newMaxY, newMinY, data);
 					break;
 				}
@@ -234,7 +234,7 @@ public class Geometry {
 				newMaxY = d.getMaxY();
 				newMinY = d.getMinY();	
 						
-				if (isValidPosition(newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
+				if (isValidPosition(viewer, newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
 					changeModelToFit(newMaxX, newMinX, newMaxY, newMinY, data);
 					break;
 				}
@@ -245,7 +245,7 @@ public class Geometry {
 				newMaxY = d.getLastCenter().y - (Math.abs(d.getMinY() - d.getLastCenter().y) + OFFSET);
 				newMinY = d.getLastCenter().y - (Math.abs(d.getMinY() - d.getLastCenter().y) + deep + OFFSET); 	
 						
-				if (isValidPosition(newMaxX, newMinX, newMaxY, newMinY, objects,  objectToFit)) {
+				if (isValidPosition(viewer, newMaxX, newMinX, newMaxY, newMinY, objects,  objectToFit)) {
 					changeModelToFit(newMaxX, newMinX, newMaxY, newMinY, data);
 					break;
 				} 
@@ -256,7 +256,7 @@ public class Geometry {
 				newMaxY = d.getMaxY();
 				newMinY = d.getMinY();		
 						
-				if (isValidPosition(newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
+				if (isValidPosition(viewer, newMaxX, newMinX, newMaxY, newMinY, objects, objectToFit)) {
 					changeModelToFit(newMaxX, newMinX, newMaxY, newMinY, data);
 					break;
 				} else if (i==objects.size()-2) {
@@ -279,12 +279,12 @@ public class Geometry {
 		return true;
 	 }
 		
-	 public static boolean isValidPosition (float newMaxX, float newMinX, float newMaxY, float newMinY, List<DataStorage> objects, int object) {
+	 public static boolean isValidPosition (STLViewer viewer, float newMaxX, float newMinX, float newMaxY, float newMinY, List<DataStorage> objects, int object) {
 		 boolean overlaps = false; 
 		 boolean outOfPlate = false;
 		 int k = 0;
 
-         int[] auxPlate = STLViewer.getCurrentPlate();
+         int[] auxPlate = viewer.getCurrentPlate();
 
 		 if (newMaxX > auxPlate[0] || newMinX < -auxPlate[0]
 				|| newMaxY > auxPlate[1] || newMinY < -auxPlate[1]) outOfPlate = true;

@@ -89,7 +89,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
         stlHolder.addView(stlViewer);
 
         //Clean the STL Viewer options every time we create a new fragment
-        STLViewer.optionClean();
+        stlViewer.optionClean();
 
         //Scan for STL files and put them in "files" variable
         scanForFiles();
@@ -134,12 +134,12 @@ public class PrintsSpecificFragment extends SpecificFragment {
         for (Detail d : linkedDetails) {
             if (d.getIdName().equals(idName)) {
                 if (!FileManager.modelExistsInSystem(d)) {
-                    //todo: The filemanager uses the STLViewer to open file. This needs to be
+                    //todo: The filemanager uses the stlViewer to open file. This needs to be
                     //todo: built better. Now there's a bug that causes nullpointerexception
-                    FileManager.downloadAndOpenFile(mContext, d);
+                    FileManager.downloadAndOpenFile(mContext, stlViewer, d);
                 } else {
-                    STLViewer.optionClean();
-                    STLViewer.openFileDialog(FileManager.getModelFile(d).getAbsolutePath());
+                    stlViewer.optionClean();
+                    stlViewer.openFileDialog(FileManager.getModelFile(d).getAbsolutePath());
                 }
 
                 break;
@@ -187,8 +187,8 @@ public class PrintsSpecificFragment extends SpecificFragment {
                     setChecked(buttonView);
                     downloadAndOpenFile(idName);
                 } else {
-                    STLViewer.optionClean();
-                    STLViewer.draw();
+                    stlViewer.optionClean();
+                    stlViewer.draw();
                 }
             }
         });

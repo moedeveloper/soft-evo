@@ -83,14 +83,14 @@ public class ViewerSurfaceView extends GLSurfaceView{
 	 * @param state Type of rendering: normal, triangle, overhang, layers
 	 * @param mode Mode of rendering: do snapshot (take picture for library), dont snapshot (normal) and print_preview (gcode preview in print progress)
 	 */
-	public ViewerSurfaceView(Context context, List<DataStorage> data, int state, int mode) {
+	public ViewerSurfaceView(STLViewer viewer, Context context, List<DataStorage> data, int state, int mode) {
 		super(context);
 		// Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
         this.mMode = mode;
         this.mDataList = data;
-		this.mRenderer = new ViewerRenderer(data, context, state, mode);
+		this.mRenderer = new ViewerRenderer(viewer, data, context, state, mode);
 		setRenderer(mRenderer);
 
 		// Render the view only when there is a change in the drawing data

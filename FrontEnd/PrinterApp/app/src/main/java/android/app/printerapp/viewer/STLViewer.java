@@ -1,7 +1,6 @@
 package android.app.printerapp.viewer;
 
 import android.app.printerapp.R;
-import android.app.printerapp.library.LibraryController;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -42,9 +41,9 @@ public class STLViewer extends FrameLayout {
     private static int mCurrentViewMode = 0;
 
     // - View variables -
-    private static Context mContext;
-    private static ViewerSurfaceView mSurface;
-    private static FrameLayout mLayout;
+    private Context mContext;
+    private ViewerSurfaceView mSurface;
+    private FrameLayout mLayout;
 
     //---------------------------------------
     // CONSTRUCTORS
@@ -70,7 +69,7 @@ public class STLViewer extends FrameLayout {
     //Initializes the layout
     private void initializeViews(Context context){
         mCurrentPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
-        mSurface = new ViewerSurfaceView(getContext(), mDataList, NORMAL, DONT_SNAPSHOT);
+        mSurface = new ViewerSurfaceView(this, getContext(), mDataList, NORMAL, DONT_SNAPSHOT);
         mContext = getContext();
         mLayout = this;
         draw();
@@ -85,36 +84,12 @@ public class STLViewer extends FrameLayout {
      * @param filePath
      */
 
-    public static void openFileDialog(final String filePath) {
+    public void openFileDialog(final String filePath) {
 
-        if (LibraryController.hasExtension(0, filePath)) {
-
-            if (!StlFile.checkFileSize(new File(filePath), mContext)) {
-                new MaterialDialog.Builder(mContext)
-                        .title(R.string.warning)
-                        .content(R.string.viewer_file_size)
-                        .negativeText(R.string.cancel)
-                        .negativeColorRes(R.color.body_text_2)
-                        .positiveText(R.string.ok)
-                        .positiveColorRes(R.color.theme_accent_1)
-                        .callback(new MaterialDialog.ButtonCallback() {
-                            @Override
-                            public void onPositive(MaterialDialog dialog) {
-                                openFile(filePath);
-
-                            }
-                        })
-                        .build()
-                        .show();
-
-            } else {
-                openFile(filePath);
-            }
-        } else if (LibraryController.hasExtension(1, filePath)) {
-
+        if (!StlFile.checkFileSize(new File(filePath), mContext)) {
             new MaterialDialog.Builder(mContext)
                     .title(R.string.warning)
-                    .content(R.string.viewer_open_gcode_dialog)
+                    .content(R.string.viewer_file_size)
                     .negativeText(R.string.cancel)
                     .negativeColorRes(R.color.body_text_2)
                     .positiveText(R.string.ok)
@@ -123,14 +98,18 @@ public class STLViewer extends FrameLayout {
                         @Override
                         public void onPositive(MaterialDialog dialog) {
                             openFile(filePath);
+
                         }
                     })
                     .build()
                     .show();
+
+        } else {
+            openFile(filePath);
         }
     }
 
-    public static void resetWhenCancel() {
+    public void resetWhenCancel() {
         try {
             mDataList.remove(mDataList.size() - 1);
             mSurface.requestRender();
@@ -145,37 +124,26 @@ public class STLViewer extends FrameLayout {
     }
 
     //Opens given file (STL)
-    public static void openFile(String filePath) {
+    public void openFile(String filePath) {
         DataStorage data = null;
         //Open the file
-        if (LibraryController.hasExtension(0, filePath)) {
+        data = new DataStorage();
 
-            data = new DataStorage();
-
-            mFile = new File(filePath);
-            StlFile.openStlFile(mContext, mFile, data, DONT_SNAPSHOT);
-            mCurrentViewMode = NORMAL;
-
-        } else if (LibraryController.hasExtension(1, filePath)) {
-
-            data = new DataStorage();
-            mFile = new File(filePath);
-            GcodeFile.openGcodeFile(mContext, mFile, data, DONT_SNAPSHOT);
-            mCurrentViewMode = LAYER;
-
-        }
+        mFile = new File(filePath);
+        StlFile.openStlFile(this, mContext, mFile, data, DONT_SNAPSHOT);
+        mCurrentViewMode = NORMAL;
 
         mDataList.add(data);
     }
 
     //Clear all data in the STL Viewer
-    public static void optionClean() {
+    public void optionClean() {
         mDataList.clear();
         mFile = null;
     }
 
     //Draws the 3d viewer
-    public static void draw() {
+    public void draw() {
         //Once the file has been opened, we need to refresh the data list.
         //If we are opening a .gcode file, we need to ic_action_delete the
         //previous files (.stl and .gcode)
@@ -187,20 +155,7 @@ public class STLViewer extends FrameLayout {
         String filePath = "";
         if (mFile != null) filePath = mFile.getAbsolutePath();
 
-        if (LibraryController.hasExtension(0, filePath)) {
-            if (mDataList.size() > 1) {
-                if (LibraryController.hasExtension(1, mDataList.get(mDataList.size() - 2).getPathFile())) {
-                    mDataList.remove(mDataList.size() - 2);
-                }
-            }
-            Geometry.relocateIfOverlaps(mDataList);
-
-        } else if (LibraryController.hasExtension(1, filePath)) {
-            if (mDataList.size() > 1)
-                while (mDataList.size() > 1) {
-                    mDataList.remove(0);
-                }
-        }
+        Geometry.relocateIfOverlaps(this, mDataList);
 
         //Add the view
         mLayout.removeAllViews();
@@ -223,11 +178,11 @@ public class STLViewer extends FrameLayout {
         }
     }
 
-    public static File getFile() {
+    public File getFile() {
         return mFile;
     }
 
-    public static int[] getCurrentPlate() {
+    public int[] getCurrentPlate() {
         return mCurrentPlate;
     }
 

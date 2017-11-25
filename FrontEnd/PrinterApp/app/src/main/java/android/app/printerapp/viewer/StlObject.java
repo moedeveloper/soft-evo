@@ -137,9 +137,11 @@ public class StlObject {
 	
 	private float mOverhangAngle= 45;
 
-	public StlObject(DataStorage data, Context context, int state) {	
+	private STLViewer stlViewer;
+
+	public StlObject(STLViewer viewer, DataStorage data, Context context, int state) {
 		this.mData = data;
-				
+		this.stlViewer= viewer;
 		mVertexArray = mData.getVertexArray();
 		mNormalArray = mData.getNormalArray();
 
@@ -149,8 +151,8 @@ public class StlObject {
 
         int[] auxPlate;
 
-        if (STLViewer.getCurrentPlate()!=null){
-           auxPlate = STLViewer.getCurrentPlate();
+        if (stlViewer.getCurrentPlate()!=null){
+           auxPlate = stlViewer.getCurrentPlate();
         } else auxPlate = new int[]{WitboxFaces.WITBOX_LONG, WitboxFaces.WITBOX_WITDH, WitboxFaces.WITBOX_HEIGHT};
 
 		
