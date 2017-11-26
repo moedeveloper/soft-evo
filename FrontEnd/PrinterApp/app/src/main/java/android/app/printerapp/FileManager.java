@@ -40,24 +40,6 @@ public class FileManager {
         detailModels.clear();
     }
 
-    //Recursively deletes all files in directory including the directory itself
-    private static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-        String[] children = dir.list();
-        for (int i = 0; i < children.length; i++) {
-            boolean success = deleteDir(new File(dir, children[i]));
-            if (!success) {
-                return false;
-            }
-        }
-            return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
-    }
-
     //Gets the modelFile from Detail as input
     public static File getModelFile(Detail detail){
         for(File file : detailModels){
@@ -76,6 +58,7 @@ public class FileManager {
 
     //Download and opens file in the STLViewer
     public static void downloadAndOpenFile(final Context context, final STLViewer viewer, final Detail detail){
+        manageCache(context);
         DatabaseHandler databaseHandler = DatabaseHandler.getInstance();
         Call<ResponseBody> call = databaseHandler.getApiService().downloadStlFile(Integer.parseInt(detail.getFileId()));
         call.enqueue(new Callback<ResponseBody>(){
@@ -125,8 +108,22 @@ public class FileManager {
         return dir.listFiles(filter);
     }
 
+
+//---------------------------------------------------------------------------------------
+//          HELPER CLASSES
+//---------------------------------------------------------------------------------------
+
+    private static void openFileInSTLViewer(STLViewer viewer, Detail d) {
+        viewer.optionClean();
+        File modelFile = FileManager.getModelFile(d);
+
+        if(modelFile != null){
+            viewer.openFileDialog(modelFile.getAbsolutePath());
+        }
+    }
+
     //Write to disk
-    public static boolean writeResponseBodyToDisk(ResponseBody body, Context context, String fileName) {
+    private static boolean writeResponseBodyToDisk(ResponseBody body, Context context, String fileName) {
         try {
             // TODO: Set correct directory
             // TODO: Make sure space is available
@@ -187,13 +184,44 @@ public class FileManager {
         }
     }
 
-    //Helper function to open the file in the STL Viewer
-    private static void openFileInSTLViewer(STLViewer viewer, Detail d) {
-        viewer.optionClean();
-        File modelFile = FileManager.getModelFile(d);
+    //Removes all files in cache if the size of it exceeds 200mb
+    private static void manageCache(Context context){
+        File cacheDir = context.getDir("Octoprint", context.MODE_PRIVATE);
+        if(getSizeOfFiles(cacheDir.listFiles()) >= 200000000){
+            deleteCache(context);
+        }
+    }
 
-        if(modelFile != null){
-            viewer.openFileDialog(modelFile.getAbsolutePath());
+    //Recursively gets size of files
+    private static int getSizeOfFiles(File[] files){
+        int totalSize = 0;
+        for(File currentFile : files){
+            if(currentFile == null){
+                //Do nothing
+            } else if(currentFile.isDirectory()){
+                totalSize += getSizeOfFiles(currentFile.listFiles());
+            } else {
+                totalSize += currentFile.length();
+            }
+        }
+        return totalSize;
+    }
+
+    //Recursively deletes all files in directory including the directory itself
+    private static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
         }
     }
 }
