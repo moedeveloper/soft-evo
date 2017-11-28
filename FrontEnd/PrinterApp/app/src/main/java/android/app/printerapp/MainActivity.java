@@ -77,10 +77,6 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
             }
         });
 
-        ApiController apiController = new ApiController();
-        apiController.testDetailsApi();
-
-
         //Set tab host for the view
         setTabHost();
 
