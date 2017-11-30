@@ -14,10 +14,13 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
@@ -64,19 +67,18 @@ public class AddDetailsActivity extends Activity implements Callback<CompanyList
     }
 
     private void setupDateTimePicker() {
-        final EditText dispalyDate = (EditText) findViewById(R.id.dateInput);
-
+        final EditText displayDate = (EditText) findViewById(R.id.dateInput);
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month =month+1;
                         Log.d(TAG, "onDateSet: mm/dd/yy" + year + "/" + month + "/" + day);
                         String date = String.format("%d-%d-%d 00:00:00", year, month, day);
-                        dispalyDate.setText(date);
+                        displayDate.setText(date);
                     }
                 };
 
-        dispalyDate.setOnClickListener(new View.OnClickListener(){
+        displayDate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Calendar currentCalendar = Calendar.getInstance();
