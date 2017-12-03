@@ -1,6 +1,7 @@
 package android.app.printerapp;
 
 import android.app.DatePickerDialog;
+import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class AddTestActivity extends ActionBarActivity {
         addElement(createTextInput("Temperature", "57 C"));
         addElement(createCheckBoxInput("Tap", false));
         addElement(createValueMeasurementLayout("Value measurement", "m/kg"));
+        addElement(createFinalizeButtons());
     }
 
 //--------------------------------------------------------------------------
@@ -57,6 +59,29 @@ public class AddTestActivity extends ActionBarActivity {
         titleView.setText(title);
         inputView.setHint(inputHint);
         return text_input_layout;
+    }
+
+    private LinearLayout createFinalizeButtons(){
+        LinearLayout buttons_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.add_test_buttons_layout, null);
+        Button confirm = (Button) buttons_layout.findViewById(R.id.confirm_button);
+        Button cancel = (Button) buttons_layout.findViewById(R.id.cancel_button);
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Save to database
+                finish();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        return buttons_layout;
     }
 
     private LinearLayout createTextInput(String title, String inputHint, String metric){
@@ -189,5 +214,6 @@ public class AddTestActivity extends ActionBarActivity {
         });
 
     }
+
 
 }

@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="top"
+            android:padding="25dp"
             android:text="Add new measure" />
 
         <Button
@@ -48,6 +49,7 @@
             android:layout_toRightOf="@id/value_measurement_add_button"
             android:layout_toEndOf="@+id/value_measurement_add_button"
             android:gravity="top"
+            android:padding="25dp"
             android:text="Remove measure" />
     </RelativeLayout>
 </LinearLayout>
