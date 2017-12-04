@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ import java.util.List;
  */
 
 public class DataEntryArrayAdapter<T> extends ArrayAdapter<T> {
+
+    List<Boolean> checkBoxState = new ArrayList();
 
     public DataEntryArrayAdapter(@NonNull Context context, @LayoutRes int resource) {
         super(context, resource);
@@ -46,13 +49,17 @@ public class DataEntryArrayAdapter<T> extends ArrayAdapter<T> {
 
     public DataEntryArrayAdapter(@NonNull Context context, @LayoutRes int resource, @IdRes int textViewResourceId, @NonNull List<T> objects) {
         super(context, resource, textViewResourceId, objects);
+
     }
 
+
+
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         final DataEntry dataEntry;
         if(getItem(position) instanceof DataEntry) {
+            checkBoxState.add(false);
             dataEntry = (DataEntry) getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
@@ -68,8 +75,10 @@ public class DataEntryArrayAdapter<T> extends ArrayAdapter<T> {
                 public void onClick(View view) {
                     if(((CheckedTextView)view).isChecked()){
                         ((CheckedTextView) view).setChecked(false);
+                        checkBoxState.set(position, false);
                     }else{
                         ((CheckedTextView) view).setChecked(true);
+                        checkBoxState.set(position, true);
                     }
                 }
             });
@@ -88,6 +97,16 @@ public class DataEntryArrayAdapter<T> extends ArrayAdapter<T> {
     }
         // Return the completed view to render on screen
         return convertView;
+    }
+
+    public List<Boolean> getCheckBoxState(){
+        return checkBoxState;
+    }
+
+    public void clearChecked(){
+        for(Boolean current : checkBoxState){
+            current = false;
+        }
     }
 
     private int getFragmentType(DataEntry dataEntry){

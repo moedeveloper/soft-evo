@@ -7,6 +7,7 @@ import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.MaterialList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.app.printerapp.model.Build;
@@ -50,6 +51,13 @@ public interface ApiService {
 
     @POST("details/create")
     Call<String> createDetails(@Body DetailDto detail);
+
+    //-------------------------------------------
+//      MATERIALS
+//-------------------------------------------
+    @GET("materials")
+    Call<MaterialList> fetchAllMaterials();
+
 
     //-------------------------------------------
 //      PRINTS

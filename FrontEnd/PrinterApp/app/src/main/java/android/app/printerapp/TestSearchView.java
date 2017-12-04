@@ -1,6 +1,8 @@
 package android.app.printerapp;
 
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Material;
+import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryArrayAdapter;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
@@ -8,11 +10,13 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -49,12 +53,22 @@ public class TestSearchView extends ConstraintLayout {
     private Button goButton;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     private ListView listView;
+    private DataEntryArrayAdapter<DataEntry> currentAdapter;
+    private Button confirmButton;
+    private Button cancelButton;
 
     //Constants
-    public static final String GO_BUTTON_CLICKED = "ONCLICK";
+    public static final String GO_BUTTON_CLICKED = "onclick";
+    public static final String CONFIRM_ATTACHMENT_PRINT = "confirm-p";
+    public static final String CONFIRM_ATTACHMENT_MATERIAL = "confirm-m";
+    public static final String CANCEL_ATTACHMENT = "cancel";
+    public static final String PRINT_DATATYPE = "data-p";
+    public static final String MATERIAL_DATATYPE = "data-m";
 
-    //Counter
+
+    //Variables
     private static int optionCounter = 0;
+    private String attachmentDataType = "";
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
@@ -90,6 +104,50 @@ public class TestSearchView extends ConstraintLayout {
         searchBar = (AutoCompleteTextView) findViewById(R.id.search_bar_test);
         goButton = (Button) findViewById(R.id.test_search_go_button);
         listView = (ListView) findViewById(R.id.test_search_list_view);
+        confirmButton = (Button) findViewById(R.id.confirm_button);
+        cancelButton = (Button) findViewById(R.id.cancel_button);
+
+        //Setup all buttons in the search view
+        confirmButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<DataEntry> checkedData = new ArrayList<>();
+
+                if(currentAdapter != null){
+                    List<Boolean> checked = (currentAdapter.getCheckBoxState());
+                    //Adds all checked dataentries to checkedData
+                    for(int i = 0; i < listView.getAdapter().getCount(); i++){
+                        if(checked.get(i).equals(Boolean.TRUE)) {
+                            checkedData.add((DataEntry) listView.getAdapter().getItem(i));
+                        }
+                    }
+                    //Clears all checks at the end
+                    currentAdapter.clearChecked();
+                    listView.clearChoices();
+                    listView.requestLayout();
+                }
+
+                //Sends the checked data to a listener to allow them to handle it
+                if(attachmentDataType.equals(PRINT_DATATYPE)){
+                    pcs.firePropertyChange(CONFIRM_ATTACHMENT_PRINT, null, checkedData);
+                } else if (attachmentDataType.equals(MATERIAL_DATATYPE)){
+                    pcs.firePropertyChange(CONFIRM_ATTACHMENT_MATERIAL, null, checkedData);
+                }
+            }
+        });
+
+        cancelButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(currentAdapter != null) {
+                    //Clears all checks
+                    currentAdapter.clearChecked();
+                    listView.clearChoices();
+                    listView.requestLayout();
+                }
+                pcs.firePropertyChange(CANCEL_ATTACHMENT, false, true);
+            }
+        });
 
         //Setup the onclick listener for the Go button
         goButton.setOnClickListener(new OnClickListener() {
@@ -141,6 +199,18 @@ public class TestSearchView extends ConstraintLayout {
 
     public void updateData(List<DataEntry> data){
 
+        if(data.size() < 1){
+            return;
+        }
+
+        //Determine the datatype for the updated data
+        DataEntry sampleData = data.get(0);
+        if(sampleData.getClass() == Print.class){
+            attachmentDataType = PRINT_DATATYPE;
+        } else if (sampleData.getClass() == Material.class){
+            attachmentDataType = MATERIAL_DATATYPE;
+        }
+
         List<String> dataIds = new ArrayList<>();
 
         //Save all print ids in a list. Add prefix to define that it's a print
@@ -154,8 +224,11 @@ public class TestSearchView extends ConstraintLayout {
         searchBar.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
-        listView.setAdapter(new DataEntryArrayAdapter<DataEntry>(getContext(),
-                android.R.layout.simple_list_item_multiple_choice, data));
+        //Update the dataentry adapter (Used in search)
+        currentAdapter = new DataEntryArrayAdapter<DataEntry>(getContext(),
+                android.R.layout.simple_list_item_multiple_choice, data);
+
+        listView.setAdapter(currentAdapter);
 
         //Update our data
         this.data = data;

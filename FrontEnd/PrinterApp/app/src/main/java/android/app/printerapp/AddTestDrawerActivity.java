@@ -1,8 +1,11 @@
 package android.app.printerapp;
 
 import android.app.DatePickerDialog;
+import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Print;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -21,79 +24,54 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Calendar;
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
 public class AddTestDrawerActivity extends ActionBarActivity
-        implements SearchDrawerFragment.NavigationDrawerCallbacks {
+        implements PropertyChangeListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private SearchDrawerFragment searchDrawerFragment;
-    private static DrawerLayout drawerLayout;
 
+    //Drawer fragment
+    private SearchDrawerFragment searchDrawerFragment;
+
+    //Views
+    private static DrawerLayout drawerLayout;
+    private ConstraintLayout addAttachmentsLayout;
+    private LinearLayout addPrintAttachmentLayout;
+    private LinearLayout addMaterialAttachmentLayout;
     private LinearLayout addTestElementHolder;
 
+    //Static variables
     private static int elementCounter = 0;
     private static Double average = 0.0;
     private static int amount = 0;
-
-    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_test_drawer);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        //Initialize the views
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         searchDrawerFragment = (SearchDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
-        // Set up the drawer.
-        searchDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                drawerLayout);
-
-        //Initialize the view
         LinearLayout date_layout = createTextInput("Date", "2017-11-29");
         EditText date_input = (EditText) date_layout.findViewById(R.id.add_text_input);
         setupDateTimePicker(date_input);
 
-        //Initialize the attachment layout
-        ConstraintLayout addAttachmentsLayout = (ConstraintLayout) getLayoutInflater().
-                inflate(R.layout.add_test_attachments_layout, null);
-        final LinearLayout addPrintAttachmentLayout = (LinearLayout)
-                addAttachmentsLayout.findViewById(R.id.add_test_prints_attachments_layout);
-        final LinearLayout addMaterialAttachmentLayout = (LinearLayout)
-                addAttachmentsLayout.findViewById(R.id.add_test_materials_attachments_layout);
-        Button attachPrintButton = (Button) addAttachmentsLayout.
-                findViewById(R.id.add_test_add_print_attachment_button);
-        Button attachMaterialButton = (Button) addAttachmentsLayout.
-                findViewById(R.id.add_test_add_material_attachment_button);
+        initializeAttachmentsLayout();
+        searchDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
+        searchDrawerFragment.addListenerToSearchView(this);
 
-        attachPrintButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //The data here should be given from the selection from the search
-                //fragment.
-                openDrawer();
-                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_PRINT);
-
-            }
-        });
-
-        attachMaterialButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //The data here should be given from the selection from the search
-                //fragment.
-                openDrawer();
-                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_MATERIAL);            }
-        });
-
+        //Add all views to the element holder
         addTestElementHolder = (LinearLayout) findViewById(R.id.add_test_element_holder);
         addElementToElementHolder(createTextInput("Operator", "Aritstotle Svensson"));
         addElementToElementHolder(createTextInput("Machine", "M1548"));
@@ -106,30 +84,6 @@ public class AddTestDrawerActivity extends ActionBarActivity
         //These things should be added last
         addElementToElementHolder(addAttachmentsLayout);
         addElementToElementHolder(createFinalizeButtons());
-
-    }
-
-    @Override
-    public void onNavigationDrawerItemSelected(int position) {
-
-    }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-    public static void openDrawer(){
-        drawerLayout.openDrawer(Gravity.RIGHT);
     }
 
 //--------------------------------------------------------------------------
@@ -319,9 +273,47 @@ public class AddTestDrawerActivity extends ActionBarActivity
         return value_meas_layout;
     }
 
-    //--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 //          HELPER METHODS
 //--------------------------------------------------------------------------
+
+    public static void openDrawer(){
+        drawerLayout.openDrawer(Gravity.RIGHT);
+    }
+
+    private void initializeAttachmentsLayout(){
+        addAttachmentsLayout = (ConstraintLayout) getLayoutInflater().
+                inflate(R.layout.add_test_attachments_layout, null);
+        addPrintAttachmentLayout = (LinearLayout)
+                addAttachmentsLayout.findViewById(R.id.add_test_prints_attachments_layout);
+        addMaterialAttachmentLayout = (LinearLayout)
+                addAttachmentsLayout.findViewById(R.id.add_test_materials_attachments_layout);
+        Button attachPrintButton = (Button) addAttachmentsLayout.
+                findViewById(R.id.add_test_add_print_attachment_button);
+        Button attachMaterialButton = (Button) addAttachmentsLayout.
+                findViewById(R.id.add_test_add_material_attachment_button);
+
+        attachPrintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //The data here should be given from the selection from the search
+                //fragment.
+                openDrawer();
+                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_PRINT);
+
+            }
+        });
+
+        attachMaterialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //The data here should be given from the selection from the search
+                //fragment.
+                openDrawer();
+                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_MATERIAL);            }
+        });
+    }
+
     private String getMeasurementAverageString(String metric){
         return (new Double(average/amount)).toString() + " " + metric;
     }
@@ -373,5 +365,38 @@ public class AddTestDrawerActivity extends ActionBarActivity
 
     }
 
+//--------------------------------------------------------------------------
+//          IMPLEMENTED METHODS
+//--------------------------------------------------------------------------
+    @Override
+    public void propertyChange(PropertyChangeEvent e) {
+        if (e.getPropertyName().equals(TestSearchView.CONFIRM_ATTACHMENT_PRINT)) {
 
+            drawerLayout.closeDrawer(Gravity.END);
+
+            List<DataEntry> data = (List<DataEntry>) e.getNewValue();
+            for (DataEntry current : data) {
+
+                addPrintAttachmentLayout.addView(
+                        createPrintAttachment(current.getIdName(),
+                                "Ivar Vidfamne", current.getCreationDate()));
+
+            }
+
+
+        }else if(e.getPropertyName().equals(TestSearchView.CONFIRM_ATTACHMENT_MATERIAL)){
+            drawerLayout.closeDrawer(Gravity.END);
+
+            List<DataEntry> data = (List<DataEntry>) e.getNewValue();
+            for (DataEntry current : data) {
+
+                addMaterialAttachmentLayout.addView(
+                        createMaterialAttachment(current.getIdName(), current.getCreationDate()));
+
+            }
+
+        }else if(e.getPropertyName().equals(TestSearchView.CANCEL_ATTACHMENT)){
+            drawerLayout.closeDrawer(Gravity.END);
+        }
+    }
 }

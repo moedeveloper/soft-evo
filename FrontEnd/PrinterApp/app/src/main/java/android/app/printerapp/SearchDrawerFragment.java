@@ -5,6 +5,8 @@ import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.MaterialList;
+import android.app.printerapp.model.Material;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.graphics.Color;
@@ -34,6 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +50,6 @@ import java.util.List;
 public class SearchDrawerFragment extends Fragment{
 
     /**
-     * Remember the position of the selected item.
-     */
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
-
-    /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
      * expands it. This shared preference tracks this.
      */
@@ -59,27 +58,19 @@ public class SearchDrawerFragment extends Fragment{
     /**
      * A pointer to the current callbacks instance (the Activity).
      */
-    private NavigationDrawerCallbacks mCallbacks;
 
-    /**
-     * Helper component that ties the action bar to the navigation drawer.
-     */
+    //View variables
     private DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
-
     private TestSearchView testSearchView;
 
-    private int mCurrentSelectedPosition = 0;
-    private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    public static final String DATATYPE_PRINT = "print";
+    public static final String DATATYPE_MATERIAL = "material";
 
-    public static final String DATATYPE_PRINT = "p";
-    public static final String DATATYPE_MATERIAL = "m";
-
-
-    public SearchDrawerFragment() {
-    }
-
+    //-----------------------------------------------------
+    //        OVERRIDES
+    //-----------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,26 +79,15 @@ public class SearchDrawerFragment extends Fragment{
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LinearLayout layoutHolder = new LinearLayout(getContext());
-        View rootView = layoutHolder;
+        //Initialize rootview
+        View rootView = new LinearLayout(getContext());
 
+        //Initialize search view
         testSearchView = new TestSearchView(getContext());
         testSearchView.setLayoutParams(new ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
@@ -117,12 +97,23 @@ public class SearchDrawerFragment extends Fragment{
         return rootView;
     }
 
+    //-----------------------------------------------------
+    //        HELPER METHODS
+    //-----------------------------------------------------
     public void loadData(String dataType){
         new LoadDataTask().execute(dataType);
     }
 
+    public void addListenerToSearchView(PropertyChangeListener listener){
+        testSearchView.addPropertyChangeListener(listener);
+    }
+
+    //-----------------------------------------------------
+    //        INNER CLASSES
+    //-----------------------------------------------------
     private class LoadDataTask extends AsyncTask<String,Void,Void>{
         PrintList resultPrints;
+        MaterialList resultMaterials;
 
         @Override
         protected Void doInBackground(String... strings) {
@@ -132,7 +123,7 @@ public class SearchDrawerFragment extends Fragment{
                 if(strings[0].equals(DATATYPE_PRINT)){
                     resultPrints = apiService.fetchAllPrints().execute().body();
                 } else if(strings[0].equals(DATATYPE_MATERIAL)){
-                    resultPrints = apiService.fetchAllPrints().execute().body();
+                    resultMaterials= apiService.fetchAllMaterials().execute().body();
                 }
 
             } catch (IOException e) {
@@ -144,16 +135,22 @@ public class SearchDrawerFragment extends Fragment{
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(resultPrints == null){
-                return;
+
+            if(resultPrints != null){
+                ArrayList<DataEntry> details = new ArrayList<>();
+                for(Print current : resultPrints.getPrints()){
+                    details.add(current);
+                }
+                testSearchView.updateData(details);
             }
 
-            ArrayList<DataEntry> details = new ArrayList();
-            for(Print current : resultPrints.getPrints()){
-                details.add(current);
+            if(resultMaterials != null){
+                ArrayList<DataEntry> materials = new ArrayList<>();
+                for(Material current : resultMaterials.getMaterials()){
+                    materials.add(current);
+                }
+                testSearchView.updateData(materials);
             }
-            testSearchView.updateData(details);
-
         }
     }
 
@@ -161,10 +158,6 @@ public class SearchDrawerFragment extends Fragment{
     //--------------------------------------------------------
     //      DRAWER IMPLEMENTATION
     //--------------------------------------------------------
-
-    public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-    }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
@@ -176,95 +169,10 @@ public class SearchDrawerFragment extends Fragment{
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        //mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.END);
-        // set up the drawer's list view with items and click listener
-
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
-
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+        if (!mUserLearnedDrawer) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (NavigationDrawerCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
-            showGlobalContextActionBar();
-        }
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-    }
-
-    private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
-    }
-
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
-    public static interface NavigationDrawerCallbacks {
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
-        void onNavigationDrawerItemSelected(int position);
     }
 }
