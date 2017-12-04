@@ -23,7 +23,6 @@
             android:layout_weight="1">
 
             <TableRow
-                android:id="@+id/company"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="left"
@@ -34,7 +33,6 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/companyName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center"
@@ -78,12 +76,10 @@
                 android:layout_height="match_parent">
 
                 <TableRow
-                    android:id="@+id/addNewCompany"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/textViewAddNewCompany"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="clip_horizontal"
@@ -116,14 +112,12 @@
             android:layout_weight="1">
 
             <TableRow
-                android:id="@+id/id_project"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="3dip"
                 android:textAlignment="center">
 
                 <TextView
-                    android:id="@+id/project"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="left|center"
@@ -159,12 +153,10 @@
             android:layout_weight="1">
 
             <TableRow
-                android:id="@+id/picker"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/dateLabel"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -200,14 +192,12 @@
             android:layout_weight="1">
 
             <TableRow
-                android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
 
                 android:layout_weight="1">
 
                 <TextView
-                    android:id="@+id/commentLabel"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
@@ -247,7 +237,6 @@
                 android:orientation="vertical">
 
                 <TableRow
-                    android:id="@+id/buttonCompany"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1">

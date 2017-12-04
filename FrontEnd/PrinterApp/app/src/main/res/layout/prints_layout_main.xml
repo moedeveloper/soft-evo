@@ -91,7 +91,6 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_left_left_guideline"
         app:layout_constraintGuide_percent="0.1"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="0dp"
@@ -100,7 +99,6 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_left_right_guideline"
         app:layout_constraintGuide_percent="0.2"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="0dp"
@@ -111,7 +109,6 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_right_left_guideline"
         app:layout_constraintGuide_percent="0.25"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="0dp"
@@ -120,7 +117,6 @@
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text_right_right_guideline"
         app:layout_constraintGuide_percent="0.35"
         android:orientation="vertical"
         tools:layout_editor_absoluteY="0dp"
@@ -210,7 +206,6 @@
 
     <!--Container for buttons, selection of models to display-->
     <RelativeLayout
-        android:id="@+id/prints_model_button_relative_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="@+id/middle_guideline_vertical"

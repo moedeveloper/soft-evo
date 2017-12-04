@@ -4,6 +4,4 @@
     android:layout_height="match_parent"
     tools:context="android.app.printerapp.dataviews.AddAttachmentFragment">
 
-
-
 </android.support.constraint.ConstraintLayout>

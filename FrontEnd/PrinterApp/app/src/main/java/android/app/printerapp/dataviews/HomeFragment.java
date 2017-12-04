@@ -1,7 +1,7 @@
 package android.app.printerapp.dataviews;
 
 import android.app.printerapp.AddDetailsActivity;
-import android.app.printerapp.AddTestActivity;
+import android.app.printerapp.AddTestDrawerActivity;
 import android.app.printerapp.R;
 import android.content.Intent;
 import android.net.Uri;
@@ -86,10 +86,11 @@ public class HomeFragment extends Fragment {
         addTestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), AddTestActivity.class);
+                Intent intent = new Intent(view.getContext(), AddTestDrawerActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
+
 
         return mRootView;
     }

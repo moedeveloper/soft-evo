@@ -17,13 +17,11 @@
         tools:layout_editor_absoluteY="182dp">
 
         <TableRow
-            android:id="@+id/tableRowLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp">
 
             <TextView
-                android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Company Name"
@@ -31,7 +29,6 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/tableRowLabe2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp">

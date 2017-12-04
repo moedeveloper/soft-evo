@@ -5,54 +5,12 @@
 
     <string name="cancel">Cancelar</string>
     <string name="confirm">Confirmar</string>
-    <string name="search">Buscar</string>
-    <string name="create">Crear</string>
-    <string name="delete">Eliminar</string>
     <string name="error">Error</string>
     <string name="warning">Aviso</string>
-    <string name="dialog_continue">Continuar</string>
-
-    <string name="fragment_print">Panel</string>
-    <string name="fragment_models">Modelos</string>
-    <string name="fragment_settings">Ajustes</string>
 
     <string name="devices_menu_add">Añadir impresora</string>
 
-    <string name="storage_toast_corrupted">El fichero está corrupto</string>
-
-    <string name="library_search_dialog_title">Palabra a buscar</string>
-
-    <string name="library_create_dialog_title">Crear nueva carpeta</string>
-    <string name="library_create_folder_name">Nombre de carpeta</string>
-    <string name="library_create_folder_name_error">El nombre de la carpeta no puede estar vacío</string>
-    <string name="library_option_print">Enviar a impresora</string>
-    <string name="library_option_edit">Editar</string>
-    <string name="library_option_move">Mover</string>
-    <string name="library_paste_toast">Selecciona "Pegar" en el menu</string>
     <string name="library_delete_dialog_original">¿Quieres eliminar el fichero original?</string>
-
-    <string name="library_menu_refresh">Recargar modelos</string>
-    <string name="library_menu_search">Buscar modelo</string>
-    <string name="library_menu_scan">Escanear dispositivo</string>
-    <string name="library_menu_add">Añadir modelo</string>
-    <string name="library_menu_folder">Nueva carpeta</string>
-    <string name="library_menu_paste">Pegar</string>
-    <string name="library_menu_models">Obtener modelos</string>
-    
-    <string name="library_models_all">Todos</string>
-    <string name="library_models_local">Local</string>
-    <string name="library_models_printers">Impresoras</string>
-    <string name="library_models_favorites">Favoritos</string>
-    <plurals name="library_models_delete_title">
-        <item quantity="one">Eliminar el archivo</item>
-        <item quantity="other">Eliminar archivos</item>
-    </plurals>
-    <plurals name="library_models_delete">
-        <item quantity="one">¿Estás seguro de eliminar el archivo?</item>
-        <item quantity="other">¿Estás seguro de eliminar los archivos seleccionados?</item>
-    </plurals>
-    <string name="library_menu_models_delete_undo">Esta acción no se podrá deshacer</string>
-    <string name="library_menu_models_delete_files">%1$d archivos</string>
 
     <string name="settings_general">Generales</string>
     <string name="settings_devices">Dispositivos</string>
@@ -67,26 +25,12 @@
     .
 
     <string name="loading_stl">Cargando archivo STL</string>
-    <string name="loading_gcode">Cargando archivo GCODE</string>
-    
-     <string name="be_patient">Esto puede llevar un rato. Por favor, tenga paciencia.</string>
+
+    <string name="be_patient">Esto puede llevar un rato. Por favor, tenga paciencia.</string>
     <string name="generating_project">Generando proyecto</string>
     <string name="generating_screenshot">Generando captura&#8230;</string>
     <string name="error_opening_invalid_file">Error en el fichero, vuelve a intentarlo.</string>
     <string name="ok">Aceptar</string>
     <string name="viewer_file_size">El modelo que intentas cargar es demasiado grande. Si continúas la aplicación puede quedarse sin memoria y cerrarse.</string>
-    <string name="library_list_go_back_tag">Ir atrás</string>
-    <string name="library_print_model">Imprimir</string>
-    <string name="library_menu_sort">Ordenar por</string>
-    <string name="viewer_open_gcode_dialog">Perderás todos los datos no guardados. ¿Continuar?</string>
-    <string name="library_scan_dialog_title">Añadir archivos</string>
-    <string name="library_scan_dialog_nomodels">No se han encontrado modelos en tu dispositivo</string>
-    <string name="share_subject_text">Modelo compartido</string>
-    <string name="share_content_text">¡Quiero compartir este modelo contigo!</string>
-    <string name="share_via_text">Compartir por</string>
-    <string name="library_empty_text">Todavía no tienes modelos 3D añadidos, utiliza los botones para descargar nuevos modelos o realizar un búsqueda en tu dispositivo.</string>
-    <string name="library_menu_sort_by_name">Nombre</string>
-    <string name="library_menu_sort_by_date">Reciente</string>
-    <string name="library_menu_sort_by_size">Tamaño</string>
 
 </resources>

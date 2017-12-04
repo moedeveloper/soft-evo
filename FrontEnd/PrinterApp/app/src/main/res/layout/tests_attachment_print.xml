@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="5dp">
+    <TextView
+        android:id="@+id/attachment_print_id"
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID: P265"/>
+    <TextView
+        android:id="@+id/attachment_print_operator"
+        android:layout_below="@id/attachment_print_id"
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Operator: Johan Gustafsson"/>
+    <TextView
+        android:id="@+id/attachment_print_start_date"
+        android:layout_below="@id/attachment_print_operator"
+        android:paddingLeft="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Creation date: 2017-12-03"/>
+    <Button
+        android:layout_alignParentRight="true"
+        android:id="@+id/attachment_remove_print_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:text="Remove"/>
+</RelativeLayout>

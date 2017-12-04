@@ -122,6 +122,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
             prints = result.getPrints();
 
+            //Update the list of all prints
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(prints));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));

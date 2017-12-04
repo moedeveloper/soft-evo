@@ -88,7 +88,6 @@
 
             <!-- Right slide panel -->
             <FrameLayout
-                android:id="@+id/right_panel_container"
                 android:layout_width="380dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="end|center_vertical" />

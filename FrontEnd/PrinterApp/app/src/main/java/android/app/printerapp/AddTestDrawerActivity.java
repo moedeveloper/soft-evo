@@ -1,16 +1,18 @@
 package android.app.printerapp;
 
 import android.app.DatePickerDialog;
-import android.app.Fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.support.v4.widget.DrawerLayout;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
@@ -23,7 +25,14 @@ import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
 
-public class AddTestActivity extends ActionBarActivity {
+public class AddTestDrawerActivity extends ActionBarActivity
+        implements SearchDrawerFragment.NavigationDrawerCallbacks {
+
+    /**
+     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
+     */
+    private SearchDrawerFragment searchDrawerFragment;
+    private static DrawerLayout drawerLayout;
 
     private LinearLayout addTestElementHolder;
 
@@ -31,11 +40,24 @@ public class AddTestActivity extends ActionBarActivity {
     private static Double average = 0.0;
     private static int amount = 0;
 
+    private CharSequence mTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_test);
+        setContentView(R.layout.activity_add_test_drawer);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+        searchDrawerFragment = (SearchDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+        // Set up the drawer.
+        searchDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                drawerLayout);
+
+        //Initialize the view
         LinearLayout date_layout = createTextInput("Date", "2017-11-29");
         EditText date_input = (EditText) date_layout.findViewById(R.id.add_text_input);
         setupDateTimePicker(date_input);
@@ -57,7 +79,9 @@ public class AddTestActivity extends ActionBarActivity {
             public void onClick(View view) {
                 //The data here should be given from the selection from the search
                 //fragment.
-                addPrintAttachmentLayout.addView(createPrintAttachment("P155","Alex Tao","2017-12-03"));
+                openDrawer();
+                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_PRINT);
+
             }
         });
 
@@ -66,8 +90,8 @@ public class AddTestActivity extends ActionBarActivity {
             public void onClick(View view) {
                 //The data here should be given from the selection from the search
                 //fragment.
-                addMaterialAttachmentLayout.addView(createMaterialAttachment("M1255","2017-12-03"));
-            }
+                openDrawer();
+                searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_MATERIAL);            }
         });
 
         addTestElementHolder = (LinearLayout) findViewById(R.id.add_test_element_holder);
@@ -82,6 +106,30 @@ public class AddTestActivity extends ActionBarActivity {
         //These things should be added last
         addElementToElementHolder(addAttachmentsLayout);
         addElementToElementHolder(createFinalizeButtons());
+
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
+        }
+    }
+
+    public static void openDrawer(){
+        drawerLayout.openDrawer(Gravity.RIGHT);
     }
 
 //--------------------------------------------------------------------------
@@ -271,7 +319,7 @@ public class AddTestActivity extends ActionBarActivity {
         return value_meas_layout;
     }
 
-//--------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 //          HELPER METHODS
 //--------------------------------------------------------------------------
     private String getMeasurementAverageString(String metric){
@@ -281,6 +329,8 @@ public class AddTestActivity extends ActionBarActivity {
     private void addElementToElementHolder(View view){
         if(elementCounter % 2 == 0){
             view.setBackgroundColor(getResources().getColor(R.color.white));
+        }else{
+            view.setBackgroundColor(getResources().getColor(R.color.pager_background));
         }
         addTestElementHolder.addView(view);
         elementCounter++;
@@ -308,7 +358,7 @@ public class AddTestActivity extends ActionBarActivity {
                 int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(
-                        AddTestActivity.this,
+                        AddTestDrawerActivity.this,
                         android.R.style.Theme_Holo_Dialog_MinWidth,
                         dateSetListener,
                         year,
