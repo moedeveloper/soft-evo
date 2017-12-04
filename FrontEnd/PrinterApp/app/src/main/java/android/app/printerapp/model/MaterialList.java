@@ -7,13 +7,13 @@ import java.util.List;
  */
 
 public class MaterialList {
-        private List<Material> printsApi;
+        private List<Material> materialsApi;
 
         public List<Material> getMaterials() {
-            return printsApi;
+            return materialsApi;
         }
 
         public void setDetails(List<Material> materials) {
-            this.printsApi = materials;
+            this.materialsApi = materials;
         }
 }

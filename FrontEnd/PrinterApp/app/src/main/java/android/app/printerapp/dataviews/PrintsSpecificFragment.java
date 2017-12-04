@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.io.File;
@@ -95,6 +96,9 @@ public class PrintsSpecificFragment extends SpecificFragment {
                 id = 1;
             }
         }
+
+        TextView title = (TextView) mRootView.findViewById(R.id.print_title);
+        title.setText("Print P" + id);
 
         stlViewer = new STLViewer(mContext);
         RelativeLayout stlHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);

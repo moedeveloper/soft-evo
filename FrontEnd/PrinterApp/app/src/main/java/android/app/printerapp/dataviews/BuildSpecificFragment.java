@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,6 +69,8 @@ public class BuildSpecificFragment extends SpecificFragment {
                 id = 1;
             }
         }
+        TextView title = (TextView) mRootView.findViewById(R.id.print_title);
+        title.setText("Build B" + id);
 
         RelativeLayout imageHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
         ImageView imageView = new ImageView(mContext);

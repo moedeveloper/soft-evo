@@ -14,8 +14,8 @@
         layout="@layout/activity_add_test"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="75dp">
+        android:layout_marginRight="150dp"
+        android:layout_marginLeft="50dp">
     </include>
 
     <!-- The drawer is given a fixed width in dp and extends the full height of

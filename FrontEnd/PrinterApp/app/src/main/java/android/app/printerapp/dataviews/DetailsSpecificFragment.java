@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import java.io.File;
@@ -92,6 +93,9 @@ public class DetailsSpecificFragment extends SpecificFragment {
                 id = 1;
             }
         }
+
+        TextView title = (TextView) mRootView.findViewById(R.id.print_title);
+        title.setText("Detail D" + id);
 
         upperButtonLayout = (LinearLayout) mRootView.findViewById(R.id.prints_detail_upper_buttons_layout);
         stlViewer = new STLViewer(mContext);
@@ -184,10 +188,13 @@ public class DetailsSpecificFragment extends SpecificFragment {
             ApiService apiService = databaseHandler.getApiService();
             try {
                 detail = apiService.fetchDetail(id).execute().body().get(0);
-                //TODO: Implement an API function for getting builds from detail id
                 List<BuildDetailLink> buildDetailResult = apiService.fetchBuildDetailLink(id).execute().body();
 
                 //For each build found, retrieve their data
+                if(buildDetailResult == null){
+                    return -1;
+                }
+
                 for(BuildDetailLink link : buildDetailResult){
                     List<Build> build = apiService.fetchBuild(
                             Integer.parseInt(link.getBuildId())).execute().body();

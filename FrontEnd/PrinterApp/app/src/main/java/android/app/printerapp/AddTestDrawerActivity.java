@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -47,12 +48,18 @@ public class AddTestDrawerActivity extends ActionBarActivity
     private LinearLayout addPrintAttachmentLayout;
     private LinearLayout addMaterialAttachmentLayout;
     private LinearLayout addTestElementHolder;
+    private LinearLayout operatorLayout;
+    private LinearLayout machineLayout;
+    private LinearLayout dateLayout;
+    private LinearLayout relativeHumidityLayout;
+    private LinearLayout temperatureLayout;
+    private LinearLayout tapLayout;
+    private LinearLayout valueMeasurementsLayout;
 
     //Static variables
     private static int elementCounter = 0;
-    private static Double average = 0.0;
     private static int amount = 0;
-
+    private static Double average = 0.0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,23 +70,31 @@ public class AddTestDrawerActivity extends ActionBarActivity
         searchDrawerFragment = (SearchDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        LinearLayout date_layout = createTextInput("Date", "2017-11-29");
-        EditText date_input = (EditText) date_layout.findViewById(R.id.add_text_input);
+        dateLayout = createTextInput("Date", "2017-11-29");
+        EditText date_input = (EditText) dateLayout.findViewById(R.id.add_text_input);
         setupDateTimePicker(date_input);
 
-        initializeAttachmentsLayout();
         searchDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
         searchDrawerFragment.addListenerToSearchView(this);
 
-        //Add all views to the element holder
+        //Initialize all views
+        addAttachmentsLayout = initializeAttachmentsLayout();
+        operatorLayout = createTextInput("Operator", "Aritstotle Svensson");
+        machineLayout = createTextInput("Machine", "M1548");
+        relativeHumidityLayout = createTextInput("Relative humidity", "50%");
+        temperatureLayout = createCheckBoxInput("Tap", false);
+        tapLayout = createCheckBoxInput("Tap", false);
+        valueMeasurementsLayout = createValueMeasurementLayout("Value measurement", "m/kg");
+
+        //Add views to the element holder
         addTestElementHolder = (LinearLayout) findViewById(R.id.add_test_element_holder);
-        addElementToElementHolder(createTextInput("Operator", "Aritstotle Svensson"));
-        addElementToElementHolder(createTextInput("Machine", "M1548"));
-        addElementToElementHolder(date_layout);
-        addElementToElementHolder(createTextInput("Relative humidity", "50%"));
-        addElementToElementHolder(createTextInput("Temperature", "57 C"));
-        addElementToElementHolder(createCheckBoxInput("Tap", false));
-        addElementToElementHolder(createValueMeasurementLayout("Value measurement", "m/kg"));
+        addElementToElementHolder(operatorLayout);
+        addElementToElementHolder(machineLayout);
+        addElementToElementHolder(dateLayout);
+        addElementToElementHolder(relativeHumidityLayout);
+        addElementToElementHolder(temperatureLayout);
+        addElementToElementHolder(tapLayout);
+        addElementToElementHolder(valueMeasurementsLayout);
 
         //These things should be added last
         addElementToElementHolder(addAttachmentsLayout);
@@ -122,14 +137,6 @@ public class AddTestDrawerActivity extends ActionBarActivity
         });
 
         return print_attachment_layout;
-    }
-
-    private RelativeLayout createPrintAttachment() {
-        return (RelativeLayout) getLayoutInflater().inflate(R.layout.tests_attachment_print, null);
-    }
-
-    private RelativeLayout createMaterialAttachment() {
-        return (RelativeLayout) getLayoutInflater().inflate(R.layout.tests_attachment_material, null);
     }
 
     private RelativeLayout createMaterialAttachment(String id, String startDate) {
@@ -180,6 +187,7 @@ public class AddTestDrawerActivity extends ActionBarActivity
             @Override
             public void onClick(View view) {
                 //Save to database
+
                 finish();
             }
         });
@@ -273,16 +281,8 @@ public class AddTestDrawerActivity extends ActionBarActivity
         return value_meas_layout;
     }
 
-//--------------------------------------------------------------------------
-//          HELPER METHODS
-//--------------------------------------------------------------------------
-
-    public static void openDrawer(){
-        drawerLayout.openDrawer(Gravity.RIGHT);
-    }
-
-    private void initializeAttachmentsLayout(){
-        addAttachmentsLayout = (ConstraintLayout) getLayoutInflater().
+    private ConstraintLayout initializeAttachmentsLayout(){
+        ConstraintLayout addAttachmentsLayout = (ConstraintLayout) getLayoutInflater().
                 inflate(R.layout.add_test_attachments_layout, null);
         addPrintAttachmentLayout = (LinearLayout)
                 addAttachmentsLayout.findViewById(R.id.add_test_prints_attachments_layout);
@@ -312,6 +312,41 @@ public class AddTestDrawerActivity extends ActionBarActivity
                 openDrawer();
                 searchDrawerFragment.loadData(SearchDrawerFragment.DATATYPE_MATERIAL);            }
         });
+        return addAttachmentsLayout;
+    }
+
+//--------------------------------------------------------------------------
+//          HELPER METHODS
+//--------------------------------------------------------------------------
+
+    private void submitToDatabase(){
+        String operator;
+        String machine;
+        String date;
+        String relativeHumidity;
+        String temperature;
+        String tap;
+        List<String> valueMeasurements = new ArrayList<>();
+        List<String> materialIds = new ArrayList<>();
+        List<String> printIds = new ArrayList<>();
+
+        operator = ((EditText) operatorLayout.
+                findViewById(R.id.add_text_input)).getText().toString();
+        machine = ((EditText) machineLayout.
+                findViewById(R.id.add_text_input)).getText().toString();
+        date = ((EditText) dateLayout.
+                findViewById(R.id.add_text_input)).getText().toString();
+        relativeHumidity = ((EditText) relativeHumidityLayout.
+                findViewById(R.id.add_text_input)).getText().toString();
+        temperature = ((EditText) temperatureLayout.
+                findViewById(R.id.add_text_input)).getText().toString();
+        tap = String.valueOf(((CheckBox) tapLayout.
+                findViewById(R.id.add_checkbox_input)).isChecked());
+
+    }
+
+    public static void openDrawer(){
+        drawerLayout.openDrawer(Gravity.RIGHT);
     }
 
     private String getMeasurementAverageString(String metric){
