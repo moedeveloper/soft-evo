@@ -8,6 +8,8 @@ import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.model.MaterialList;
+import android.app.printerapp.model.Operator;
+import android.app.printerapp.model.OperatorList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.app.printerapp.model.Build;
@@ -98,4 +100,13 @@ public interface ApiService {
 
     @POST("company/create")
     Call<String> createNewCompany(@Body CompanyDTO company);
+    //-------------------------------------------
+//      OPERATORS
+//-------------------------------------------
+    @GET("operators")
+    Call<OperatorList> fetchAllOperators();
+
+    @GET("operator/{operatorId}")
+    Call<List<Operator>> fetchOperator(@Path("operatorId") int operatorId);
+
 }

@@ -2,7 +2,7 @@ package android.app.printerapp.dataviews;
 
 import android.app.AlertDialog;
 import android.app.printerapp.DividerItemDecoration;
-import android.app.printerapp.FileManager;
+import android.app.printerapp.library.FileManager;
 import android.app.printerapp.ListContent;
 import android.app.printerapp.Log;
 import android.app.printerapp.R;
@@ -15,7 +15,6 @@ import android.app.printerapp.viewer.DataTextAdapter;
 import android.app.printerapp.viewer.STLViewer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;

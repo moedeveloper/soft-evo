@@ -22,7 +22,7 @@
          the container. -->
     <fragment
         android:id="@+id/navigation_drawer"
-        android:name="android.app.printerapp.SearchDrawerFragment"
+        android:name="android.app.printerapp.search.SearchDrawerFragment"
         android:layout_width="500dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"

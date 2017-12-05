@@ -3,10 +3,11 @@ package android.app.printerapp.dataviews;
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.R;
-import android.app.printerapp.SearchView;
+import android.app.printerapp.search.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.OperatorList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
@@ -19,15 +20,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -40,6 +37,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
     private RelativeLayout searchHolder;
     private SearchView searchView;
     private List<Print> prints;
+    private OperatorList operators;
 
     public PrintsFragment() {
         databaseHandler = DatabaseHandler.getInstance();
@@ -69,17 +67,6 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
         new LoadDataTask().execute();
 
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-
         return mRootView;
     }
 
@@ -107,6 +94,7 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
             try {
                 result =  apiService.fetchAllPrints().execute().body();
+                operators = apiService.fetchAllOperators().execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -129,6 +117,14 @@ public class PrintsFragment extends Fragment implements PropertyChangeListener{
 
             //Update the data in search view
             searchView.updateData(prints);
+
+            //Set options
+            searchView.createSearchOptionSelection("Operator", operators.getOperators());
+//        searchView.createSearchOptionSelection("Machine", null);
+//        searchView.createSearchOptionSelection("Build platform material", null);
+            searchView.createSearchOptionTextInput("Machine", "e.g M12");
+            searchView.createSearchOptionTextInput("Build platform material", "e.g Steel");
+            searchView.createSearchOptionTextInput("Start date", "e.g 2017-12-05");
     }
 }
 

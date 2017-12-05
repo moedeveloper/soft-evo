@@ -2,12 +2,11 @@ package android.app.printerapp;
 
 import android.app.DatePickerDialog;
 import android.app.printerapp.model.DataEntry;
-import android.app.printerapp.model.Print;
+import android.app.printerapp.search.SearchDrawerFragment;
+import android.app.printerapp.search.TestSearchView;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -82,7 +81,7 @@ public class AddTestDrawerActivity extends ActionBarActivity
         operatorLayout = createTextInput("Operator", "Aritstotle Svensson");
         machineLayout = createTextInput("Machine", "M1548");
         relativeHumidityLayout = createTextInput("Relative humidity", "50%");
-        temperatureLayout = createCheckBoxInput("Tap", false);
+        temperatureLayout = createTextInput("Temperature", "57 C");
         tapLayout = createCheckBoxInput("Tap", false);
         valueMeasurementsLayout = createValueMeasurementLayout("Value measurement", "m/kg");
 
@@ -187,7 +186,8 @@ public class AddTestDrawerActivity extends ActionBarActivity
             @Override
             public void onClick(View view) {
                 //Save to database
-
+                submitToDatabase();
+                //close;
                 finish();
             }
         });
@@ -342,6 +342,35 @@ public class AddTestDrawerActivity extends ActionBarActivity
                 findViewById(R.id.add_text_input)).getText().toString();
         tap = String.valueOf(((CheckBox) tapLayout.
                 findViewById(R.id.add_checkbox_input)).isChecked());
+
+        //Store all value measurements
+        LinearLayout valueMeasurementsInputs = (LinearLayout) valueMeasurementsLayout.
+                findViewById(R.id.value_measurement_values_layout);
+        for(int i = 0; i < valueMeasurementsInputs.getChildCount(); i++){
+            valueMeasurements.add(
+                    ((EditText) valueMeasurementsInputs.getChildAt(i)).getText().toString());
+        }
+
+        //Store all attached prints
+        LinearLayout printAttachments = (LinearLayout) addAttachmentsLayout.
+                findViewById(R.id.add_test_prints_attachments_layout);
+        for(int i = 2; i < printAttachments.getChildCount(); i++){
+            RelativeLayout printAttachmentHolder = (RelativeLayout) printAttachments.getChildAt(i);
+            printIds.add(((TextView) printAttachmentHolder.
+                    findViewById(R.id.attachment_print_id)).getText().toString());
+        }
+
+        //Store all attached materials
+        LinearLayout materialAttachments = (LinearLayout) addAttachmentsLayout.
+                findViewById(R.id.add_test_materials_attachments_layout);
+        for(int i = 2; i < materialAttachments.getChildCount(); i++){
+            RelativeLayout materialAttachmentHolder = (RelativeLayout) materialAttachments.getChildAt(i);
+            materialIds.add(((TextView) materialAttachmentHolder.
+                    findViewById(R.id.attachment_material_id)).getText().toString());
+        }
+
+        //Perform POST
+
 
     }
 

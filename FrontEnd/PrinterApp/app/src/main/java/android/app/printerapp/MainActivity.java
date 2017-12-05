@@ -8,6 +8,7 @@ import android.app.printerapp.dataviews.BuildsFragment;
 import android.app.printerapp.dataviews.DetailsFragment;
 import android.app.printerapp.dataviews.HomeFragment;
 import android.app.printerapp.dataviews.PrintsFragment;
+import android.app.printerapp.library.FileManager;
 import android.app.printerapp.ui.AnimationHelper;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;

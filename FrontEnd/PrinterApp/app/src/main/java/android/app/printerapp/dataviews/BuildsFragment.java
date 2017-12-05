@@ -6,9 +6,8 @@ package android.app.printerapp.dataviews;
 
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
-import android.app.printerapp.Log;
 import android.app.printerapp.R;
-import android.app.printerapp.SearchView;
+import android.app.printerapp.search.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.BuildList;
@@ -67,12 +66,6 @@ public class BuildsFragment extends Fragment implements PropertyChangeListener{
 
         new LoadDataTask().execute();
 
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-
         return mRootView;
     }
 
@@ -116,6 +109,8 @@ public class BuildsFragment extends Fragment implements PropertyChangeListener{
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getBuilds()));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
+
+            searchView.createSearchOptionTextInput("Creation date", "e.g 2017-12-05");
 
             searchView.updateData(result.getBuilds());
         }

@@ -3,10 +3,11 @@ package android.app.printerapp.dataviews;
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.R;
-import android.app.printerapp.SearchView;
+import android.app.printerapp.search.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
-import android.app.printerapp.model.BuildList;
+import android.app.printerapp.model.Company;
+import android.app.printerapp.model.CompanyList;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.DetailList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
@@ -37,6 +38,7 @@ public class DetailsFragment extends Fragment implements PropertyChangeListener 
     private View mRootView;
     private RelativeLayout searchHolder;
     private SearchView searchView;
+    private List<Company> allCompanies;
 
     public DetailsFragment() {
         databaseHandler = DatabaseHandler.getInstance();
@@ -66,17 +68,6 @@ public class DetailsFragment extends Fragment implements PropertyChangeListener 
 
         new LoadDataTask().execute();
 
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-        searchView.createSearchOption("Company", new String[]{"Ericsson", "Höganäs", "Chalmers"});
-
         return mRootView;
     }
 
@@ -97,12 +88,13 @@ public class DetailsFragment extends Fragment implements PropertyChangeListener 
     private class LoadDataTask extends AsyncTask<Void, Void, Void> {
 
         private DetailList result = null;
+        CompanyList companyList = null;
 
         @Override
         protected Void doInBackground(Void... vs) {
             ApiService apiService = databaseHandler.getApiService();
-
             try {
+                companyList= apiService.fetchAllCompanies().execute().body();
                 result =  apiService.fetchAllDetails().execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -121,6 +113,11 @@ public class DetailsFragment extends Fragment implements PropertyChangeListener 
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
             searchView.updateData(result.getDetails());
+            allCompanies = companyList.getCompaniesApi();
+
+            searchView.createSearchOptionSelection("Company", allCompanies);
+            searchView.createSearchOptionTextInput("Project id", "e.g 5");
+            searchView.createSearchOptionTextInput("Creation date", "e.g 2017-12-05");
         }
     }
 }
