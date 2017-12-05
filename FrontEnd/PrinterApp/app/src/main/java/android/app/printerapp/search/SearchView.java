@@ -1,12 +1,19 @@
 package android.app.printerapp.search;
 
 import android.app.printerapp.R;
+import android.app.printerapp.api.ApiService;
+import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.Operator;
+import android.app.printerapp.model.Print;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,6 +25,7 @@ import android.widget.TextView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,6 +50,8 @@ public class SearchView extends ConstraintLayout {
     private Context mContext;
     private List<? extends DataEntry> data;
     private Map<String, List<? extends DataEntry>> optionLists = new HashMap<>();
+    private DataEntry selectedOperator;
+    private DataEntry selectedCompany;
 
     //Views
     private LinearLayout leftSearchOptionsLayout;
@@ -94,7 +104,11 @@ public class SearchView extends ConstraintLayout {
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(data != null) {
+                if (selectedOperator != null) {
+                    new LoadPrintsByOperator().execute();
+                } else if (selectedCompany != null) {
+                    new LoadDetailsByCompany().execute();
+                } else {
                     pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(data, searchBar.getText().toString()));
                     searchBar.setText("");
                 }
@@ -110,7 +124,7 @@ public class SearchView extends ConstraintLayout {
         pcs.removePropertyChangeListener(listener);
     }
 
-    public void createSearchOptionSelection(String title, List<? extends DataEntry> options){
+    public void createSearchOptionSelection(final String title, List<? extends DataEntry> options){
         if(options == null){
             return;
         }
@@ -137,8 +151,24 @@ public class SearchView extends ConstraintLayout {
         }
 
         //Set the adapter of the spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, dataNames);
+        SearchOptionArrayAdapter<? extends DataEntry> adapter = new SearchOptionArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, options);
         optionSpinner.setAdapter(adapter);
+        optionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(title.equals("Operator")){
+                    selectedOperator = (DataEntry) adapterView.getAdapter().getItem(i);
+                }else if (title.equals("Company")){
+                    selectedCompany = (DataEntry) adapterView.getAdapter().getItem(i);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                selectedOperator = null;
+            }
+        });
+
 
         addOptionToLayout(searchOptionLayout);
 
@@ -202,4 +232,56 @@ public class SearchView extends ConstraintLayout {
         }
         return returnList;
     }
+
+    private class LoadDetailsByCompany extends AsyncTask<Void,Void,Void>{
+        List<Detail> details = null;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ApiService apiService = DatabaseHandler.getInstance().getApiService();
+            try {
+                details = apiService.fetchDetailByCompany(Integer.parseInt(selectedCompany.getId())).execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            List<? extends DataEntry> dataToDisplay = data;
+            if(details != null){
+                dataToDisplay = details;
+            }
+            pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(dataToDisplay, searchBar.getText().toString()));
+            searchBar.setText("");
+        }
+    }
+
+    private class LoadPrintsByOperator extends AsyncTask<Void,Void,Void> {
+
+        List<Print> prints = null;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            ApiService apiService = DatabaseHandler.getInstance().getApiService();
+            try {
+                prints = apiService.fetchPrintFromOperator(Integer.parseInt(selectedOperator.getId())).execute().body();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            List<? extends DataEntry> dataToDisplay = data;
+            if(prints != null){
+                dataToDisplay = prints;
+            }
+            pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(dataToDisplay, searchBar.getText().toString()));
+            searchBar.setText("");
+        }
+    }
+
 }

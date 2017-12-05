@@ -51,6 +51,9 @@ public interface ApiService {
     @GET("download/file/{fileId}")
     Call<ResponseBody> downloadStlFile(@Path("fileId") int fileId);
 
+    @GET("details/companyId/{companyId}")
+    Call<List<Detail>> fetchDetailByCompany(@Path("companyId") int companyId);
+
     @POST("details/create")
     Call<String> createDetails(@Body DetailDto detail);
 
@@ -72,6 +75,9 @@ public interface ApiService {
 
     @GET("print/build/{buildId}")
     Call<List<Print>> fetchPrintFromBuild(@Path("buildId") int buildId);
+
+    @GET("print/operator/{operatorId}")
+    Call<List<Print>> fetchPrintFromOperator(@Path("operatorId") int operatorId);
 
 //-------------------------------------------
 //      BUILDS
