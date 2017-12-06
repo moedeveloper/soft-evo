@@ -7,8 +7,8 @@ package android.app.printerapp.model;
 public class Print implements DataEntry{
     private String id;
     private String buildsId;
-    private String operator;
-    private String machine;
+    private String operatorId;
+    private String machineId;
     private String powderWeightStart;
     private String powderWeightEnd;
     private String buildPlatformMaterial;
@@ -47,20 +47,24 @@ public class Print implements DataEntry{
         this.buildsId = id;
     }
 
-    public String getOperator(){
-        return operator;
+    public String getOperatorId() {
+        return operatorId;
     }
 
-    public void setOperator(String operator){
-        this.operator = operator;
+    public void setOperatorId(String operatorId) {
+        this.operatorId = operatorId;
     }
 
-    public String getMachine(){
-        return machine;
+    public String getMachineId() {
+        return machineId;
     }
 
-    public void setMachine(String machine){
-        this.machine = machine;
+    public void setMachineId(String machineId) {
+        this.machineId = machineId;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getPowderWeightStart(){
@@ -113,7 +117,7 @@ public class Print implements DataEntry{
 
     @Override
     public String toString() {
-        return id + ", " + buildsId + ", " + operator + ", " + machine + ", " +
+        return id + ", " + buildsId + ", " + operatorId + ", " + machineId + ", " +
                 powderWeightStart + ", " + powderWeightEnd + ", " + buildPlatformMaterial
                 + ", " + buildPlatformWeight + ", " + startTime + ", " + endTime;
     }

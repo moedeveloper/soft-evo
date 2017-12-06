@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.ListContent;
+import android.app.printerapp.Log;
 import android.app.printerapp.R;
 import android.app.printerapp.SpecificActivity;
 import android.app.printerapp.api.DatabaseHandler;
@@ -184,5 +185,16 @@ abstract class SpecificFragment extends Fragment {
 
             return linearLayout;
         }
+    }
+
+    protected void createAlertDialog(String message){
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        Log.d("SpecificFragment", message);
+    }
+
+    //Helper methods
+    protected boolean dataIsOk(List<?> list){
+        return (list != null && !list.isEmpty());
     }
 }

@@ -141,15 +141,22 @@ public class BuildSpecificFragment extends SpecificFragment {
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
             try {
-                build = apiService.fetchBuild(id).execute().body().get(0);
+                List<Build> bResult = apiService.fetchBuild(id).execute().body();
+                if(dataIsOk(bResult)){
+                    build = bResult.get(0);
+                }
+
                 List<BuildDetailLink> buildDetailResult = apiService.fetchDetailBuildLink(id).execute().body();
                 linkedPrints = apiService.fetchPrintFromBuild(id).execute().body();
 
                 //For each detail found, retrieve their data
-                for(BuildDetailLink link : buildDetailResult){
-                    List<Detail> detail = apiService.fetchDetail(
-                            Integer.parseInt(link.getDetailsId())).execute().body();
-                    linkedDetails.add(detail.get(0));
+                if(dataIsOk(buildDetailResult) && dataIsOk(linkedPrints)){
+                    for(BuildDetailLink link : buildDetailResult) {
+                        List<Detail> detail = apiService.fetchDetail(
+                                Integer.parseInt(link.getDetailsId())).execute().body();
+                        linkedDetails.add(detail.get(0));
+
+                    }
                 }
 
             } catch (IOException e) {

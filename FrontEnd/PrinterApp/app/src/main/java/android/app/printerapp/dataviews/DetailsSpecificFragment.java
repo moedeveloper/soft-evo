@@ -9,8 +9,11 @@ import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.BuildDetailLink;
+import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.Print;
+import android.app.printerapp.model.Project;
+import android.app.printerapp.model.ProjectList;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
 import android.app.printerapp.viewer.STLViewer;
@@ -179,11 +182,29 @@ public class DetailsSpecificFragment extends SpecificFragment {
     //Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
+        Project project;
+        Company company;
+
         @Override
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
             try {
-                detail = apiService.fetchDetail(id).execute().body().get(0);
+
+                List<Detail> result = apiService.fetchDetail(id).execute().body();
+                if(result != null){
+                    detail = result.get(0);
+
+                    List<Project> pResult = apiService.fetchProject(detail.getProjectId()).execute().body();
+                    List<Company> cResult = apiService.fetchCompany(detail.getCompanyId()).execute().body();
+
+                    if(dataIsOk(pResult)){
+                        project = pResult.get(0);
+                    }
+                    if(dataIsOk(cResult)){
+                        company = cResult.get(0);
+                    }
+                }
+
                 List<BuildDetailLink> buildDetailResult = apiService.fetchBuildDetailLink(id).execute().body();
 
                 //For each build found, retrieve their data
@@ -194,10 +215,15 @@ public class DetailsSpecificFragment extends SpecificFragment {
                 for(BuildDetailLink link : buildDetailResult){
                     List<Build> build = apiService.fetchBuild(
                             Integer.parseInt(link.getBuildId())).execute().body();
-                    linkedBuilds.add(build.get(0));
+                    if (dataIsOk(build)) {
+                        linkedBuilds.add(build.get(0));
+                    }
+
                     List<Print> print = apiService.fetchPrintFromBuild(
                             Integer.parseInt(link.getBuildId())).execute().body();
-                    linkedPrints.add(print.get(0));
+                    if(dataIsOk(print)) {
+                        linkedPrints.add(print.get(0));
+                    }
                 }
 
             } catch (IOException e) {
@@ -209,16 +235,31 @@ public class DetailsSpecificFragment extends SpecificFragment {
         @Override
         protected void onPostExecute(Integer integer) {
             //If we failed to retrieve a print, do nothing
-            if(detail == null) {
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-                Log.d("DetailsSpecificFragment", "Failed to retrieve prints");
+            if (detail == null) {
+                createAlertDialog("Failed to retrieve detail");
                 return;
             }
 
-            String[] detailTitles = {"Id", "Name", "Creation date", "Company id", "File id", "Project id", "Comments"};
-            String[] detailValues = {detail.getId(), detail.getName(), detail.getCreationDate(),
-                    String.valueOf(detail.getCompanyId()), detail.getFileId(), String.valueOf(detail.getProjectId()),
+            String companyName;
+            String projectName;
+
+            if (company == null) {
+                companyName = String.valueOf(detail.getCompanyId());
+            } else {
+                companyName = company.getName();
+            }
+
+            if (project == null) {
+                projectName = String.valueOf(detail.getProjectId());
+            } else {
+                projectName = project.getName();
+            }
+
+            String[] detailTitles = {"Id", "Name", "Creation date", "Company", "File id", "Project", "Comments"};
+            String[] detailValues;
+
+            detailValues = new String[]{detail.getId(), detail.getName(), detail.getCreationDate(),
+                    companyName, detail.getFileId(), projectName,
                     detail.getComment()};
 
             dataListView.setAdapter(new DataTextAdapter(detailTitles, detailValues, mContext));

@@ -9,6 +9,8 @@ import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.Machine;
+import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
@@ -172,6 +174,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
         currentCheckedButton = button;
     }
 
+
 //---------------------------------------------------------------------------------------
 //          FACTORY METHODS
 //---------------------------------------------------------------------------------------
@@ -229,6 +232,9 @@ public class PrintsSpecificFragment extends SpecificFragment {
     //Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
+        Operator operator;
+        Machine machine;
+
         @Override
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
@@ -236,8 +242,21 @@ public class PrintsSpecificFragment extends SpecificFragment {
             try {
                 //Fetch prints
                 printResult = apiService.fetchPrint(id).execute().body();
-                if (printResult != null && printResult.size() > 0) {
+
+                if (dataIsOk(printResult)) {
                     print = printResult.get(0);
+
+                    List<Operator> oResult = apiService.fetchOperator(
+                            Integer.parseInt(print.getOperatorId())).execute().body();
+                    if(dataIsOk(oResult)){
+                        operator = oResult.get(0);
+                    }
+
+                    List<Machine> mResult = apiService.fetchMachine(
+                            Integer.parseInt(print.getMachineId())).execute().body();
+                    if(dataIsOk(mResult)){
+                        machine = mResult.get(0);
+                    }
                 } else {
                     Log.d("PrintsSpecificFragment", "Could not fetch any data with given ID");
                     return 1;
@@ -247,10 +266,14 @@ public class PrintsSpecificFragment extends SpecificFragment {
                         Integer.parseInt(print.getBuildsId())).execute().body();
 
                 //For each detail found, retrieve their data
-                for (BuildDetailLink link : buildDetailResult) {
-                    List<Detail> detail = apiService.fetchDetail(
-                            Integer.parseInt(link.getDetailsId())).execute().body();
-                    linkedDetails.add(detail.get(0));
+                if(dataIsOk(buildDetailResult)) {
+                    for (BuildDetailLink link : buildDetailResult) {
+                        List<Detail> detail = apiService.fetchDetail(
+                                Integer.parseInt(link.getDetailsId())).execute().body();
+                        if(dataIsOk(detail)) {
+                            linkedDetails.add(detail.get(0));
+                        }
+                    }
                 }
 
             } catch (IOException e) {
@@ -263,17 +286,31 @@ public class PrintsSpecificFragment extends SpecificFragment {
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
 
-            //If we failed to retrieve a print, do nothing
+            //If we failed to retrieve a print, machine or operator. Alert.
             if (print == null) {
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-                Log.d("PrintsSpecificFragment", "Failed to retrieve prints");
+                createAlertDialog("Failed to retrieve prints");
                 return;
             }
+
+            String machineName;
+            String operatorName;
+
+            if (machine == null) {
+                machineName = print.getMachineId();
+            } else {
+                machineName = machine.getName();
+            }
+
+            if (operator == null) {
+                operatorName = print.getOperatorId();
+            } else {
+                operatorName = operator.getName();
+            }
+
             //Fill the fields for the print
             String[] printTitles = {"Id", "Build id", "Operator", "Machine", "Powder weight start", "Powder weight end",
-                    "Build platform material", "Build platform weight", "End time", "Start time"};
-            String[] printValues = {print.getId(), print.getBuildsId(), print.getOperator(), print.getMachine(),
+                    "Build platform material", "Build platform weight", "Start time", "End time"};
+            String[] printValues = {print.getId(), print.getBuildsId(), operatorName, machineName,
                     print.getPowderWeightStart(), print.getPowderWeightEnd(), print.getBuildPlatformMaterial(),
                     print.getBuildPlatformWeight(), print.getEndTime(), print.getStartTime()};
 

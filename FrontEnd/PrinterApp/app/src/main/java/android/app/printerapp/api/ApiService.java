@@ -7,12 +7,18 @@ import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.Machine;
+import android.app.printerapp.model.MachineList;
 import android.app.printerapp.model.MaterialList;
+import android.app.printerapp.model.Measurement;
+import android.app.printerapp.model.MeasurementList;
 import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.OperatorList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.model.PrintList;
 import android.app.printerapp.model.Build;
+import android.app.printerapp.model.Project;
+import android.app.printerapp.model.ProjectList;
 
 import java.util.List;
 
@@ -97,6 +103,9 @@ public interface ApiService {
     @GET("companies")
     Call<CompanyList> fetchAllCompanies();
 
+    @GET("company/{companyId}")
+    Call<List<Company>> fetchCompany(@Path("companyId") int companyId);
+
     @Headers({
             "Accept: application/json",
             "Content-Type: text/html; charset=utf-8"
@@ -114,5 +123,33 @@ public interface ApiService {
 
     @GET("operator/{operatorId}")
     Call<List<Operator>> fetchOperator(@Path("operatorId") int operatorId);
+
+    //-------------------------------------------
+//      PROJECTS
+//-------------------------------------------
+    @GET("projects")
+    Call<ProjectList> fetchAllProjects();
+
+    @GET("project/{projectId}")
+    Call<List<Project>> fetchProject(@Path("projectId") int projectId);
+
+    //-------------------------------------------
+//      MACHINES
+//-------------------------------------------
+    @GET("machines")
+    Call<MachineList> fetchAllMachines();
+
+    @GET("machine/{machineId}")
+    Call<List<Machine>> fetchMachine(@Path("machineId") int machineId);
+
+    //-------------------------------------------
+//      MEASUREMENTS
+//-------------------------------------------
+    @GET("measurements")
+    Call<MeasurementList> fetchAllMeasurements();
+
+    @GET("machine/{machineId}")
+    Call<List<Measurement>> fetchMeasurement(@Path("measurementId") int measurementId);
+
 
 }
