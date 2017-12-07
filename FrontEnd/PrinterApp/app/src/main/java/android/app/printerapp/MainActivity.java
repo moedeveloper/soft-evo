@@ -7,7 +7,9 @@ import android.app.printerapp.database.DatabaseController;
 import android.app.printerapp.dataviews.BuildsFragment;
 import android.app.printerapp.dataviews.DetailsFragment;
 import android.app.printerapp.dataviews.HomeFragment;
+import android.app.printerapp.dataviews.MaterialsFragment;
 import android.app.printerapp.dataviews.PrintsFragment;
+import android.app.printerapp.dataviews.TestsFragment;
 import android.app.printerapp.library.FileManager;
 import android.app.printerapp.ui.AnimationHelper;
 import android.graphics.drawable.ColorDrawable;
@@ -33,6 +35,8 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
     private DetailsFragment mDetailsFragment;
     private PrintsFragment mPrintsFragment;
     private BuildsFragment mBuildsFragment;
+    private MaterialsFragment mMaterialsFragment;
+    private TestsFragment mTestsFragment;
 
     public static final String PRINT_CLICKED = "print_clicked";
 
@@ -42,6 +46,7 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
     private static DialogController mDialog; //Dialog controller @static
 
     private static TabHost mTabHost;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,6 +225,20 @@ public class MainActivity extends ActionBarActivity implements PropertyChangeLis
                     fragmentTransaction.add(R.id.maintab3, mPrintsFragment, ListContent.ID_PRINTS);
                 }
                 mCurrent = mPrintsFragment;
+            }
+            case 4: {
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_MATERIALS) == null) {
+                    mMaterialsFragment = new MaterialsFragment();
+                    fragmentTransaction.add(R.id.maintab4, mMaterialsFragment, ListContent.ID_MATERIALS);
+                }
+                mCurrent = mMaterialsFragment;
+            }
+            case 5: {
+                if (getFragmentManager().findFragmentByTag(ListContent.ID_TESTS) == null) {
+                    mTestsFragment = new TestsFragment();
+                    fragmentTransaction.add(R.id.maintab5, mTestsFragment, ListContent.ID_TESTS);
+                }
+                mCurrent = mTestsFragment;
             }
         }
 

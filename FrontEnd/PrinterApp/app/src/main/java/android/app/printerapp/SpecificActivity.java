@@ -3,7 +3,9 @@ package android.app.printerapp;
 import android.app.Fragment;
 import android.app.printerapp.dataviews.BuildSpecificFragment;
 import android.app.printerapp.dataviews.DetailsSpecificFragment;
+import android.app.printerapp.dataviews.MaterialSpecificFragment;
 import android.app.printerapp.dataviews.PrintsSpecificFragment;
+import android.app.printerapp.dataviews.TestSpecificFragment;
 import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -20,6 +22,8 @@ public class SpecificActivity extends ActionBarActivity {
     public static final int START_BUILD_FRAGMENT = 1;
     public static final int START_PRINT_FRAGMENT = 2;
     public static final String ID = "data_id";
+    public static final int START_MATERIAL_FRAGMENT = 3;
+    public static final int START_TEST_FRAGMENT = 4;
 
     //Variables
     private int id = 0;
@@ -46,6 +50,10 @@ public class SpecificActivity extends ActionBarActivity {
                 return BuildSpecificFragment.newInstance(id);
             case START_PRINT_FRAGMENT:
                 return PrintsSpecificFragment.newInstance(id);
+            case START_MATERIAL_FRAGMENT:
+                return MaterialSpecificFragment.newInstance(id);
+            case START_TEST_FRAGMENT:
+                return TestSpecificFragment.newInstance(id);
             default:
                 throw new IllegalArgumentException("Invalid fragment type chosen.");
         }

@@ -7,9 +7,11 @@ import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.HallFlowTestList;
 import android.app.printerapp.model.HallflowTest;
 import android.app.printerapp.model.Machine;
 import android.app.printerapp.model.MachineList;
+import android.app.printerapp.model.Material;
 import android.app.printerapp.model.MaterialList;
 import android.app.printerapp.model.Measurement;
 import android.app.printerapp.model.MeasurementList;
@@ -72,7 +74,7 @@ public interface ApiService {
 
     @GET("details/filter/year/{year}/company/{companyId}/project/{projectId}")
     Call<List<Detail>> fetchDetailByFilter(@Path("year") String year, @Path("companyId") String companyId,
-                                         @Path("projectId") String projectId);
+                                           @Path("projectId") String projectId);
 
     @GET("details/projectId/{projectId}")
     Call<List<Detail>> fetchDetailByProject(@Path("projectId") String projectId);
@@ -83,6 +85,12 @@ public interface ApiService {
 //-------------------------------------------
     @GET("materials")
     Call<MaterialList> fetchAllMaterials();
+
+    @GET("material/date/{year}")
+    Call<List<Material>> fetchMaterialsByYear(@Path("year") String year);
+
+    @GET("material/date/{year}/{month}")
+    Call<List<Material>> fetchMaterialsByYearMonth(@Path("year") String year, @Path("month") String month);
 
 
     //-------------------------------------------
@@ -152,6 +160,7 @@ public interface ApiService {
 
     @POST("company/create")
     Call<String> createNewCompany(@Body CompanyDTO company);
+
     //-------------------------------------------
 //      OPERATORS
 //-------------------------------------------
@@ -196,4 +205,31 @@ public interface ApiService {
 //-------------------------------------------
     @POST("hallflowtest/create")
     Call<List<HallflowTest>> createHallflowTest(@Body List<HallflowTest> hallflowTest);
+
+    @GET("hallflowtest/{id}")
+    Call<List<HallflowTest>> fetchHallflowTest(@Path("id") String id);
+
+    @GET("hallflowtests")
+    Call<HallFlowTestList> fetchAllHallflowTests();
+
+    @GET("hallflowtest/material/{id}")
+    Call<List<HallflowTest>> fetchHallflowTestByMaterial(@Path("id") String id);
+
+    @GET("hallflowtest/operator/{id}")
+    Call<List<HallflowTest>> fetchHallflowTestByOperator(@Path("id") String id);
+
+    @GET("hallflowtest/date/{year}/{month}")
+    Call<List<HallflowTest>> fetchHallflowTestsByYearMonth(@Path("year") String year, @Path("month") String month);
+
+    @GET("hallflowtest/date/{year}")
+    Call<List<HallflowTest>> fetchHallflowTestsByYear(@Path("year") String year);
+
+    @GET("hallflowtest/filter/year/{year}/operator/{operatorId}/material/{materialId}")
+    Call<List<HallflowTest>> fetchHallflowTestsByFilter(@Path("year") String year, @Path("operatorId") String operatorId, @Path("materialId") String materialId);
+
+
+
+
+
 }
+

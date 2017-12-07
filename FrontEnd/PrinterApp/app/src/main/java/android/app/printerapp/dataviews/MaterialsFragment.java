@@ -12,6 +12,8 @@ import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.BuildList;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Material;
+import android.app.printerapp.model.MaterialList;
 import android.app.printerapp.search.SearchView;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
@@ -97,18 +99,18 @@ public class MaterialsFragment extends Fragment implements PropertyChangeListene
         }
     }
 
-    private List<Build> filterByText(String text, List<Build> builds){
-        List<Build> filteredBuilds = new ArrayList<>();
-        for(Build current : builds){
+    private List<Material> filterByText(String text, List<Material> materials){
+        List<Material> filteredMaterials = new ArrayList<>();
+        for(Material current : materials){
             if(current.getIdName().contains(text)){
-                filteredBuilds.add(current);
+                filteredMaterials.add(current);
             }
         }
-        return filteredBuilds;
+        return filteredMaterials;
     }
 
     private class LoadFilteredDataTask extends AsyncTask<Void, Void, Void>{
-        private List<Build> result;
+        private List<Material> result;
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -117,12 +119,12 @@ public class MaterialsFragment extends Fragment implements PropertyChangeListene
                 if(!dateInput.getId().equals("")){
                     String[] date = dateInput.getId().split("-");
                     if (date.length >= 2) {
-                        result = apiService.fetchBuildByYearMonth(date[0], date[1]).execute().body();
+                        result = apiService.fetchMaterialsByYearMonth(date[0], date[1]).execute().body();
                     } else {
-                        result = apiService.fetchBuildByYear(date[0]).execute().body();
+                        result = apiService.fetchMaterialsByYear(date[0]).execute().body();
                     }
                 } else {
-                    result = apiService.fetchAllBuilds().execute().body().getBuilds();
+                    result = apiService.fetchAllMaterials().execute().body().getMaterials();
                 }
             }catch(IOException e){
                 e.printStackTrace();
@@ -148,14 +150,14 @@ public class MaterialsFragment extends Fragment implements PropertyChangeListene
     //of the recycler view upon data retrieved
     private class LoadDataTask extends AsyncTask<Void, Void, Void> {
 
-        private BuildList result = null;
+        private MaterialList result = null;
 
         @Override
         protected Void doInBackground(Void... vs) {
             ApiService apiService = databaseHandler.getApiService();
 
             try {
-                result =  apiService.fetchAllBuilds().execute().body();
+                result =  apiService.fetchAllMaterials().execute().body();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -169,12 +171,11 @@ public class MaterialsFragment extends Fragment implements PropertyChangeListene
                 return;
             }
 
-            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getBuilds()));
+            recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(result.getMaterials()));
             recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
             recyclerView.addItemDecoration(new DividerItemDecoration(mContext));
 
-            searchView.updateData(result.getBuilds());
+            searchView.updateData(result.getMaterials());
         }
     }
-
 }

@@ -4,11 +4,15 @@ import android.app.printerapp.R;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.HallflowTest;
+import android.app.printerapp.model.Material;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DateEntryItemHolders.BuildItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.DataEntryItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.DetailItemHolder;
+import android.app.printerapp.ui.DateEntryItemHolders.MaterialItemHolder;
 import android.app.printerapp.ui.DateEntryItemHolders.PrintItemHolder;
+import android.app.printerapp.ui.DateEntryItemHolders.TestItemHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +40,8 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
         Class<?> p = Print.class;
         Class<?> d = Detail.class;
         Class<?> b = Build.class;
+        Class<?> m = Material.class;
+        Class<?> t = HallflowTest.class;
 
         View view = null;
         DataEntryItemHolder itemholder = null;
@@ -52,6 +58,14 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
             view = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.data_entry_list_item, parent, false);
             itemholder = new BuildItemHolder(view);
+        }else if (type == m){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.data_entry_list_item, parent, false);
+            itemholder = new MaterialItemHolder(view);
+        }else if (type == t){
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.data_entry_list_item, parent, false);
+            itemholder = new TestItemHolder(view);
         }
 
         return itemholder;
