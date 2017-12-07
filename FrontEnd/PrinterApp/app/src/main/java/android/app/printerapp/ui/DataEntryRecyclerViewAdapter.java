@@ -67,6 +67,9 @@ public class DataEntryRecyclerViewAdapter<E extends DataEntry> extends RecyclerV
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        if(dataset != null){
+            return dataset.size();
+        }
+        return -1;
     }
 }

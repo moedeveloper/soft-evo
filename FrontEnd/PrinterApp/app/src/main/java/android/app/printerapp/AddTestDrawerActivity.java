@@ -1,11 +1,15 @@
 package android.app.printerapp;
 
 import android.app.DatePickerDialog;
+import android.app.printerapp.api.ApiService;
+import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.HallflowTest;
 import android.app.printerapp.search.SearchDrawerFragment;
 import android.app.printerapp.search.TestSearchView;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -25,9 +29,12 @@ import android.widget.TextView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
 
@@ -369,8 +376,61 @@ public class AddTestDrawerActivity extends ActionBarActivity
                     findViewById(R.id.attachment_material_id)).getText().toString());
         }
 
-        //Perform POST
+        if(operator.isEmpty()){
+            //Failed
+            return;
+        }
+        if(machine.isEmpty()) {
+            //Failed
+            return;
+        }
+        if(date.isEmpty()){
+            //Failed
+            return;
+        }
+        if(relativeHumidity.isEmpty()){
+            Log.d("Tests", "Failed to add relativeHumidity");
+            return;
+        }
+        if(temperature.isEmpty()){
+            //Failed
+            return;
+        }
+        if(tap.isEmpty()){
+            //Failed
+            return;
+        }
+        if(valueMeasurements.isEmpty()){
+            //Failed
+            return;
+        }
+        if(materialIds.isEmpty()){
+            //Failed
+            return;
+        }
 
+        //Perform POST
+        HallflowTest test = new HallflowTest();
+        test.setOperatorId(operator);
+        test.setDate(date);
+        test.setMaterialId(materialIds.get(0));
+        test.setRelativeHumidity(relativeHumidity);
+        test.setTemperature(temperature);
+        test.setTap(tap);
+
+        //TODO: create measurement??
+
+        ApiService apiService = DatabaseHandler.getInstance().getApiService();
+        List<HallflowTest> postData = new ArrayList<HallflowTest>();
+        postData.add(test);
+
+        Log.d("Test", "WeeHoo");
+        try {
+            Response<List<HallflowTest>> response = apiService.createHallflowTest(postData).execute();
+            Log.d("Test", "Success? " + response.isSuccessful());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

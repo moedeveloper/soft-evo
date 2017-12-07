@@ -37,8 +37,6 @@ public class BuildSpecificFragment extends SpecificFragment {
     private List<Print> linkedPrints;
     private List<Detail> linkedDetails = new ArrayList<>();
 
-    private ListView buildListView;
-
     //Api
     File[] files;
 
@@ -59,8 +57,7 @@ public class BuildSpecificFragment extends SpecificFragment {
         if (savedInstanceState == null) {
 
             //Retrieve references to views
-            buildListView = (ListView) mRootView.findViewById(R.id.data_list_view);
-
+            ListView buildListView = (ListView) mRootView.findViewById(R.id.data_list_view);
 
             //Retrieve id from arguments
             if(arguments != null) {
@@ -155,7 +152,6 @@ public class BuildSpecificFragment extends SpecificFragment {
                         List<Detail> detail = apiService.fetchDetail(
                                 Integer.parseInt(link.getDetailsId())).execute().body();
                         linkedDetails.add(detail.get(0));
-
                     }
                 }
 
@@ -167,6 +163,11 @@ public class BuildSpecificFragment extends SpecificFragment {
 
         @Override
         protected void onPostExecute(Integer integer) {
+
+            if(build == null){
+                createAlertDialog("Cannot retrieve build");
+                return;
+            }
 
             String[] buildTitles = {"Id", "Creation date", "Comments"};
             String[] buildValues = {build.getId(), build.getCreationDate(), build.getComment()};

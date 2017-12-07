@@ -7,6 +7,7 @@ import android.app.printerapp.model.BuildDetailLinkList;
 import android.app.printerapp.model.Company;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.DetailList;
+import android.app.printerapp.model.HallflowTest;
 import android.app.printerapp.model.Machine;
 import android.app.printerapp.model.MachineList;
 import android.app.printerapp.model.MaterialList;
@@ -63,6 +64,20 @@ public interface ApiService {
     @POST("details/create")
     Call<String> createDetails(@Body DetailDto detail);
 
+    @GET("details/date/{year}")
+    Call<List<Detail>> fetchDetailByYear(@Path("year") String year);
+
+    @GET("details/date/{year}/{month}")
+    Call<List<Detail>> fetchDetailByYearMonth(@Path("year") String year, @Path("month") String month);
+
+    @GET("details/filter/year/{year}/company/{companyId}/project/{projectId}")
+    Call<List<Detail>> fetchDetailByFilter(@Path("year") String year, @Path("companyId") String companyId,
+                                         @Path("projectId") String projectId);
+
+    @GET("details/projectId/{projectId}")
+    Call<List<Detail>> fetchDetailByProject(@Path("projectId") String projectId);
+
+
     //-------------------------------------------
 //      MATERIALS
 //-------------------------------------------
@@ -82,17 +97,39 @@ public interface ApiService {
     @GET("print/build/{buildId}")
     Call<List<Print>> fetchPrintFromBuild(@Path("buildId") int buildId);
 
-    @GET("print/operator/{operatorId}")
-    Call<List<Print>> fetchPrintFromOperator(@Path("operatorId") int operatorId);
+    @GET("print/machine/{machineId}")
+    Call<List<Print>> fetchPrintByMachine(@Path("machineId") String machineId);
 
-//-------------------------------------------
+    @GET("print/operator/{operatorId}")
+    Call<List<Print>> fetchPrintFromOperator(@Path("operatorId") String operatorId);
+
+    @GET("print/date/{year}")
+    Call<List<Print>> fetchPrintByYear(@Path("year") String year);
+
+    @GET("print/date/{year}/{month}")
+    Call<List<Print>> fetchPrintByYearMonth(@Path("year") String year, @Path("month") String month);
+
+    @GET("prints/filter/year/{year}/operator/{operatorId}/machine/{machineId}")
+    Call<List<Print>> fetchPrintByFilter(@Path("year") String year, @Path("operatorId") String operatorId,
+                                         @Path("machineId") String machineId);
+
+
+    //-------------------------------------------
 //      BUILDS
 //-------------------------------------------
     @GET("build/{buildId}")
     Call<List<Build>> fetchBuild(@Path("buildId") int buildId);
 
+    @GET("build/date/{year}")
+    Call<List<Build>> fetchBuildByYear(@Path("year") String year);
+
+    @GET("build/date/{year}/{month}")
+    Call<List<Build>> fetchBuildByYearMonth(@Path("year") String year, @Path("month") String month);
+
+
     @GET("build/details/{detailId}")
     Call<List<BuildDetailLink>> fetchBuildDetailLink(@Path("detailId") int detailId);
+
 
     @GET("builds")
     Call<BuildList> fetchAllBuilds();
@@ -148,8 +185,15 @@ public interface ApiService {
     @GET("measurements")
     Call<MeasurementList> fetchAllMeasurements();
 
-    @GET("machine/{machineId}")
+    @GET("measurement/{measurementId}")
     Call<List<Measurement>> fetchMeasurement(@Path("measurementId") int measurementId);
 
+    @POST("measurement/create")
+    Call<List<Measurement>> createMeasurement(@Body List<Measurement> measurement);
 
+    //-------------------------------------------
+//      HALLFLOW TESTS
+//-------------------------------------------
+    @POST("hallflowtest/create")
+    Call<List<HallflowTest>> createHallflowTest(@Body List<HallflowTest> hallflowTest);
 }

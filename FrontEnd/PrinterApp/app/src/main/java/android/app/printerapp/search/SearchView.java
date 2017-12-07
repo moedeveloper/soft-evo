@@ -4,7 +4,9 @@ import android.app.printerapp.R;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.model.Date;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.NoDataSelected;
 import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.Print;
 import android.content.Context;
@@ -50,8 +52,7 @@ public class SearchView extends ConstraintLayout {
     private Context mContext;
     private List<? extends DataEntry> data;
     private Map<String, List<? extends DataEntry>> optionLists = new HashMap<>();
-    private DataEntry selectedOperator;
-    private DataEntry selectedCompany;
+    private Map<String, DataEntry> selectedOptionsMap = new HashMap<>();
 
     //Views
     private LinearLayout leftSearchOptionsLayout;
@@ -59,9 +60,11 @@ public class SearchView extends ConstraintLayout {
     private AutoCompleteTextView searchBar;
     private Button goButton;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+    private EditText dateInput;
 
     //Constants
     public static final String GO_BUTTON_CLICKED = "ONCLICK";
+    public static final String DATE_OPTION = "date_option";
 
     //Counter
     private int optionCounter = 0;
@@ -104,30 +107,28 @@ public class SearchView extends ConstraintLayout {
         goButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedOperator != null) {
-                    new LoadPrintsByOperator().execute();
-                } else if (selectedCompany != null) {
-                    new LoadDetailsByCompany().execute();
-                } else {
-                    pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(data, searchBar.getText().toString()));
-                    searchBar.setText("");
-                }
+
+                Date dateOption = new Date();
+                dateOption.setDate(dateInput.getText().toString());
+                selectedOptionsMap.put(DATE_OPTION, dateOption);
+
+                pcs.firePropertyChange(GO_BUTTON_CLICKED, null, selectedOptionsMap);
+
             }
         });
+
+        createSearchOptionTextInput("Creation date", "e.g 2017-12-05");
     }
 
-    public void addPropertyChangeListener(PropertyChangeListener listener){
-        pcs.addPropertyChangeListener(listener);
-    }
-
-    public void removePropertyChangeListener(PropertyChangeListener listener){
-        pcs.removePropertyChangeListener(listener);
-    }
-
-    public void createSearchOptionSelection(final String title, List<? extends DataEntry> options){
-        if(options == null){
+    public void createSearchOptionSelection(final String tag, String title, List<? extends DataEntry> givenOptions){
+        if(givenOptions == null){
             return;
         }
+
+        List<DataEntry> options = new ArrayList<>();
+        options.add(0, new NoDataSelected());
+        options.addAll(givenOptions);
+
         optionLists.put(title, options);
 
         //Inflate the search_option_selection_layout
@@ -139,36 +140,20 @@ public class SearchView extends ConstraintLayout {
         titleTextView.setText(title);
         Spinner optionSpinner = (Spinner) searchOptionLayout.findViewById(R.id.search_option_spinner);
 
-        //Get all company names and put them in array
-        String[] dataNames = new String[options.size() + 1];
-        Arrays.fill(dataNames, "");
-        dataNames[0] = "No option selected";
-        for(int i = 1; i < options.size(); i++){
-            //TODO: Name is not unique? Need to fix in database
-            if(options.get(i).getName() != null) {
-                dataNames[i] = options.get(i).getName();
-            }
-        }
-
         //Set the adapter of the spinner
         SearchOptionArrayAdapter<? extends DataEntry> adapter = new SearchOptionArrayAdapter<>(mContext, android.R.layout.simple_spinner_item, options);
         optionSpinner.setAdapter(adapter);
         optionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(title.equals("Operator")){
-                    selectedOperator = (DataEntry) adapterView.getAdapter().getItem(i);
-                }else if (title.equals("Company")){
-                    selectedCompany = (DataEntry) adapterView.getAdapter().getItem(i);
-                }
+                selectedOptionsMap.put(tag, (DataEntry) adapterView.getAdapter().getItem(i));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                selectedOperator = null;
+                selectedOptionsMap.put(tag, null);
             }
         });
-
 
         addOptionToLayout(searchOptionLayout);
 
@@ -187,6 +172,9 @@ public class SearchView extends ConstraintLayout {
 
         addOptionToLayout(searchOptionLayout);
 
+        if(title.equals("Creation date")){
+            dateInput = textInput;
+        }
     }
 
     private void addOptionToLayout(RelativeLayout searchOptionLayout){
@@ -198,6 +186,15 @@ public class SearchView extends ConstraintLayout {
         }
         optionCounter++;
     }
+
+    public void addPropertyChangeListener(PropertyChangeListener listener){
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener listener){
+        pcs.removePropertyChangeListener(listener);
+    }
+
 
 //---------------------------------------------------------------------------------------
 //          METHODS TO CONTROL THE CLASS
@@ -222,66 +219,7 @@ public class SearchView extends ConstraintLayout {
         this.data = data;
     }
 
-    //Filters a list of DataEntry, by ID
-    private List<DataEntry> filterList(List<? extends DataEntry> list, String filter){
-        List<DataEntry> returnList = new ArrayList<>();
-        for(DataEntry current : list){
-            if(current.getIdName().toLowerCase().contains(filter.toLowerCase())){
-                returnList.add(current);
-            }
-        }
-        return returnList;
+    public String getSearchText(){
+        return searchBar.getText().toString();
     }
-
-    private class LoadDetailsByCompany extends AsyncTask<Void,Void,Void>{
-        List<Detail> details = null;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ApiService apiService = DatabaseHandler.getInstance().getApiService();
-            try {
-                details = apiService.fetchDetailByCompany(Integer.parseInt(selectedCompany.getId())).execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            List<? extends DataEntry> dataToDisplay = data;
-            if(details != null){
-                dataToDisplay = details;
-            }
-            pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(dataToDisplay, searchBar.getText().toString()));
-            searchBar.setText("");
-        }
-    }
-
-    private class LoadPrintsByOperator extends AsyncTask<Void,Void,Void> {
-
-        List<Print> prints = null;
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            ApiService apiService = DatabaseHandler.getInstance().getApiService();
-            try {
-                prints = apiService.fetchPrintFromOperator(Integer.parseInt(selectedOperator.getId())).execute().body();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            List<? extends DataEntry> dataToDisplay = data;
-            if(prints != null){
-                dataToDisplay = prints;
-            }
-            pcs.firePropertyChange(GO_BUTTON_CLICKED, null, filterList(dataToDisplay, searchBar.getText().toString()));
-            searchBar.setText("");
-        }
-    }
-
 }

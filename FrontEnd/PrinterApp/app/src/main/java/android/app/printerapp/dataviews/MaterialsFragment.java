@@ -7,18 +7,16 @@ package android.app.printerapp.dataviews;
 import android.app.Fragment;
 import android.app.printerapp.DividerItemDecoration;
 import android.app.printerapp.R;
-import android.app.printerapp.model.Print;
-import android.app.printerapp.search.SearchView;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
-import android.app.printerapp.model.BuildList;
 import android.app.printerapp.model.Build;
+import android.app.printerapp.model.BuildList;
 import android.app.printerapp.model.DataEntry;
+import android.app.printerapp.search.SearchView;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BuildsFragment extends Fragment implements PropertyChangeListener{
+public class MaterialsFragment extends Fragment implements PropertyChangeListener{
 
     private RecyclerView recyclerView;
     private DatabaseHandler databaseHandler;
@@ -46,7 +44,7 @@ public class BuildsFragment extends Fragment implements PropertyChangeListener{
 
     private DataEntry dateInput;
 
-    public BuildsFragment() {
+    public MaterialsFragment() {
         databaseHandler = DatabaseHandler.getInstance();
     }
 
