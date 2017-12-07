@@ -7,6 +7,10 @@ import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.HallflowTest;
+import android.app.printerapp.model.Material;
+import android.app.printerapp.model.Measurement;
+import android.app.printerapp.model.MeasurementList;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
@@ -33,15 +37,11 @@ public class TestSpecificFragment extends SpecificFragment {
 //---------------------------------------------------------------------------------------
     //Variables for specific print
     private int id;
-    private Build build;
-    private List<Print> linkedPrints;
-    private List<Detail> linkedDetails = new ArrayList<>();
-
-    //Api
-    File[] files;
+    private HallflowTest test;
 
     //Constants
-    public static final String BUILD_ID = "build_id";
+    public static final String TEST_ID = "test_id";
+    private List<Material> linkedMaterials;
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
@@ -57,25 +57,17 @@ public class TestSpecificFragment extends SpecificFragment {
         if (savedInstanceState == null) {
 
             //Retrieve references to views
-            ListView buildListView = (ListView) mRootView.findViewById(R.id.data_list_view);
+            ListView testListView = (ListView) mRootView.findViewById(R.id.data_list_view);
 
             //Retrieve id from arguments
             if(arguments != null) {
-                id = arguments.getInt(BUILD_ID);
+                id = arguments.getInt(TEST_ID);
             } else {
                 id = 1;
             }
         }
         TextView title = (TextView) mRootView.findViewById(R.id.print_title);
-        title.setText("Build B" + id);
-
-        RelativeLayout imageHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
-        ImageView imageView = new ImageView(mContext);
-        imageView.setImageResource(R.drawable.magics);
-        imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT));
-        imageHolder.addView(imageView);
-
+        title.setText("Hallflow Test HFT" + id);
 
         //Load all data we need from database
         //and then display the data into the views we have
@@ -96,8 +88,6 @@ public class TestSpecificFragment extends SpecificFragment {
 
     @Override
     public void createTabs() {
-        createTab(ListContent.ID_DETAILS, "Detail");
-        createTab(ListContent.ID_PRINTS, "Print");
         createTab(ListContent.ID_MATERIALS, "Material");
     }
 
@@ -108,7 +98,7 @@ public class TestSpecificFragment extends SpecificFragment {
     //Factory method used to create this fragment
     public static TestSpecificFragment newInstance(int id){
         Bundle b = new Bundle();
-        b.putInt(BUILD_ID, id);
+        b.putInt(TEST_ID, id);
         TestSpecificFragment bsf = new TestSpecificFragment();
         bsf.setArguments(b);
         return bsf;
@@ -120,10 +110,10 @@ public class TestSpecificFragment extends SpecificFragment {
         if(tag == null){
             return;
         }
-        if(tag.equals(ListContent.ID_PRINTS)){
-            allTraceLists.get(ListContent.ID_PRINTS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedPrints));
-            allTraceLists.get(ListContent.ID_PRINTS).setLayoutManager(new LinearLayoutManager(mContext));
-            allTraceLists.get(ListContent.ID_PRINTS).addItemDecoration(new DividerItemDecoration(mContext));
+        if(tag.equals(ListContent.ID_MATERIALS)){
+            allTraceLists.get(ListContent.ID_MATERIALS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedMaterials));
+            allTraceLists.get(ListContent.ID_MATERIALS).setLayoutManager(new LinearLayoutManager(mContext));
+            allTraceLists.get(ListContent.ID_MATERIALS).addItemDecoration(new DividerItemDecoration(mContext));
         }
     }
 
@@ -134,26 +124,19 @@ public class TestSpecificFragment extends SpecificFragment {
     //Async task used to load all data to be displayed
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
+        private List<Measurement> measurementList;
+
         @Override
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
             try {
-                List<Build> bResult = apiService.fetchBuild(id).execute().body();
-                if(dataIsOk(bResult)){
-                    build = bResult.get(0);
+                List<HallflowTest> tResult = apiService.fetchHallflowTest(String.valueOf(id)).execute().body();
+                if(dataIsOk(tResult)){
+                    test = tResult.get(0);
+                    linkedMaterials = apiService.fetchMaterial(test.getMaterialId()).execute().body();
                 }
+                measurementList = apiService.fetchMeasurementsByHallflowTest(String.valueOf(id)).execute().body();
 
-                List<BuildDetailLink> buildDetailResult = apiService.fetchDetailBuildLink(id).execute().body();
-                linkedPrints = apiService.fetchPrintFromBuild(id).execute().body();
-
-                //For each detail found, retrieve their data
-                if(dataIsOk(buildDetailResult) && dataIsOk(linkedPrints)){
-                    for(BuildDetailLink link : buildDetailResult) {
-                        List<Detail> detail = apiService.fetchDetail(
-                                Integer.parseInt(link.getDetailsId())).execute().body();
-                        linkedDetails.add(detail.get(0));
-                    }
-                }
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -164,19 +147,50 @@ public class TestSpecificFragment extends SpecificFragment {
         @Override
         protected void onPostExecute(Integer integer) {
 
-            if(build == null){
+            if(test == null){
                 createAlertDialog("Cannot retrieve build");
                 return;
             }
 
-            String[] buildTitles = {"Id", "Creation date", "Comments"};
-            String[] buildValues = {build.getId(), build.getCreationDate(), build.getComment()};
+            if(measurementList == null){
+                measurementList = new ArrayList<>();
+            }
 
-            dataListView.setAdapter(new DataTextAdapter(buildTitles, buildValues, mContext));
+            if(linkedMaterials == null){
+                linkedMaterials = new ArrayList<>();
+            }
 
-            allTraceLists.get(ListContent.ID_DETAILS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
-            allTraceLists.get(ListContent.ID_DETAILS).setLayoutManager(new LinearLayoutManager(mContext));
-            allTraceLists.get(ListContent.ID_DETAILS).addItemDecoration(new DividerItemDecoration(mContext));
+            String[] testTitles = new String[6 + measurementList.size()];
+            String[] testValues = new String[testTitles.length];
+
+            testTitles[0] = "Id";
+            testTitles[1] = "Creation date";
+            testTitles[2] = "Operator";
+            testTitles[3] = "Relative humidity";
+            testTitles[4] = "Temperature";
+            testTitles[5] = "Tap";
+            testTitles[6] = "Comments";
+
+            testTitles[0] = test.getId();
+            testTitles[1] = test.getCreationDate();
+            testTitles[2] = test.getOperatorId();
+            testTitles[3] = test.getRelativeHumidity();
+            testTitles[4] = test.getTemperature();
+            testTitles[5] = test.getTap();
+            testTitles[6] = test.getComments();
+
+            for(int i = 0; i < measurementList.size(); i++){
+                int j = 7 + i;
+                testTitles[j] = "Measurement value [" + i + "]";
+                testValues[j] = measurementList.get(i).getMeasurementValue() + " " +
+                                measurementList.get(i).getMeasurementUnit();
+            }
+
+            dataListView.setAdapter(new DataTextAdapter(testTitles, testValues, mContext));
+
+            allTraceLists.get(ListContent.ID_MATERIALS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedMaterials));
+            allTraceLists.get(ListContent.ID_MATERIALS).setLayoutManager(new LinearLayoutManager(mContext));
+            allTraceLists.get(ListContent.ID_MATERIALS).addItemDecoration(new DividerItemDecoration(mContext));
 
             super.onPostExecute(integer);
         }

@@ -86,6 +86,9 @@ public interface ApiService {
     @GET("materials")
     Call<MaterialList> fetchAllMaterials();
 
+    @GET("material/{id}")
+    Call<List<Material>> fetchMaterial(@Path("id") String id);
+
     @GET("material/date/{year}")
     Call<List<Material>> fetchMaterialsByYear(@Path("year") String year);
 
@@ -197,6 +200,9 @@ public interface ApiService {
     @GET("measurement/{measurementId}")
     Call<List<Measurement>> fetchMeasurement(@Path("measurementId") int measurementId);
 
+    @GET("measurement/hallflowtest/{id}")
+    Call<List<Measurement>> fetchMeasurementsByHallflowTest(@Path("id") String id);
+
     @POST("measurement/create")
     Call<List<Measurement>> createMeasurement(@Body List<Measurement> measurement);
 
@@ -226,7 +232,6 @@ public interface ApiService {
 
     @GET("hallflowtest/filter/year/{year}/operator/{operatorId}/material/{materialId}")
     Call<List<HallflowTest>> fetchHallflowTestsByFilter(@Path("year") String year, @Path("operatorId") String operatorId, @Path("materialId") String materialId);
-
 
 
 

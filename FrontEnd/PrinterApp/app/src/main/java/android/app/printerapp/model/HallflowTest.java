@@ -12,6 +12,11 @@ public class HallflowTest implements DataEntry{
     private String temperature;
     private String tap;
     private String materialId;
+    private String comments;
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
 
     @Override
     public String getName() {
@@ -82,5 +87,9 @@ public class HallflowTest implements DataEntry{
 
     public void setMaterialId(String materialId) {
         this.materialId = materialId;
+    }
+
+    public String getComments() {
+        return comments;
     }
 }
