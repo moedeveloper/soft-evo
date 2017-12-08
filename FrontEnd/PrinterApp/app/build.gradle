@@ -8,7 +8,7 @@ android {
         applicationId "android.app.printerapp"
         minSdkVersion 14
         multiDexEnabled true
-        targetSdkVersion 20
+        targetSdkVersion 21
         versionName 1.0 + ";" + computeVersionName()
         versionCode System.getenv("BUILD_NUMBER") as Integer ?: 0
 

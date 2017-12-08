@@ -186,10 +186,12 @@ public class TestsFragment extends Fragment implements PropertyChangeListener{
         @Override
         protected void onPostExecute(Void aVoid) {
             if(filteredTests == null || filteredTests.isEmpty()){
-                recyclerView.setAdapter(new DataEntryRecyclerViewAdapter(null));
+                recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(null));
                 recyclerView.getAdapter().notifyDataSetChanged();
                 return;
             }
+
+
 
             filteredTests = filterByText(searchView.getSearchText(), filteredTests);
             recyclerView.setAdapter(new DataEntryRecyclerViewAdapter<>(filteredTests));

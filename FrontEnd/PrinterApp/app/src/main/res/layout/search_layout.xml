@@ -49,6 +49,7 @@
         android:textColor="@color/black"
         android:layout_margin="20dp"
         android:inputType="text"
+        style="@style/App_EditTextStyle"
         app:layout_constraintTop_toTopOf="@+id/search_bar_guideline_top"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="@id/search_vertical_end_guideline"

@@ -8,11 +8,20 @@ public class HallflowTest implements DataEntry{
     private String id;
     private String operatorId;
     private String date;
-    private String relativeHumidity;
+    private String relativehumidity;
     private String temperature;
     private String tap;
     private String materialId;
     private String comments;
+    private String machineId;
+
+    public String getMachineId() {
+        return machineId;
+    }
+
+    public void setMachineId(String machineId) {
+        this.machineId = machineId;
+    }
 
     public void setComments(String comments) {
         this.comments = comments;
@@ -58,11 +67,11 @@ public class HallflowTest implements DataEntry{
     }
 
     public String getRelativeHumidity() {
-        return relativeHumidity;
+        return relativehumidity;
     }
 
     public void setRelativeHumidity(String relativeHumidity) {
-        this.relativeHumidity = relativeHumidity;
+        this.relativehumidity = relativeHumidity;
     }
 
     public String getTemperature() {

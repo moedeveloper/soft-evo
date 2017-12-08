@@ -7,6 +7,7 @@ import android.app.printerapp.api.ApiService;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.Material;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
@@ -33,15 +34,13 @@ public class MaterialSpecificFragment extends SpecificFragment {
 //---------------------------------------------------------------------------------------
     //Variables for specific print
     private int id;
-    private Build build;
-    private List<Print> linkedPrints;
-    private List<Detail> linkedDetails = new ArrayList<>();
 
     //Api
     File[] files;
 
     //Constants
     public static final String BUILD_ID = "build_id";
+    private Material material;
 
 //---------------------------------------------------------------------------------------
 //          OVERRIDES
@@ -67,13 +66,13 @@ public class MaterialSpecificFragment extends SpecificFragment {
             }
         }
         TextView title = (TextView) mRootView.findViewById(R.id.print_title);
-        title.setText("Build B" + id);
+        title.setText("Material M" + id);
 
         RelativeLayout imageHolder = (RelativeLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
         ImageView imageView = new ImageView(mContext);
-        imageView.setImageResource(R.drawable.magics);
+        imageView.setImageResource(R.drawable.material_info);
         imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT));
+                RelativeLayout.LayoutParams.WRAP_CONTENT));
         imageHolder.addView(imageView);
 
 
@@ -86,7 +85,7 @@ public class MaterialSpecificFragment extends SpecificFragment {
 
     @Override
     public int getLayoutResourceId() {
-        return R.layout.prints_layout_main;
+        return R.layout.material_layout_main;
     }
 
     @Override
@@ -96,9 +95,8 @@ public class MaterialSpecificFragment extends SpecificFragment {
 
     @Override
     public void createTabs() {
-        createTab(ListContent.ID_DETAILS, "Detail");
         createTab(ListContent.ID_PRINTS, "Print");
-        createTab(ListContent.ID_MATERIALS, "Material");
+        createTab(ListContent.ID_TESTS, "Test");
     }
 
 //---------------------------------------------------------------------------------------
@@ -121,9 +119,6 @@ public class MaterialSpecificFragment extends SpecificFragment {
             return;
         }
         if(tag.equals(ListContent.ID_PRINTS)){
-            allTraceLists.get(ListContent.ID_PRINTS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedPrints));
-            allTraceLists.get(ListContent.ID_PRINTS).setLayoutManager(new LinearLayoutManager(mContext));
-            allTraceLists.get(ListContent.ID_PRINTS).addItemDecoration(new DividerItemDecoration(mContext));
         }
     }
 
@@ -138,21 +133,9 @@ public class MaterialSpecificFragment extends SpecificFragment {
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
             try {
-                List<Build> bResult = apiService.fetchBuild(id).execute().body();
-                if(dataIsOk(bResult)){
-                    build = bResult.get(0);
-                }
-
-                List<BuildDetailLink> buildDetailResult = apiService.fetchDetailBuildLink(id).execute().body();
-                linkedPrints = apiService.fetchPrintFromBuild(id).execute().body();
-
-                //For each detail found, retrieve their data
-                if(dataIsOk(buildDetailResult) && dataIsOk(linkedPrints)){
-                    for(BuildDetailLink link : buildDetailResult) {
-                        List<Detail> detail = apiService.fetchDetail(
-                                Integer.parseInt(link.getDetailsId())).execute().body();
-                        linkedDetails.add(detail.get(0));
-                    }
+                List<Material> mResult = apiService.fetchMaterial(String.valueOf(id)).execute().body();
+                if(dataIsOk(mResult)){
+                    material = mResult.get(0);
                 }
 
             } catch (IOException e) {
@@ -164,19 +147,15 @@ public class MaterialSpecificFragment extends SpecificFragment {
         @Override
         protected void onPostExecute(Integer integer) {
 
-            if(build == null){
-                createAlertDialog("Cannot retrieve build");
+            if(material == null){
+                createAlertDialog("Cannot retrieve material");
                 return;
             }
 
-            String[] buildTitles = {"Id", "Creation date", "Comments"};
-            String[] buildValues = {build.getId(), build.getCreationDate(), build.getComment()};
+            String[] buildTitles = {"Id", "Creation date", "Pdf file name"};
+            String[] buildValues = {material.getId(), material.getCreationDate(), material.getPdfName()};
 
             dataListView.setAdapter(new DataTextAdapter(buildTitles, buildValues, mContext));
-
-            allTraceLists.get(ListContent.ID_DETAILS).setAdapter(new DataEntryRecyclerViewAdapter<>(linkedDetails));
-            allTraceLists.get(ListContent.ID_DETAILS).setLayoutManager(new LinearLayoutManager(mContext));
-            allTraceLists.get(ListContent.ID_DETAILS).addItemDecoration(new DividerItemDecoration(mContext));
 
             super.onPostExecute(integer);
         }

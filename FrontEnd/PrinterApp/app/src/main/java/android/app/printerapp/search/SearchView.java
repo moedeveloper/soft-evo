@@ -117,7 +117,7 @@ public class SearchView extends ConstraintLayout {
             }
         });
 
-        createSearchOptionTextInput("Creation date", "e.g 2017-12-05");
+        createSearchOptionTextInput("Creation date", "YYYY-MM");
     }
 
     public void createSearchOptionSelection(final String tag, String title, List<? extends DataEntry> givenOptions){

@@ -2,6 +2,11 @@
 
     <!-- Navigation drawer -->
 
+    <style name="Autocomplete">
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/theme_primary_dark</item>
+    </style>
+
     <style name="NavigationDrawerItem" parent="android:TextAppearance">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">@color/navdrawer_text_color</item>

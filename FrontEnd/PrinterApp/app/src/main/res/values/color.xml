@@ -13,10 +13,14 @@
     <color name="transparent">#00000000</color>
 
     <!-- THEME COLORS -->
-    <color name="theme_primary">#5BB433</color>
-    <color name="theme_primary_dark">#169300</color>
-    <color name="theme_primary_light">#557bdd3b</color>
+    <!--<color name="theme_primary">#5BB433</color>-->
+    <!--<color name="theme_primary_dark">#169300</color>-->
+    <!--<color name="theme_primary_light">#557bdd3b</color>-->
+    <color name="theme_primary">#e87d5c</color>
+    <color name="theme_primary_dark">#f79951</color>
+    <color name="theme_primary_light">#ffc76d</color>
     <color name="almost_white">#FAFAFA</color>
+    <color name="blue_separator">#d5d9e8</color>
 
     <color name="pager_background">#EEEEEE</color>
 

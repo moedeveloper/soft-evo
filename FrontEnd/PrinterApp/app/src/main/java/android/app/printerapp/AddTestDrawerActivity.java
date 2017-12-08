@@ -5,6 +5,7 @@ import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.HallflowTest;
+import android.app.printerapp.model.postModels.HallflowTestPost;
 import android.app.printerapp.search.SearchDrawerFragment;
 import android.app.printerapp.search.TestSearchView;
 import android.graphics.Color;
@@ -34,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.ContentValues.TAG;
@@ -410,23 +414,25 @@ public class AddTestDrawerActivity extends ActionBarActivity
         }
 
         //Perform POST
-        HallflowTest test = new HallflowTest();
-        test.setOperatorId(operator);
+
+        HallflowTestPost test = new HallflowTestPost();
+        test.setOperatorId("1");
         test.setDate(date);
-        test.setMaterialId(materialIds.get(0));
+        test.setMaterialId("1");
         test.setRelativeHumidity(relativeHumidity);
         test.setTemperature(temperature);
         test.setTap(tap);
+        test.setMachineId("1");
 
         //TODO: create measurement??
 
         ApiService apiService = DatabaseHandler.getInstance().getApiService();
-        List<HallflowTest> postData = new ArrayList<HallflowTest>();
+        List<HallflowTestPost> postData = new ArrayList<>();
         postData.add(test);
 
         Log.d("Test", "WeeHoo");
         try {
-            Response<List<HallflowTest>> response = apiService.createHallflowTest(postData).execute();
+            Response<List<HallflowTestPost>> response = apiService.createHallflowTest(postData).execute();
             Log.d("Test", "Success? " + response.isSuccessful());
         } catch (IOException e) {
             e.printStackTrace();

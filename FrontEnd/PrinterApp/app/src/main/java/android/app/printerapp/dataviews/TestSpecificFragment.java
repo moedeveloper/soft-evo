@@ -8,9 +8,11 @@ import android.app.printerapp.model.Build;
 import android.app.printerapp.model.BuildDetailLink;
 import android.app.printerapp.model.Detail;
 import android.app.printerapp.model.HallflowTest;
+import android.app.printerapp.model.Machine;
 import android.app.printerapp.model.Material;
 import android.app.printerapp.model.Measurement;
 import android.app.printerapp.model.MeasurementList;
+import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.Print;
 import android.app.printerapp.ui.DataEntryRecyclerViewAdapter;
 import android.app.printerapp.viewer.DataTextAdapter;
@@ -21,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -69,6 +72,16 @@ public class TestSpecificFragment extends SpecificFragment {
         TextView title = (TextView) mRootView.findViewById(R.id.print_title);
         title.setText("Hallflow Test HFT" + id);
 
+        LinearLayout imageHolder = (LinearLayout) mRootView.findViewById(R.id.stl_viewer_holder_layout);
+        ImageView imageView = new ImageView(mContext);
+        imageView.setImageResource(R.drawable.material_info);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        imageView.setLayoutParams(layoutParams);
+
+        imageHolder.addView(imageView);
+
+
         //Load all data we need from database
         //and then display the data into the views we have
         new LoadDataTask().execute();
@@ -78,7 +91,7 @@ public class TestSpecificFragment extends SpecificFragment {
 
     @Override
     public int getLayoutResourceId() {
-        return R.layout.prints_layout_main;
+        return R.layout.test_layout_main;
     }
 
     @Override
@@ -125,15 +138,26 @@ public class TestSpecificFragment extends SpecificFragment {
     private class LoadDataTask extends AsyncTask<Integer, Integer, Integer> {
 
         private List<Measurement> measurementList;
+        List<Operator> operatorResult;
+        List<Machine> machineResult;
 
         @Override
         protected Integer doInBackground(Integer... integers) {
             ApiService apiService = databaseHandler.getApiService();
             try {
-                List<HallflowTest> tResult = apiService.fetchHallflowTest(String.valueOf(id)).execute().body();
+                List<HallflowTest> tResult = apiService.fetchHallflowTest(
+                        String.valueOf(id)).execute().body();
                 if(dataIsOk(tResult)){
                     test = tResult.get(0);
-                    linkedMaterials = apiService.fetchMaterial(test.getMaterialId()).execute().body();
+
+                    machineResult = apiService.fetchMachine(
+                            Integer.parseInt(test.getMachineId())).execute().body();
+
+                    operatorResult = apiService.fetchOperator(
+                            Integer.parseInt(test.getOperatorId())).execute().body();
+
+                    linkedMaterials = apiService.fetchMaterial(
+                            test.getMaterialId()).execute().body();
                 }
                 measurementList = apiService.fetchMeasurementsByHallflowTest(String.valueOf(id)).execute().body();
 
@@ -160,7 +184,18 @@ public class TestSpecificFragment extends SpecificFragment {
                 linkedMaterials = new ArrayList<>();
             }
 
-            String[] testTitles = new String[6 + measurementList.size()];
+            String operatorName = test.getOperatorId();
+            String machineName = test.getMachineId();
+
+            if(dataIsOk(operatorResult)){
+                operatorName = operatorResult.get(0).getName();
+            }
+
+            if(dataIsOk(machineResult)){
+                machineName = machineResult.get(0).getName();
+            }
+
+            String[] testTitles = new String[9 + measurementList.size()];
             String[] testValues = new String[testTitles.length];
 
             testTitles[0] = "Id";
@@ -169,22 +204,34 @@ public class TestSpecificFragment extends SpecificFragment {
             testTitles[3] = "Relative humidity";
             testTitles[4] = "Temperature";
             testTitles[5] = "Tap";
-            testTitles[6] = "Comments";
+            testTitles[6] = "Machine";
 
-            testTitles[0] = test.getId();
-            testTitles[1] = test.getCreationDate();
-            testTitles[2] = test.getOperatorId();
-            testTitles[3] = test.getRelativeHumidity();
-            testTitles[4] = test.getTemperature();
-            testTitles[5] = test.getTap();
-            testTitles[6] = test.getComments();
+            testValues[0] = test.getId();
+            testValues[1] = test.getCreationDate();
+            testValues[2] = operatorName;
+            testValues[3] = test.getRelativeHumidity() + " %";
+            testValues[4] = test.getTemperature() + " C";
+            testValues[5] = test.getTap();
+            testValues[6] = machineName;
 
-            for(int i = 0; i < measurementList.size(); i++){
-                int j = 7 + i;
-                testTitles[j] = "Measurement value [" + i + "]";
-                testValues[j] = measurementList.get(i).getMeasurementValue() + " " +
-                                measurementList.get(i).getMeasurementUnit();
+            double Average = 0;
+
+            if(dataIsOk(measurementList)){
+                for(int i = 0; i < measurementList.size(); i++){
+                    int j = 7 + i;
+                    testTitles[j] = "Measurement value [" + i + "]";
+                    testValues[j] = measurementList.get(i).getMeasurementValue() + " " +
+                            measurementList.get(i).getMeasurementUnit();
+                    Average += Double.parseDouble(measurementList.get(i).getMeasurementValue());
+                }
+
+                Average /= measurementList.size();
+                testTitles[testTitles.length - 2] = "Measurement average";
+                testValues[testValues.length - 2] = Average + " " +measurementList.get(0).getMeasurementUnit();
             }
+
+            testTitles[testTitles.length - 1] = "Comments";
+            testValues[testValues.length - 1] = test.getComments();
 
             dataListView.setAdapter(new DataTextAdapter(testTitles, testValues, mContext));
 

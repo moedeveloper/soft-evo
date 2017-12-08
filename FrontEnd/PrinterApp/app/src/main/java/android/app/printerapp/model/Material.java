@@ -6,11 +6,11 @@ package android.app.printerapp.model;
 
 public class Material implements DataEntry{
     private String id;
-    private String creationDate;
-    private String pdfName;
+    private String createdDate;
+    private String pdfname;
 
     public String getPdfName(){
-        return pdfName;
+        return pdfname;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class Material implements DataEntry{
 
     @Override
     public String getCreationDate(){
-        return creationDate;
+        return createdDate;
     }
 
 
@@ -38,10 +38,10 @@ public class Material implements DataEntry{
     }
 
     public void setCreationDate(String creationDate){
-        this.creationDate = creationDate;
+        this.createdDate = creationDate;
     }
 
     public void setPdfName(String pdfName){
-        this.pdfName = pdfName;
+        this.pdfname = pdfName;
     }
 }

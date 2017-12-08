@@ -1,5 +1,6 @@
 package android.app.printerapp.api;
 
+import android.app.printerapp.AddTestDrawerActivity;
 import android.app.printerapp.model.BuildList;
 import android.app.printerapp.model.CompanyList;
 import android.app.printerapp.model.BuildDetailLink;
@@ -22,6 +23,7 @@ import android.app.printerapp.model.PrintList;
 import android.app.printerapp.model.Build;
 import android.app.printerapp.model.Project;
 import android.app.printerapp.model.ProjectList;
+import android.app.printerapp.model.postModels.HallflowTestPost;
 
 import java.util.List;
 
@@ -44,7 +46,7 @@ import retrofit2.http.Url;
 public interface ApiService {
     String BASE_URL = "http://mo3app.azurewebsites.net/api/";
 
-    //-------------------------------------------
+//-------------------------------------------
 //      DETAILS
 //-------------------------------------------
     @GET("details")
@@ -80,7 +82,7 @@ public interface ApiService {
     Call<List<Detail>> fetchDetailByProject(@Path("projectId") String projectId);
 
 
-    //-------------------------------------------
+//-------------------------------------------
 //      MATERIALS
 //-------------------------------------------
     @GET("materials")
@@ -96,7 +98,7 @@ public interface ApiService {
     Call<List<Material>> fetchMaterialsByYearMonth(@Path("year") String year, @Path("month") String month);
 
 
-    //-------------------------------------------
+//-------------------------------------------
 //      PRINTS
 //-------------------------------------------
     @GET("print/{printId}")
@@ -200,7 +202,7 @@ public interface ApiService {
     @GET("measurement/{measurementId}")
     Call<List<Measurement>> fetchMeasurement(@Path("measurementId") int measurementId);
 
-    @GET("measurement/hallflowtest/{id}")
+    @GET("measurements/hallflowtest/{id}")
     Call<List<Measurement>> fetchMeasurementsByHallflowTest(@Path("id") String id);
 
     @POST("measurement/create")
@@ -210,7 +212,7 @@ public interface ApiService {
 //      HALLFLOW TESTS
 //-------------------------------------------
     @POST("hallflowtest/create")
-    Call<List<HallflowTest>> createHallflowTest(@Body List<HallflowTest> hallflowTest);
+    Call<List<HallflowTestPost>> createHallflowTest(@Body List<HallflowTestPost> hallflowTest);
 
     @GET("hallflowtest/{id}")
     Call<List<HallflowTest>> fetchHallflowTest(@Path("id") String id);
