@@ -16,6 +16,7 @@ import android.app.printerapp.model.Material;
 import android.app.printerapp.model.MaterialList;
 import android.app.printerapp.model.Measurement;
 import android.app.printerapp.model.MeasurementList;
+import android.app.printerapp.model.OkPacket;
 import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.OperatorList;
 import android.app.printerapp.model.Print;
@@ -24,6 +25,7 @@ import android.app.printerapp.model.Build;
 import android.app.printerapp.model.Project;
 import android.app.printerapp.model.ProjectList;
 import android.app.printerapp.model.postModels.HallflowTestPost;
+import android.app.printerapp.model.postModels.MeasurementPost;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -65,8 +68,8 @@ public interface ApiService {
     @GET("details/companyId/{companyId}")
     Call<List<Detail>> fetchDetailByCompany(@Path("companyId") int companyId);
 
-    @POST("details/create")
-    Call<String> createDetails(@Body DetailDto detail);
+    @POST("details/create/")
+    Call<OkPacket> createDetails(@Body DetailDto detail);
 
     @GET("details/date/{year}")
     Call<List<Detail>> fetchDetailByYear(@Path("year") String year);
@@ -156,15 +159,8 @@ public interface ApiService {
     @GET("company/{companyId}")
     Call<List<Company>> fetchCompany(@Path("companyId") int companyId);
 
-    @Headers({
-            "Accept: application/json",
-            "Content-Type: text/html; charset=utf-8"
-    })
-    @POST("company/create")
-    Call<String> createNewCompany(@Body RequestBody companyDetails);
-
-    @POST("company/create")
-    Call<String> createNewCompany(@Body CompanyDTO company);
+    @POST("company/create/")
+    Call<OkPacket> createNewCompany(@Body CompanyDTO company);
 
     //-------------------------------------------
 //      OPERATORS
@@ -205,14 +201,20 @@ public interface ApiService {
     @GET("measurements/hallflowtest/{id}")
     Call<List<Measurement>> fetchMeasurementsByHallflowTest(@Path("id") String id);
 
-    @POST("measurement/create")
-    Call<List<Measurement>> createMeasurement(@Body List<Measurement> measurement);
+    @POST("measurement/create/")
+    Call<OkPacket> createMeasurement(@Body MeasurementPost measurement);
 
-    //-------------------------------------------
+//-------------------------------------------
 //      HALLFLOW TESTS
 //-------------------------------------------
-    @POST("hallflowtest/create")
-    Call<List<HallflowTestPost>> createHallflowTest(@Body List<HallflowTestPost> hallflowTest);
+//    @POST("hallflowtest/create")
+//    Call<List<HallflowTestPost>> createHallflowTest(@Body List<HallflowTestPost> hallflowTest);
+//
+//    @POST("hallflowtest/create")
+//    Call<HallflowTestPost> createHallflowTest(@Header("Content-type") String content_type, @Body HallflowTestPost hallflowTest);
+
+    @POST("hallflowtest/create/")
+    Call<OkPacket> createHallflowTest(@Body HallflowTestPost hallflowTest);
 
     @GET("hallflowtest/{id}")
     Call<List<HallflowTest>> fetchHallflowTest(@Path("id") String id);
@@ -234,9 +236,5 @@ public interface ApiService {
 
     @GET("hallflowtest/filter/year/{year}/operator/{operatorId}/material/{materialId}")
     Call<List<HallflowTest>> fetchHallflowTestsByFilter(@Path("year") String year, @Path("operatorId") String operatorId, @Path("materialId") String materialId);
-
-
-
-
 }
 

@@ -50,7 +50,6 @@ public class AddDetailsActivity extends Activity implements Callback<CompanyList
     private void setup() {
         setupAddNewCompanyListener();
         setupSaveButtonListener();
-        setupDateTimePicker();
         setupCancelButton();
     }
 
@@ -64,43 +63,6 @@ public class AddDetailsActivity extends Activity implements Callback<CompanyList
                     currentActivity.finish();
                 }
             });
-    }
-
-    private void setupDateTimePicker() {
-        final EditText displayDate = (EditText) findViewById(R.id.dateInput);
-        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        month =month+1;
-                        Log.d(TAG, "onDateSet: mm/dd/yy" + year + "/" + month + "/" + day);
-                        String date = String.format("%d-%d-%d 00:00:00", year, month, day);
-                        displayDate.setText(date);
-                    }
-                };
-
-        displayDate.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Calendar currentCalendar = Calendar.getInstance();
-
-                int year = currentCalendar.get(Calendar.YEAR);
-                int month = currentCalendar.get(Calendar.MONTH);
-                int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(
-                        AddDetailsActivity.this,
-                        android.R.style.Theme_Holo_Dialog_MinWidth,
-                        dateSetListener,
-                        year,
-                        month,
-                        day
-                );
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
     }
 
     private void setupAddNewCompanyListener() {

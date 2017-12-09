@@ -201,18 +201,20 @@ public class TestSpecificFragment extends SpecificFragment {
             testTitles[0] = "Id";
             testTitles[1] = "Creation date";
             testTitles[2] = "Operator";
-            testTitles[3] = "Relative humidity";
-            testTitles[4] = "Temperature";
-            testTitles[5] = "Tap";
-            testTitles[6] = "Machine";
+            testTitles[3] = "Machine";
+            testTitles[4] = "Relative humidity";
+            testTitles[5] = "Temperature";
+            testTitles[6] = "Tap";
+
 
             testValues[0] = test.getId();
             testValues[1] = test.getCreationDate();
             testValues[2] = operatorName;
-            testValues[3] = test.getRelativeHumidity() + " %";
-            testValues[4] = test.getTemperature() + " C";
-            testValues[5] = test.getTap();
-            testValues[6] = machineName;
+            testValues[3] = machineName;
+            testValues[4] = test.getRelativeHumidity() + " %";
+            testValues[5] = test.getTemperature() + " C";
+            testValues[6] = test.getTap();
+
 
             double Average = 0;
 

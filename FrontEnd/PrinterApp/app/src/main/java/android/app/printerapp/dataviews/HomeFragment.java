@@ -1,6 +1,7 @@
 package android.app.printerapp.dataviews;
 
 import android.app.printerapp.AddDetailsActivity;
+import android.app.printerapp.AddNewCompany;
 import android.app.printerapp.AddTestDrawerActivity;
 import android.app.printerapp.R;
 import android.content.Intent;
@@ -87,6 +88,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), AddTestDrawerActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        Button addCompanyButton = (Button) mRootView.findViewById(R.id.add_company_button);
+        addCompanyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), AddNewCompany.class);
                 startActivityForResult(intent, 0);
             }
         });

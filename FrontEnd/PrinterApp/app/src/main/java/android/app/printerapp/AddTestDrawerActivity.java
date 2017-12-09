@@ -1,16 +1,19 @@
 package android.app.printerapp;
 
-import android.app.DatePickerDialog;
+import android.app.AlertDialog;
 import android.app.printerapp.api.ApiService;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.DataEntry;
-import android.app.printerapp.model.HallflowTest;
+import android.app.printerapp.model.Machine;
+import android.app.printerapp.model.NoDataSelected;
+import android.app.printerapp.model.OkPacket;
+import android.app.printerapp.model.Operator;
 import android.app.printerapp.model.postModels.HallflowTestPost;
+import android.app.printerapp.model.postModels.MeasurementPost;
 import android.app.printerapp.search.SearchDrawerFragment;
+import android.app.printerapp.search.SearchOptionArrayAdapter;
 import android.app.printerapp.search.TestSearchView;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.provider.ContactsContract;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -22,25 +25,19 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.ContentValues.TAG;
 
 public class AddTestDrawerActivity extends ActionBarActivity
         implements PropertyChangeListener{
@@ -60,16 +57,19 @@ public class AddTestDrawerActivity extends ActionBarActivity
     private LinearLayout addTestElementHolder;
     private LinearLayout operatorLayout;
     private LinearLayout machineLayout;
-    private LinearLayout dateLayout;
     private LinearLayout relativeHumidityLayout;
     private LinearLayout temperatureLayout;
     private LinearLayout tapLayout;
     private LinearLayout valueMeasurementsLayout;
+    private AlertDialog.Builder builder;
 
-    //Static variables
-    private static int elementCounter = 0;
-    private static int amount = 0;
-    private static Double average = 0.0;
+    //variables
+    private int elementCounter = 0;
+    private int amount = 0;
+    private Double average = 0.0;
+    private HallflowTestPost testSubmission;
+    private List<MeasurementPost> measurementSubmissionList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,19 +80,31 @@ public class AddTestDrawerActivity extends ActionBarActivity
         searchDrawerFragment = (SearchDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        dateLayout = createTextInput("Date", "2017-11-29");
-        EditText date_input = (EditText) dateLayout.findViewById(R.id.add_text_input);
-        setupDateTimePicker(date_input);
-
         searchDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
         searchDrawerFragment.addListenerToSearchView(this);
 
+        builder = new AlertDialog.Builder(AddTestDrawerActivity.this);
+
+        new LoadDataTask().execute();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(Gravity.END)){
+            drawerLayout.closeDrawer(Gravity.END);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private void initializeAllViews(List<Operator> operators, List<Machine> machines){
         //Initialize all views
+
         addAttachmentsLayout = initializeAttachmentsLayout();
-        operatorLayout = createTextInput("Operator", "Aritstotle Svensson");
-        machineLayout = createTextInput("Machine", "M1548");
-        relativeHumidityLayout = createTextInput("Relative humidity", "50%");
-        temperatureLayout = createTextInput("Temperature", "57 C");
+        operatorLayout = createSpinnerInput("Operator", operators);
+        machineLayout = createSpinnerInput("Machine", machines);
+        relativeHumidityLayout = createTextInput("Relative humidity", "e.g 50");
+        temperatureLayout = createTextInput("Temperature", "e.g 35");
         tapLayout = createCheckBoxInput("Tap", false);
         valueMeasurementsLayout = createValueMeasurementLayout("Value measurement", "m/kg");
 
@@ -100,7 +112,6 @@ public class AddTestDrawerActivity extends ActionBarActivity
         addTestElementHolder = (LinearLayout) findViewById(R.id.add_test_element_holder);
         addElementToElementHolder(operatorLayout);
         addElementToElementHolder(machineLayout);
-        addElementToElementHolder(dateLayout);
         addElementToElementHolder(relativeHumidityLayout);
         addElementToElementHolder(temperatureLayout);
         addElementToElementHolder(tapLayout);
@@ -179,6 +190,24 @@ public class AddTestDrawerActivity extends ActionBarActivity
         return material_attachment_layout;
     }
 
+
+    private LinearLayout createSpinnerInput(String title, List<? extends DataEntry> data) {
+        LinearLayout spinner_input_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.add_spinner_layout, null);
+        TextView titleView = (TextView)spinner_input_layout.findViewById(R.id.add_spinner_title);
+        Spinner spinner = (Spinner)spinner_input_layout.findViewById(R.id.add_spinner_input);
+        titleView.setText(title);
+
+        List<DataEntry> dataEntries = new ArrayList<>();
+        dataEntries.add(new NoDataSelected());
+        dataEntries.addAll(data);
+
+        SearchOptionArrayAdapter<? extends DataEntry> adapter = new SearchOptionArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, dataEntries);
+
+        spinner.setAdapter(adapter);
+        return spinner_input_layout;
+    }
+
     private LinearLayout createTextInput(String title, String inputHint){
         LinearLayout text_input_layout = (LinearLayout) getLayoutInflater().inflate(R.layout.add_text_layout, null);
         TextView titleView = (TextView)text_input_layout.findViewById(R.id.add_text_title);
@@ -199,7 +228,6 @@ public class AddTestDrawerActivity extends ActionBarActivity
                 //Save to database
                 submitToDatabase();
                 //close;
-                finish();
             }
         });
 
@@ -330,10 +358,16 @@ public class AddTestDrawerActivity extends ActionBarActivity
 //          HELPER METHODS
 //--------------------------------------------------------------------------
 
+    private void createErrorDialog(String errorMessage, String errorTitle){
+        builder.setMessage(errorMessage)
+                .setTitle(errorTitle);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private void submitToDatabase(){
         String operator;
         String machine;
-        String date;
         String relativeHumidity;
         String temperature;
         String tap;
@@ -341,12 +375,14 @@ public class AddTestDrawerActivity extends ActionBarActivity
         List<String> materialIds = new ArrayList<>();
         List<String> printIds = new ArrayList<>();
 
-        operator = ((EditText) operatorLayout.
-                findViewById(R.id.add_text_input)).getText().toString();
-        machine = ((EditText) machineLayout.
-                findViewById(R.id.add_text_input)).getText().toString();
-        date = ((EditText) dateLayout.
-                findViewById(R.id.add_text_input)).getText().toString();
+        DataEntry operatorEntry = (DataEntry)((Spinner) operatorLayout.
+                findViewById(R.id.add_spinner_input)).getSelectedItem();
+        DataEntry machineEntry = (DataEntry)((Spinner) machineLayout.
+                findViewById(R.id.add_spinner_input)).getSelectedItem();
+
+        operator = operatorEntry.getId();
+        machine = machineEntry.getId();
+
         relativeHumidity = ((EditText) relativeHumidityLayout.
                 findViewById(R.id.add_text_input)).getText().toString();
         temperature = ((EditText) temperatureLayout.
@@ -376,68 +412,110 @@ public class AddTestDrawerActivity extends ActionBarActivity
                 findViewById(R.id.add_test_materials_attachments_layout);
         for(int i = 2; i < materialAttachments.getChildCount(); i++){
             RelativeLayout materialAttachmentHolder = (RelativeLayout) materialAttachments.getChildAt(i);
-            materialIds.add(((TextView) materialAttachmentHolder.
-                    findViewById(R.id.attachment_material_id)).getText().toString());
+            String materialIdName = ((TextView) materialAttachmentHolder.
+                    findViewById(R.id.attachment_material_id)).getText().toString();
+            materialIdName = materialIdName.replaceAll("[^0-9]", "");
+            materialIds.add(materialIdName);
         }
 
-        if(operator.isEmpty()){
-            //Failed
-            return;
-        }
-        if(machine.isEmpty()) {
-            //Failed
-            return;
-        }
-        if(date.isEmpty()){
-            //Failed
-            return;
-        }
-        if(relativeHumidity.isEmpty()){
-            Log.d("Tests", "Failed to add relativeHumidity");
-            return;
-        }
-        if(temperature.isEmpty()){
-            //Failed
-            return;
-        }
-        if(tap.isEmpty()){
-            //Failed
-            return;
-        }
-        if(valueMeasurements.isEmpty()){
-            //Failed
-            return;
-        }
-        if(materialIds.isEmpty()){
-            //Failed
+        if(operator.isEmpty() || machine.isEmpty() || relativeHumidity.isEmpty() || temperature.isEmpty()
+                              || tap.isEmpty() || materialIds.isEmpty()){
+            String errorMessage = "All fields must be filled in order to store the test.";
+            String errorTitle = "Error: Empty field(s)";
+            createErrorDialog(errorMessage, errorTitle);
             return;
         }
 
-        //Perform POST
-
-        HallflowTestPost test = new HallflowTestPost();
-        test.setOperatorId("1");
-        test.setDate(date);
-        test.setMaterialId("1");
-        test.setRelativeHumidity(relativeHumidity);
-        test.setTemperature(temperature);
-        test.setTap(tap);
-        test.setMachineId("1");
-
-        //TODO: create measurement??
-
-        ApiService apiService = DatabaseHandler.getInstance().getApiService();
-        List<HallflowTestPost> postData = new ArrayList<>();
-        postData.add(test);
-
-        Log.d("Test", "WeeHoo");
-        try {
-            Response<List<HallflowTestPost>> response = apiService.createHallflowTest(postData).execute();
-            Log.d("Test", "Success? " + response.isSuccessful());
-        } catch (IOException e) {
-            e.printStackTrace();
+        measurementSubmissionList = new ArrayList<>();
+        for(String current : valueMeasurements){
+            MeasurementPost newMeasurement = new MeasurementPost();
+            newMeasurement.setMeasurementValue(current);
+            measurementSubmissionList.add(newMeasurement);
         }
 
+        testSubmission = new HallflowTestPost();
+        testSubmission.setOperatorId(operator);
+        testSubmission.setMaterialId(materialIds.get(0));
+        testSubmission.setRelativehumidity(relativeHumidity);
+        testSubmission.setTemperature(temperature);
+        testSubmission.setTap(tap);
+        testSubmission.setMachineId(machine);
+
+        new PostTestData().execute();
+
+    }
+
+    private class LoadDataTask extends AsyncTask<Void, Void,Void> {
+        private ApiService apiService = DatabaseHandler.getInstance().getApiService();
+        private List<Operator> operators;
+        private List<Machine> machines;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                operators = apiService.fetchAllOperators().execute().body().getOperators();
+                machines = apiService.fetchAllMachines().execute().body().getMachinesApi();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            initializeAllViews(operators, machines);
+        }
+    }
+
+    private class PostTestData extends AsyncTask<Void, Void, Void> {
+        private ApiService apiService = DatabaseHandler.getInstance().getApiService();
+        private String errorMessage;
+        private String errorTitle;
+        private boolean submissionSuccess = true;
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                if(testSubmission != null) {
+                    Response<OkPacket> response = apiService.createHallflowTest(testSubmission).execute();
+                    String id = response.body().getInsertId();
+                    if (response.isSuccessful()) {
+                        for (MeasurementPost current : measurementSubmissionList) {
+                            current.setHallflowTestId(id);
+                            Response<OkPacket> mResponse = apiService.createMeasurement(current).execute();
+                            if(!mResponse.isSuccessful()){
+                                //TODO: Find some way to store data and try posting again at a later time
+                                Log.d("Failed", "");
+                                submissionSuccess = false;
+                                errorMessage = "Failed to submit measurements to server.";
+                                errorTitle = "Connection error";
+                                return null;
+                            } else {
+                                submissionSuccess = true;
+                            }
+                        }
+                    } else {
+                        submissionSuccess = false;
+                        errorMessage = "Failed to submit tests to server.";
+                        errorTitle = "Connection error";
+                    }
+            }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(submissionSuccess){
+                finish();
+            }else{
+                createErrorDialog(errorMessage, errorTitle);
+            }
+        }
     }
 
     public static void openDrawer(){
@@ -458,52 +536,13 @@ public class AddTestDrawerActivity extends ActionBarActivity
         elementCounter++;
     };
 
-
-    private void setupDateTimePicker(final EditText displayDate) {
-        final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                month =month+1;
-                Log.d(TAG, "onDateSet: mm/dd/yy" + year + "/" + month + "/" + day);
-                String date = String.format("%d-%d-%d 00:00:00", year, month, day);
-                displayDate.setText(date);
-            }
-        };
-
-        displayDate.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Calendar currentCalendar = Calendar.getInstance();
-
-                int year = currentCalendar.get(Calendar.YEAR);
-                int month = currentCalendar.get(Calendar.MONTH);
-                int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(
-                        AddTestDrawerActivity.this,
-                        android.R.style.Theme_Holo_Dialog_MinWidth,
-                        dateSetListener,
-                        year,
-                        month,
-                        day
-                );
-
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.show();
-            }
-        });
-
-    }
-
 //--------------------------------------------------------------------------
 //          IMPLEMENTED METHODS
 //--------------------------------------------------------------------------
     @Override
     public void propertyChange(PropertyChangeEvent e) {
         if (e.getPropertyName().equals(TestSearchView.CONFIRM_ATTACHMENT_PRINT)) {
-
             drawerLayout.closeDrawer(Gravity.END);
-
             List<DataEntry> data = (List<DataEntry>) e.getNewValue();
             for (DataEntry current : data) {
 

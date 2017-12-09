@@ -10,10 +10,17 @@ public class DetailDto {
     //  { "name" : "insert now", "companyId": "5", "projectId":"3", "creationDate": "2017-11-6 14:26:00", "comment" : "teststing insert" }
     private String name;
     private String companyId;
-    private String fieldId;
+    private String fileId;
     private String projectId;
-    private String creationDate;
     private String comment;
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
 
     public DetailDto() {
     }
@@ -23,10 +30,9 @@ public class DetailDto {
 
         name = detail.getName();
         companyId = String.valueOf(detail.getCompanyId());
-        fieldId = detail.getFileId();
         projectId = String.valueOf(detail.getProjectId());
-        creationDate = detail.getCreationDate();
         comment = detail.getComment();
+        fileId = detail.getFileId();
     }
 
 
@@ -46,28 +52,12 @@ public class DetailDto {
         this.companyId = companyId;
     }
 
-    public String getFieldId() {
-        return fieldId;
-    }
-
-    public void setFieldId(String fieldId) {
-        this.fieldId = fieldId;
-    }
-
     public String getProjectId() {
         return projectId;
     }
 
     public void setProjectId(String projectId) {
         this.projectId = projectId;
-    }
-
-    public String getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
     }
 
     public String getComment() {

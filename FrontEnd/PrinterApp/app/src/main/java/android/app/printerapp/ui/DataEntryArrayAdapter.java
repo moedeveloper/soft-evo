@@ -3,6 +3,7 @@ package android.app.printerapp.ui;
 import android.app.printerapp.SpecificActivity;
 import android.app.printerapp.model.DataEntry;
 import android.app.printerapp.model.Detail;
+import android.app.printerapp.model.Material;
 import android.app.printerapp.model.Print;
 import android.content.Context;
 import android.content.Intent;
@@ -114,6 +115,8 @@ public class DataEntryArrayAdapter<T> extends ArrayAdapter<T> {
             return SpecificActivity.START_PRINT_FRAGMENT;
         } else if (dataEntry.getClass() == Detail.class){
             return SpecificActivity.START_DETAIL_FRAGMENT;
+        } else if (dataEntry.getClass() == Material.class){
+            return SpecificActivity.START_MATERIAL_FRAGMENT;
         }
         else return -1;
     }

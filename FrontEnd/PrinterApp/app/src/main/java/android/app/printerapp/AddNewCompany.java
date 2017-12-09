@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.printerapp.api.CompanyDTO;
 import android.app.printerapp.api.DatabaseHandler;
 import android.app.printerapp.model.Company;
+import android.app.printerapp.model.OkPacket;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
@@ -44,12 +45,14 @@ public class AddNewCompany extends ActionBarActivity {
                 try {
                     Company company = extractCompanyFromUserInput();
                     System.out.println(company.toString());
-                    Call<String> call = DatabaseHandler.getInstance().getApiService().createNewCompany(new CompanyDTO(company.getName()));
+                    Call<OkPacket> call = DatabaseHandler.getInstance()
+                            .getApiService().createNewCompany(new CompanyDTO(company.getName()));
                     return 200 == call.execute().code();
                 } catch (Exception e) {
                     e.printStackTrace();
                     return false;
                 }
+
             }
 
             private RequestBody convert(final Company company) {

@@ -25,6 +25,47 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="3dip"
+                android:textAlignment="center">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left|center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="4"
+                    android:gravity="left|center"
+                    android:padding="2dp"
+                    android:text="Name"
+                    tools:layout_editor_absoluteX="302dp"
+                    tools:layout_editor_absoluteY="236dp" />
+
+                <EditText
+                    android:id="@+id/nameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:gravity="left|center"
+                    android:hint="Detail name"
+                    android:inputType="textPersonName"
+                    android:padding="2dp"
+                    android:textSize="14sp"
+                    tools:layout_editor_absoluteX="448dp"
+                    tools:layout_editor_absoluteY="236dp" />
+            </TableRow>
+        </GridLayout>
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="left"
                 android:padding="3dip">
 
@@ -144,45 +185,6 @@
                     android:textSize="14sp"
                     tools:layout_editor_absoluteX="448dp"
                     tools:layout_editor_absoluteY="236dp" />
-            </TableRow>
-        </GridLayout>
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="4"
-                    android:gravity="left|center"
-                    android:padding="2dp"
-                    android:text="Date"
-                    android:textAlignment="center" />
-<!--
-                    style="@android:style/Widget.Holo.CalendarView"
-                    android:datePickerMode="spinner"
--->
-                <EditText
-                    android:id="@+id/dateInput"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:gravity="left|center"
-                    android:hint="Select date"
-                    android:inputType="date"
-                    android:padding="2dp"
-                    tools:layout_editor_absoluteX="448dp"
-                    tools:layout_editor_absoluteY="293dp" />
-
             </TableRow>
         </GridLayout>
 

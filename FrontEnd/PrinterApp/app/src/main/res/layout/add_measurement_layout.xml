@@ -26,7 +26,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="Average : 15487.256 mg" />
+        android:text="Average : 0" />
 
     <RelativeLayout
         android:layout_width="match_parent"
