@@ -52,7 +52,7 @@ public class BuildSpecificFragment extends SpecificFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        getActivity().setTitle("MaplePrint - Build");
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
 

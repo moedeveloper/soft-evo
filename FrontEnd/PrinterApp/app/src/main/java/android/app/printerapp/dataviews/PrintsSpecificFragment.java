@@ -83,7 +83,7 @@ public class PrintsSpecificFragment extends SpecificFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        getActivity().setTitle("MaplePrint - Print");
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
             //Retrieve references to views

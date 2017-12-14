@@ -55,7 +55,7 @@ public class TestSpecificFragment extends SpecificFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        getActivity().setTitle("MaplePrint - Test");
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
 

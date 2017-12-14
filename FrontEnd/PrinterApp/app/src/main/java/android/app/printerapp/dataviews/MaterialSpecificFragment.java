@@ -51,7 +51,7 @@ public class MaterialSpecificFragment extends SpecificFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        getActivity().setTitle("MaplePrint - Material");
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
 

@@ -13,7 +13,7 @@
         <item>India</item>
     </string-array>
 
-    <string name="app_name">OctoPrint</string>
+    <string name="app_name">MaplePrint</string>
 
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
@@ -59,13 +59,13 @@
     <string name="shared_preferences_autoslice" translatable="false">autoslice</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="title_activity_add_details">Add Details</string>
+    <string name="title_activity_add_details">MaplePrint - Add New Detail</string>
     <string name="companyLabelText">Company</string>
-    <string name="title_activity_add_new_company">Add New Company</string>
-    <string name="title_activity_add_test">AddTestActivity</string>
+    <string name="title_activity_add_new_company">MaplePrint - Add New Company</string>
+    <string name="title_activity_add_test">Add New Hallflow Test</string>
 
     <string name="operator">Operator</string>
-    <string name="title_activity_add_test_drawer">AddTestDrawerActivity</string>
+    <string name="title_activity_add_test_drawer">MaplePrint - Add New Hallflow Test</string>
 
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>

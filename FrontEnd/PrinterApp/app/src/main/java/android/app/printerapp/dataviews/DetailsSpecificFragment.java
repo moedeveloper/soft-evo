@@ -82,7 +82,7 @@ public class DetailsSpecificFragment extends SpecificFragment {
                              Bundle savedInstanceState) {
 
         super.onCreateView(inflater, container, savedInstanceState);
-
+        getActivity().setTitle("MaplePrint - Detail");
         //If there's no saved instance state, initialize variables
         if (savedInstanceState == null) {
             //Retrieve id from arguments
