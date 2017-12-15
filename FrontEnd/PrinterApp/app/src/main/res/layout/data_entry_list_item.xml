@@ -25,7 +25,7 @@
             android:id="@+id/detail_list_item_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="12dp" />
+            android:layout_marginRight="24dp" />
 
         <TextView
             android:id="@+id/detail_list_item_creation_date"
